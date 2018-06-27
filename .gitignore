@@ -80,3 +80,6 @@ target/
 
 # Mac OS-specific storage files
 .DS_Store
+
+# specific directory for non-distributable material (e.g. copyrighted pdfs)
+/not_for_distribution

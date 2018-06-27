@@ -82,4 +82,4 @@ target/
 .DS_Store
 
 # specific directory for non-distributable material (e.g. copyrighted pdfs)
-/not_for_distribution
+/not_for_distribution/

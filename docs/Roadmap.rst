@@ -1,7 +1,7 @@
 Road detection and classification in satellite images
 =====================================================
 
-Portfolio Project by Lisa Hesse & Harald Hentschke, Data Science Retreat Berlin (Batch 15)
+Portfolio Project by Lisa Hesse, Kiran Prakash and Harald Hentschke, Data Science Retreat Berlin (Batch 15)
 
 Roadmap/To-do list
 ------------------
@@ -33,3 +33,6 @@ Copernicus satellite info (from Wikipedia)
 * Sentinel-2 will provide high-resolution optical imaging for land services (e.g. imagery of vegetation, soil and water cover, inland waterways and coastal areas). Sentinel-2 will also provide information for emergency services. The first Sentinel-2 satellite has successfully launched on 23 June 2015.[10] 
 * Sentinel-3 will provide ocean and global land monitoring services. The first Sentinel-3A satellite was launched on 16 January 2016 by a Eurockot Rokot vehicle from the Plesetsk Cosmodrome in Russia;[11][12] 
 
+Ideas
+-----
+* divide each satellite image into small segments, possibly in several runs of overlapping segments, classify these into two or three categories (paved road/unpaved road/no road), then try to stick the road-detecting ones together so that we have an outline of the roads

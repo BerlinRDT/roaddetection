@@ -12,13 +12,14 @@ This document is a chronolgic summary of previous scientific contributions to th
 :Journal:         Daniilidis K., Maragos P., Paragios N. (eds) Computer Vision – ECCV 2010. ECCV 2010. Lecture Notes in Computer Science, vol 6316. Springer, Berlin, Heidelberg
 :Date:            2010
 :Hardware:        consumer GPU
-:Data:            High-resolution areal images and vector-formatted road maps
+:Data:            High-resolution areal images
+                  vector-formatted road maps
 
 **State of the art**
 
-* No automatized road detection in commercial use
+There were no automatized road detection in commercial use at the time where the paper was published.
 
-* Approaches in use:
+Approaches in use:
 
   1. Ad-hoc multistage approaches:
 
@@ -89,7 +90,7 @@ NN with a single hidden layer.  Both the hidden layer an the output unit have a 
 
 **Pre-processing**
 
-Insufficient to use only *local* image intensity information.  It is rather suggested to feed the predictor with as much *context* as possible.
+It appears to be insufficient to use only *local* image intensity information.  It is rather suggested to feed the predictor with as much *context* as possible.
 
 :Aim of pre-processing: Dimensionality reduction of the input data in order to provide a larger context the NN.
 :Method of choice:      Principal Component Anaysis to wxw RGB aerial image patches and retain the top w*w principal components.
@@ -99,12 +100,33 @@ Insufficient to use only *local* image intensity information.  It is rather sugg
       
 
 Define the map
-.. image:: http://quicklatex.com/cache3/5c/ql_a2b1d658fb0ffa7a095ed0699fbc295c_l3.png
+.. image:: http://quicklatex.com/cache3/37/ql_17f5aad853e33de52a8a02615cc19a37_l3.png
 which carries out the reduction of dimensionality.  
 
 
 **Training**
 
+:Pre-training: Usupervised pre-trainig (= pre-initializing the weights of the NN) with the procedure of Hinton and Salakhutdinov (Gaussian-binary Restricted Boltzmann Machines) to increase performance. 
+               According to the authors Gaussian-binary RBM is not a good choice for images as pixels are assumed to be independent of the features.
+               Better choice: include explicit representation of covariance structure (?)
+:Model fit:   Minimization of the cross entropy.  
+              Data augmentation by rotation of the images (bias removal).  
+:Post-processing: According to Jain and Seung (natural image denoising) to increase performance.
+:Metrics: Completeness (fraction of true roads that were correctly detected)
+          Correctness (fraction of predicted raods that are true roads)
+
+
+
+**Error analysis**
+
+Most of the errors are due to the labeling process:
+
+* Lack of information about the width.
+* Small roads are not labeled in the vector-formatted road map.
+
+Suggestion for performance improvement:
+
+View the labels as noisy versions of underlying true labels.  This allowes the NN to override labels that are incorrect (commonly used in the field of object recognition)
 
 
  

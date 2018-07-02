@@ -91,14 +91,16 @@ which carries out the reduction of dimensionality.
 
 **Training**
 
-:Pre-training: Usupervised pre-trainig (= pre-initializing the weights of the NN) with the procedure of Hinton and Salakhutdinov (Gaussian-binary Restricted Boltzmann Machines) to increase performance. 
-According to the authors Gaussian-binary RBM is not a good choice for images as pixels are assumed to be independent of the features.
-Better choice: include explicit representation of covariance structure (?)
-:Model fit: Minimization of the cross entropy. 
-Data augmentation by rotation of the images (bias removal). 
+:Pre-training:    Unsupervised pre-trainig (= pre-initializing the weights of the NN) with the procedure of Hinton and Salakhutdinov (Gaussian-binary Restricted Boltzmann Machines) to increase performance. 
+                  According to the authors Gaussian-binary RBM is not a good choice for images as pixels are assumed to be independent of the features.
+                  Better choice: include explicit representation of covariance structure (?)
+                  
+:Model fit:       Minimization of the cross entropy. 
+                  Data augmentation by rotation of the images (bias removal). 
 :Post-processing: According to Jain and Seung (natural image denoising) to increase performance.
-:Metrics: Completeness (fraction of true roads that were correctly detected)
-Correctness (fraction of predicted roads that are true roads)
+:Metrics:         Completeness (fraction of true roads that were correctly detected)
+
+                  Correctness (fraction of predicted roads that are true roads)
 
 
 

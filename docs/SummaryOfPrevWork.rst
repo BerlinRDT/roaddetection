@@ -8,7 +8,7 @@ This document is a chronolgic summary of previous scientific contributions to th
 
 `Learning to Detect Roads in High-Resolution Aerial Images <https://link.springer.com/chapter/10.1007/978-3-642-15567-3_16>`_
 ============================================================================================================================================
-:Authors: V. Mnih and G. E. Hinton
+:Authors: V Mnih, G E Hinton
 :Journal: Daniilidis K., Maragos P., Paragios N. (eds) Computer Vision – ECCV 2010. ECCV 2010. Lecture Notes in Computer Science, vol 6316. Springer, Berlin, Heidelberg
 :Date: 2010
 :Hardware: consumer GPU
@@ -117,3 +117,141 @@ View the labels as noisy versions of underlying true labels. This allows the NN 
 
 
 
+
+`DeepSat – A Learning framework for Satellite Imagery <http://bit.csc.lsu.edu/~saikat/publications/sigproc-sp.pdf>`_
+====================================================================================================================
+
+:Authors: S Basu *et al.*
+:Journal: Daniilidis K., Maragos P., Paragios N. (eds) Computer Vision – ECCV 2010. ECCV 2010. Lecture Notes in Computer Science, vol 6316. Springer, Berlin, Heidelberg
+:Date: 09.2015
+:Hardware: consumer GPU
+:Data: SAT-4 & SAT-6 (new satellite datasets, four bands (red, green, blue, NIR),  U.S.)
+:GitHub: `link <https://github.com/mpapadomanolaki/Training-on-DeepSat>`_
+
+**Approach**
+
+Classification framework consisting of
+
+1. Preprocessing (input data -> normalized data):
+ 
+  * feature extraction
+  * normalization 
+  
+ 2. Classification: **Deep Belief Network** (input:  normalized data from 1., unsupervised appraoch)
+    Accuracy:  97.95 % (SAT-4) / 93.9% (SAT-6)
+    
+    
+    
+ 
+
+
+
+`Road Extraction from Very High ResolutionRemote Sensing Optical Images based onTexture Analysis and Beamlet Transform <https://ieeexplore.ieee.org/document/7159022/>`_
+====================================================================================================================
+
+:Authors: M O Sghaier, R Lepage
+:Journal: IEEE Journal of Selected Topics in Applied Earth Observations and Remote Sensing ( Volume: 9, Issue: 5, May 2016 ) 
+:Date: 07.2015
+:Hardware: 
+:Data: 
+:GitHub: 
+
+    
+    
+    
+ 
+
+
+
+`Multiple Object Extraction from Aerial Imagery withConvolutional Neural Networks <https://www.ingentaconnect.com/content/ist/jist/2016/00000060/00000001/art00003>`_
+====================================================================================================================
+
+:Authors: S Shunta, Y Takayoshi, A Yoshimitsu
+:Journal: Society for Imaging Science and Technology
+:Date: 01.2016
+:Hardware: 
+:Data: 
+:GitHub: 
+
+    
+    
+    
+ 
+
+
+
+`Satellite Imagery Classification Based on Deep Convolutional Network <https://waset.org/publications/10004722/satellite-imagery-classification-based-on-deep-convolution-network>`_
+====================================================================================================================
+
+:Authors: Z Ma, Z Wang, C Liu, X Liu
+:Hardware: 
+:Data: 
+:GitHub: 
+
+    
+    
+    
+ 
+
+
+
+`Fully Convolutional Networks for Dense Semantic Labelling of High-Resolution Aerial Imagery <https://ieeexplore.ieee.org/document/7159022/>`_
+====================================================================================================================
+
+:Authors: J Sherrah
+:Journal: arXiv
+:Date: 06.2016
+:Hardware: 
+:Data: 
+:GitHub: 
+
+    
+    
+    
+ 
+
+
+
+`MRF-based Segmentation and Unsupervised Classification forBuilding and Road Detection in Peri-urban Areas ofHigh-resolution Satellite Images <https://www.sciencedirect.com/science/article/pii/S0924271616304816>`_
+====================================================================================================================
+
+:Authors: I Grinias, C Panagiotakis, G Tziritas
+:Journal: ISPRS Journal of Photogrammetry and Remote Sensing
+:Date: 12.2016
+:Hardware: 
+:Data: 
+:GitHub: 
+
+    
+    
+    
+ 
+
+
+
+`Creating Roadmaps in Aerial Images with Generative Adversarial Networks and Smoothing-based Optimization <http://openaccess.thecvf.com/content_ICCV_2017_workshops/papers/w30/Costea_Creating_Roadmaps_in_ICCV_2017_paper.pdf>`_
+====================================================================================================================
+
+:Authors: D Costea, A Marcu, E Slusanschi, M Leordeanu
+:Journal: IEEE Xplore
+:Date: 10.2017
+:Hardware: 
+:Data: 
+:GitHub: 
+
+    
+    
+    
+ 
+
+
+
+`Road Extraction by Deep Residual U-Net <https://ieeexplore.ieee.org/document/8309343/>`_
+====================================================================================================================
+
+:Authors: Z Zhang, Q Liu, Y Wang
+:Journal: IEEE Geoscience and Remote Sensing Letters
+:Date: 03.2018
+:Hardware: 
+:Data: 
+:GitHub: `link1 <https://github.com/DuFanXin/deep_residual_unet>`_, `link2 <https://github.com/handong1587/handong1587.github.io/blob/master/_posts/deep_learning/2015-10-09-segmentation.md>`_

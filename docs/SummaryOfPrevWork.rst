@@ -177,12 +177,43 @@ Classification framework consisting of
 :Authors: M O Sghaier, R Lepage
 :Journal: IEEE Journal of Selected Topics in Applied Earth Observations and Remote Sensing ( Volume: 9, Issue: 5, May 2016 ) 
 :Date: 07.2015
+:Data:   ``_
+:GitHub: ``_
+
+**Approach (simultanous building and road detection)**
+
+
+**Method**
+
+
+
+**Training**
+
+
+
+**Result**
+
+
+
+    
+    
+    
+ 
+
+
+
+`Multiple Object Extraction from Aerial Imagery withConvolutional Neural Networks <https://www.ingentaconnect.com/content/ist/jist/2016/00000060/00000001/art00003>`_
+====================================================================================================================
+
+:Authors: S Shunta, Y Takayoshi, A Yoshimitsu
+:Journal: Society for Imaging Science and Technology
+:Date: 01.2016
 :Data:   `Massachusetts Buildings Dataset (Mass. Buildings) and Massachusetts Roads Dataset (Mass. Roads) <http://www.cs.toronto.edu/~vmnih/data/>`_
 :GitHub: `link <https://github.com/mitmul/ssai>`_
 
 **Approach (simultanous building and road detection)**
 
-CNNs trained on publicly available aerial imagery dataset accroding to `Mnih <https://www.cs.toronto.edu/~vmnih/docs/Mnih_Volodymyr_PhD_Thesis.pdf>`_.
+CNNs trained on publicly available aerial imagery dataset accroding to `Mnih PhD Thesis <https://www.cs.toronto.edu/~vmnih/docs/Mnih_Volodymyr_PhD_Thesis.pdf>`_.
 
 No need to
 
@@ -191,6 +222,7 @@ No need to
 * consider how to fuse multile decisions 
 
 **Method**
+
 similar to `Learning to Detect Roads in High-Resolution Aerial Images <https://link.springer.com/chapter/10.1007/978-3-642-15567-3_16>`_ but with multi-class output
 
 
@@ -212,26 +244,7 @@ Hyperparamters:
 
 **Result**
 
-Increase of the road detection accuracy. 
-
-
-
-    
-    
-    
- 
-
-
-
-`Multiple Object Extraction from Aerial Imagery withConvolutional Neural Networks <https://www.ingentaconnect.com/content/ist/jist/2016/00000060/00000001/art00003>`_
-====================================================================================================================
-
-:Authors: S Shunta, Y Takayoshi, A Yoshimitsu
-:Journal: Society for Imaging Science and Technology
-:Date: 01.2016
-:Hardware: 
-:Data: 
-:GitHub: 
+Increase of the road detection accuracy.
 
     
     
@@ -247,6 +260,19 @@ Increase of the road detection accuracy.
 :Hardware: 
 :Data: 
 :GitHub: 
+
+**Approach (simultanous building and road detection)**
+
+
+**Method**
+
+
+
+**Training**
+
+
+
+**Result**
 
     
     
@@ -267,12 +293,30 @@ Increase of the road detection accuracy.
 
     
     
+**Approach**
+Fully convolutional network for semantic labeling (no patch-based approach)
+
+Usually FCN have low resolution output (lower than input) due to *down-sampling*.  
+
+The presented novel approach maintain the full resolution. 
+
+
+**Method**
+
+
+
+**Training**
+
+
+
+**Result**
+
     
  
 
 
 
-`MRF-based Segmentation and Unsupervised Classification forBuilding and Road Detection in Peri-urban Areas ofHigh-resolution Satellite Images <https://www.sciencedirect.com/science/article/pii/S0924271616304816>`_
+`MRF-based Segmentation and Unsupervised Classification for Building and Road Detection in Peri-urban Areas ofHigh-resolution Satellite Images <https://www.sciencedirect.com/science/article/pii/S0924271616304816>`_
 ====================================================================================================================
 
 :Authors: I Grinias, C Panagiotakis, G Tziritas
@@ -282,7 +326,20 @@ Increase of the road detection accuracy.
 :Data: 
 :GitHub: 
 
-    
+   
+**Approach (simultanous building and road detection)**
+
+
+**Method**
+
+
+
+**Training**
+
+
+
+**Result**
+ 
     
     
  
@@ -295,14 +352,63 @@ Increase of the road detection accuracy.
 :Authors: D Costea, A Marcu, E Slusanschi, M Leordeanu
 :Journal: IEEE Xplore
 :Date: 10.2017
-:Hardware: 
-:Data: 
+:Hardware: GPU (Tesla K40)
+:Data: `European Road Dataset <https://pdfs.semanticscholar.org/191b/eb87f84326d2cc9c427efe2a5abee8f67574.pdf>`_
 :GitHub: 
+:Measure: 84.05 % F-measure road detection
 
-    
-    
-    
+ **Task** 
  
+ 1. Translate RGB images into roadmaps
+ 2. Translate the predictions into intersection locations
+ 
+**Approach (road detection and roadmap graph)**
+
+1. Novel dual-hop generative adversarial network (DH-GAN):  segments images at the level of pixels
+
+2. Smoothing based optimization (SBO): Transform pixelwise segmentation into a roadmap graph
+
+**Method**
+
+Two conditional GANs, each consisting of one 
+
+a) segmentation Generator G (each an adapted version of `U-nets <https://arxiv.org/abs/1505.04597>`_)
+b) discriminator D (variant `PatchGAN <https://arxiv.org/abs/1611.07004>`_)
+
+The 
+
+:1. cGAN: predicts pixelwise roatmaps
+          learns a pixelwise segmentation generator G
+          D detects G's misleading road outputs
+          
+:2. cGAN: outputs intersection locations (has access to original RGB and 1. cGAN's output)
+          learns intersection generator G
+          D detects G's misleading intersection outputs
+
+Generator Architecture:
+
+* fully convolutional encoder-decoder network
+* 9 down-sampling modules
+* output: 512x512 pixels, 64 filters
+* bottleneck layer: 1x1x512 (-> loss of high-frequency information, solving by applying `skip connections <https://arxiv.org/abs/1611.07004>`_)
+* decoder mirrors encoder, but fractionally-strided convolutions
+
+Discriminator Architecture:
+
+* fully convolutional network 
+* 5 downsampling modules
+* **increase of number of parameters results in very small performance**
+
+**Training**
+
+* Optimize negative log-likelihood 
+* mini-batch stochastic gradient decent
+* Adam solver, LR = 2e-4, momentum = 0.5
+* 200 epochs (60th was the bes, afterwards overfitting)
+
+**Remarks**
+
+* Store vertices uses 70 times less space 
 
 
 
@@ -315,3 +421,19 @@ Increase of the road detection accuracy.
 :Hardware: 
 :Data: 
 :GitHub: `link1 <https://github.com/DuFanXin/deep_residual_unet>`_, `link2 <https://github.com/handong1587/handong1587.github.io/blob/master/_posts/deep_learning/2015-10-09-segmentation.md>`_
+
+
+
+**Approach (simultanous building and road detection)**
+
+
+**Method**
+
+
+
+**Training**
+
+
+
+**Result**
+

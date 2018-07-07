@@ -4,7 +4,39 @@ Summary of previous work
 
 This document is a chronolgic summary of previous scientific contributions to the issue of road detection on satellite images. 
 
+Most of the previous work can be devided into two categories:
 
+:**road area extraction**:  Generate pixel-level labeling of roads
+:**road centerline extraction**:  Aims at detecting skeletons of roads 
+
+Simultaneous area and centerline extraction:   `G. Chen, Y. Wang, S. Xu, H. Wang, S. Jiang, and C. Pan, “Auto-matic road detection and centerline extraction via cascaded end-to-endconvolutional neural network,” TGRS, vol. 55, no. 6, pp. 3322–3337,2017. <https://ieeexplore.ieee.org/document/7873262/>`_
+
+According to 
+`Road Extraction by Deep Residual U-Net <https://ieeexplore.ieee.org/document/8309343/>`_ 
+road centerline extraction is easily achieved from road areas by using morphological thinning.  
+
+References for **road area extraction** (only partially summarized below):
+
+1. `X. Huang and L. Zhang, “Road centreline extraction from highresolution imagery based on multiscale structural features and support vector machines,” IJRS, vol. 30, no. 8, pp. 1977–1987, 2009. <https://www.tandfonline.com/doi/abs/10.1080/01431160802546837>`_
+
+2. `V. Mnih and G. Hinton, “Learning to detect roads in high-resolution aerial images,” ECCV, pp. 210–223, 2010. <https://link.springer.com/chapter/10.1007/978-3-642-15567-3_16>`_
+
+3. `C. Unsalan and B. Sirmacek, “Road network detection using probabilistic and graph theoretical methods,” TGRS, vol. 50, no. 11, pp. 4441–4453, 2012. <https://ieeexplore.ieee.org/document/6185661/>`_
+
+4. `G. Cheng, Y. Wang, Y. Gong, F. Zhu, and C. Pan, “Urban road extraction via graph cuts based probability propagation,” in ICIP, 2015, pp. 5072–5076. <https://ieeexplore.ieee.org/document/7026027/>`_
+
+5. `S. Saito, T. Yamashita, and Y. Aoki, “Multiple object extraction from aerial imagery with convolutional neural networks,” J. ELECTRON IMAGING, vol. 2016, no. 10, pp. 1–9, 2016. <https://www.ingentaconnect.com/content/ist/jist/2016/00000060/00000001/art00003>`_
+
+6. `R. Alshehhi and P. R. Marpu, “Hierarchical graph-based segmentation for extracting road networks from high-resolution satellite images,” P&RS, vol. 126, pp. 245–260, 2017. <https://www.sciencedirect.com/science/article/pii/S0924271616302015>`_
+
+References on **road centerline detection** (only partially summarized below):
+
+1. `B. Liu, H. Wu, Y. Wang, and W. Liu, “Main road extraction from ZY-3 grayscale imagery based on directional mathematical morphology and VGI prior knowledge in urban areas,” PLOS ONE, vol. 10, no. 9, p.
+e0138071, 2015. <http://journals.plos.org/plosone/article?id=10.1371/journal.pone.0138071>`_
+
+2. `C. Sujatha and D. Selvathi, “Connected component-based technique
+for automatic extraction of road centerline in high resolution satellite
+images,” J. Image Video Process., vol. 2015, no. 1, p. 8, 2015. <https://link.springer.com/article/10.1186/s13640-015-0062-9>`_
 
 `Learning to Detect Roads in High-Resolution Aerial Images <https://link.springer.com/chapter/10.1007/978-3-642-15567-3_16>`_
 ============================================================================================================================================
@@ -12,7 +44,9 @@ This document is a chronolgic summary of previous scientific contributions to th
 :Journal: Daniilidis K., Maragos P., Paragios N. (eds) Computer Vision – ECCV 2010. ECCV 2010. Lecture Notes in Computer Science, vol 6316. Springer, Berlin, Heidelberg
 :Date: 2010
 :Hardware: consumer GPU
-:Data: high-resolution areal images (area ~500 km²)
+:Data: `Massachusetts Roads Dataset (Mass. Roads) <http://www.cs.toronto.edu/~vmnih/data/>`_
+          
+          high-resolution areal images (area ~500 km²)
 
           vector-formatted road maps
 
@@ -106,6 +140,7 @@ which carries out the reduction of dimensionality.
 :Metrics:         Completeness (fraction of true roads that were correctly detected)
 
                   Correctness (fraction of predicted roads that are true roads)
+:Measure:
 
 
 
@@ -152,6 +187,7 @@ b) Mnih `PhD thesis <https://www.cs.toronto.edu/~vmnih/docs/Mnih_Volodymyr_PhD_T
 :Hardware: consumer GPU
 :Data: SAT-4 & SAT-6 (new satellite datasets, four bands (red, green, blue, NIR),  U.S.)
 :GitHub: `link <https://github.com/mpapadomanolaki/Training-on-DeepSat>`_
+:Measure:
 
 **Approach - NO road detection**
 
@@ -179,6 +215,7 @@ Classification framework consisting of
 :Date: 07.2015
 :Data:   ``_
 :GitHub: ``_
+:Measure:
 
 **Approach (simultanous building and road detection)**
 
@@ -210,6 +247,7 @@ Classification framework consisting of
 :Date: 01.2016
 :Data:   `Massachusetts Buildings Dataset (Mass. Buildings) and Massachusetts Roads Dataset (Mass. Roads) <http://www.cs.toronto.edu/~vmnih/data/>`_
 :GitHub: `link <https://github.com/mitmul/ssai>`_
+:Measure: 90.47% (recall at breakeven, road detection)
 
 **Approach (simultanous building and road detection)**
 
@@ -260,6 +298,7 @@ Increase of the road detection accuracy.
 :Hardware: 
 :Data: 
 :GitHub: 
+:Measure:
 
 **Approach (simultanous building and road detection)**
 
@@ -290,6 +329,7 @@ Increase of the road detection accuracy.
 :Hardware: 
 :Data: 
 :GitHub: 
+:Measure:
 
     
     
@@ -325,6 +365,7 @@ The presented novel approach maintain the full resolution.
 :Hardware: 
 :Data: 
 :GitHub: 
+:Measure: 
 
    
 **Approach (simultanous building and road detection)**
@@ -354,8 +395,9 @@ The presented novel approach maintain the full resolution.
 :Date: 10.2017
 :Hardware: GPU (Tesla K40)
 :Data: `European Road Dataset <https://pdfs.semanticscholar.org/191b/eb87f84326d2cc9c427efe2a5abee8f67574.pdf>`_
-:GitHub: 
-:Measure: 84.05 % F-measure road detection
+:Measure: 84.05 % (F-measure road detection)
+
+
 
  **Task** 
  
@@ -418,22 +460,48 @@ Discriminator Architecture:
 :Authors: Z Zhang, Q Liu, Y Wang
 :Journal: IEEE Geoscience and Remote Sensing Letters
 :Date: 03.2018
-:Hardware: 
-:Data: 
+:Hardware: GPU (NVIDIA Titan 1080)
+:Data: `Massachusetts Roads Dataset (Mass. Roads) <http://www.cs.toronto.edu/~vmnih/data/>`_
 :GitHub: `link1 <https://github.com/DuFanXin/deep_residual_unet>`_, `link2 <https://github.com/handong1587/handong1587.github.io/blob/master/_posts/deep_learning/2015-10-09-segmentation.md>`_
+:Measure: 91.87% (breakeven point)
 
 
 
 **Approach (simultanous building and road detection)**
 
+Deep residual U-Net:  combines advantages of residual learning and U-Net architechture.  
+
+Difference to U-Net:
+
+1. Residual units instad of plain neural units (basic block)
+2. No cropping operation required.
+
+
+
 
 **Method**
 
+The U-Net (basically encoder - bridge - decoder structure):
+
+* to get a finer result, it is important to use low level deails while retaining high-level segmantic information
+* training is very hard also due to limitations on training samples 
+          
+          -> solve this by emplying pre-trained networks, then fine-tune them on target data
+          
+          OR: emplying extensive data augmentation (as done here)
+          
+ The `Resiudal unit <https://arxiv.org/abs/1512.03385>`_:
+ 
+ * consists of a series of stacked residual units
 
 
 **Training**
 
+* no data augmentation during training 
+* 224x244 omage size
+* 30000 samples
+* convergence after 50 epochs
+* Mini-batches (size 8)
+* LR 10e3, reduced by factor of 0.1 every 20 epochs
 
-
-**Result**
 

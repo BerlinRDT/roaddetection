@@ -12,8 +12,9 @@ This document is a chronolgic summary of previous scientific contributions to th
 :Journal: Daniilidis K., Maragos P., Paragios N. (eds) Computer Vision – ECCV 2010. ECCV 2010. Lecture Notes in Computer Science, vol 6316. Springer, Berlin, Heidelberg
 :Date: 2010
 :Hardware: consumer GPU
-:Data: High-resolution areal images
-vector-formatted road maps
+:Data: high-resolution areal images (area ~500 km²)
+
+          vector-formatted road maps
 
 **State of the art**
 
@@ -36,7 +37,8 @@ a. Very little training data:
 Feasibility of large datasets is limited by ground truth for training and testing is obtained by manually labeling each pixel.
 b. Very small context is used for feature extraction or only few features are extracted from the context.
 c. Independent predictions drawn from each pixel
-**Approach proposed in the paper**
+
+**Approach (patch-based semantic segmentation task)**
 
 * *learn* road detection from labeled data which is abundant (**according to the authors: universities have libraries of geographic data (? -> contradiction to 2a. ?)**)
 * Address all three issues of learning-based approaches at once by means of the following technique:
@@ -52,6 +54,8 @@ Use dependencies present in the vicinity of each map pixel to improve prediction
 
 - One order of magnitude of increase of the considered area
 - Evaluation was performed on urban datasets
+
+
 **Data**
 
 * High-resolution aerial images
@@ -69,6 +73,7 @@ where
 :sigma: Smoothing parameter, depending on the scale of the areal images and accounts for the uncertainty in road widths and centerline locations. 
 2*sigma + 1 corresponds to the width of a typical two-lane road
 Interpret M as the probability that the location (i, j) belongs to a road where (i, j) is d(i, j) pixels away from the nearest centerline pixel.
+
 **Model**
 
 NN with a single hidden layer. Both the hidden layer an the output unit have a logistic sigmoid activation. 
@@ -116,6 +121,26 @@ Suggestion for performance improvement:
 View the labels as noisy versions of underlying true labels. This allows the NN to override labels that are incorrect (commonly used in the field of object recognition)
 
 
+**Udate to the paper:**
+
+a) `V. Mnih and G. Hinton, ‘‘Learning to label aerial images from noisy data,’’ Proc. 29th Annual Int’l Conf. on Machine Learning (ICML 2012) <https://www.cs.toronto.edu/~vmnih/docs/noisy_maps.pdf>`_
+
+
+  Incorporate two different noise models occuring in label images:
+
+   1. omission noise:
+     occurs when an object appears in an aerial imagery but not in the corresponding label image
+   
+   2. registration noise
+     inaccurate location of the object in a label image
+   
+  Proposal:
+
+  Asymmetric Bernoulli distribution and translational noise distribution
+
+
+ 
+b) Mnih `PhD thesis <https://www.cs.toronto.edu/~vmnih/docs/Mnih_Volodymyr_PhD_Thesis.pdf>`_ (2013)
 
 
 `DeepSat – A Learning framework for Satellite Imagery <http://bit.csc.lsu.edu/~saikat/publications/sigproc-sp.pdf>`_
@@ -128,7 +153,7 @@ View the labels as noisy versions of underlying true labels. This allows the NN 
 :Data: SAT-4 & SAT-6 (new satellite datasets, four bands (red, green, blue, NIR),  U.S.)
 :GitHub: `link <https://github.com/mpapadomanolaki/Training-on-DeepSat>`_
 
-**Approach**
+**Approach - NO road detection**
 
 Classification framework consisting of
 
@@ -152,9 +177,44 @@ Classification framework consisting of
 :Authors: M O Sghaier, R Lepage
 :Journal: IEEE Journal of Selected Topics in Applied Earth Observations and Remote Sensing ( Volume: 9, Issue: 5, May 2016 ) 
 :Date: 07.2015
-:Hardware: 
-:Data: 
-:GitHub: 
+:Data:   `Massachusetts Buildings Dataset (Mass. Buildings) and Massachusetts Roads Dataset (Mass. Roads) <http://www.cs.toronto.edu/~vmnih/data/>`_
+:GitHub: `link <https://github.com/mitmul/ssai>`_
+
+**Approach (simultanous building and road detection)**
+
+CNNs trained on publicly available aerial imagery dataset accroding to `Mnih <https://www.cs.toronto.edu/~vmnih/docs/Mnih_Volodymyr_PhD_Thesis.pdf>`_.
+
+No need to
+
+* design image freatures manually
+* individual training of multiple classifiers for each terrestrial object 
+* consider how to fuse multile decisions 
+
+**Method**
+similar to `Learning to Detect Roads in High-Resolution Aerial Images <https://link.springer.com/chapter/10.1007/978-3-642-15567-3_16>`_ but with multi-class output
+
+
+**Training**
+
+Mini-batch stochastic gradient decent with momentum
+
+Learning rate is reduced during learning by multipliction with a fixed reducing rate every x iterations.
+
+Regularization with L2 weight decay.  
+
+Hyperparamters: 
+
+1. Mini-batch size
+2. Learning rate
+3. Learning-rate reducing rate
+4. Weight of the L2 term
+
+
+**Result**
+
+Increase of the road detection accuracy. 
+
+
 
     
     

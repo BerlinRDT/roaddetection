@@ -2,9 +2,9 @@
 Summary of previous work
 ========================
 
-This document is a chronolgic summary of previous scientific contributions to the issue of road detection on satellite images. 
+This document is a chronological summary of previous scientific contributions to the issue of road detection on satellite images. 
 
-Most of the previous work can be devided into two categories:
+Most of the previous work can be divided into two categories:
 
 :**road area extraction**:  Generate pixel-level labeling of roads
 :**road centerline extraction**:  Aims at detecting skeletons of roads 
@@ -156,7 +156,7 @@ Suggestion for performance improvement:
 View the labels as noisy versions of underlying true labels. This allows the NN to override labels that are incorrect (commonly used in the field of object recognition)
 
 
-**Udate to the paper:**
+**Update to the paper:**
 
 a) `V. Mnih and G. Hinton, ‘‘Learning to label aerial images from noisy data,’’ Proc. 29th Annual Int’l Conf. on Machine Learning (ICML 2012) <https://www.cs.toronto.edu/~vmnih/docs/noisy_maps.pdf>`_
 
@@ -171,7 +171,7 @@ a) `V. Mnih and G. Hinton, ‘‘Learning to label aerial images from noisy data
    
   Proposal:
 
-  Asymmetric Bernoulli distribution and translational noise distribution
+  Asymmetric Bernoulli distribution and transnational noise distribution
 
 
  
@@ -193,7 +193,7 @@ b) Mnih `PhD thesis <https://www.cs.toronto.edu/~vmnih/docs/Mnih_Volodymyr_PhD_T
 
 Classification framework consisting of
 
-1. Preprocessing (input data -> normalized data):
+1. Pre-processing (input data -> normalized data):
  
   * feature extraction
   * normalization 
@@ -207,7 +207,7 @@ Classification framework consisting of
 
 
 
-`Road Extraction from Very High ResolutionRemote Sensing Optical Images based onTexture Analysis and Beamlet Transform <https://ieeexplore.ieee.org/document/7159022/>`_
+`Road Extraction from Very High Resolution Remote Sensing Optical Images based onTexture Analysis and Beamlet Transform <https://ieeexplore.ieee.org/document/7159022/>`_
 ====================================================================================================================
 
 :Authors: M O Sghaier, R Lepage
@@ -217,7 +217,7 @@ Classification framework consisting of
 :GitHub: ``_
 :Measure:
 
-**Approach (simultanous building and road detection)**
+**Approach (simultaneous building and road detection)**
 
 
 **Method**
@@ -239,7 +239,7 @@ Classification framework consisting of
 
 
 
-`Multiple Object Extraction from Aerial Imagery withConvolutional Neural Networks <https://www.ingentaconnect.com/content/ist/jist/2016/00000060/00000001/art00003>`_
+`Multiple Object Extraction from Aerial Imagery with Convolutional Neural Networks <https://www.ingentaconnect.com/content/ist/jist/2016/00000060/00000001/art00003>`_
 ====================================================================================================================
 
 :Authors: S Shunta, Y Takayoshi, A Yoshimitsu
@@ -249,15 +249,15 @@ Classification framework consisting of
 :GitHub: `link <https://github.com/mitmul/ssai>`_
 :Measure: 90.47% (recall at breakeven, road detection)
 
-**Approach (simultanous building and road detection)**
+**Approach (simultaneous building and road detection)**
 
-CNNs trained on publicly available aerial imagery dataset accroding to `Mnih PhD Thesis <https://www.cs.toronto.edu/~vmnih/docs/Mnih_Volodymyr_PhD_Thesis.pdf>`_.
+CNNs trained on publicly available aerial imagery dataset according to `Mnih PhD Thesis <https://www.cs.toronto.edu/~vmnih/docs/Mnih_Volodymyr_PhD_Thesis.pdf>`_.
 
 No need to
 
-* design image freatures manually
+* design image features manually
 * individual training of multiple classifiers for each terrestrial object 
-* consider how to fuse multile decisions 
+* consider how to fuse multiple decisions 
 
 **Method**
 
@@ -268,7 +268,7 @@ similar to `Learning to Detect Roads in High-Resolution Aerial Images <https://l
 
 Mini-batch stochastic gradient decent with momentum
 
-Learning rate is reduced during learning by multipliction with a fixed reducing rate every x iterations.
+Learning rate is reduced during learning by multiplication with a fixed reducing rate every x iterations.
 
 Regularization with L2 weight decay.  
 
@@ -300,7 +300,7 @@ Increase of the road detection accuracy.
 :GitHub: 
 :Measure:
 
-**Approach (simultanous building and road detection)**
+**Approach (simultaneous building and road detection)**
 
 
 **Method**
@@ -356,7 +356,7 @@ The presented novel approach maintain the full resolution.
 
 
 
-`MRF-based Segmentation and Unsupervised Classification for Building and Road Detection in Peri-urban Areas ofHigh-resolution Satellite Images <https://www.sciencedirect.com/science/article/pii/S0924271616304816>`_
+`MRF-based Segmentation and Unsupervised Classification for Building and Road Detection in Peri-urban Areas of High-resolution Satellite Images <https://www.sciencedirect.com/science/article/pii/S0924271616304816>`_
 ====================================================================================================================
 
 :Authors: I Grinias, C Panagiotakis, G Tziritas
@@ -368,7 +368,7 @@ The presented novel approach maintain the full resolution.
 :Measure: 
 
    
-**Approach (simultanous building and road detection)**
+**Approach (simultaneous building and road detection)**
 
 
 **Method**
@@ -401,14 +401,14 @@ The presented novel approach maintain the full resolution.
 
  **Task** 
  
- 1. Translate RGB images into roadmaps
+ 1. Translate RGB images into road maps
  2. Translate the predictions into intersection locations
  
-**Approach (road detection and roadmap graph)**
+**Approach (road detection and road map graph)**
 
 1. Novel dual-hop generative adversarial network (DH-GAN):  segments images at the level of pixels
 
-2. Smoothing based optimization (SBO): Transform pixelwise segmentation into a roadmap graph
+2. Smoothing based optimization (SBO): Transform pixelwise segmentation into a road map graph
 
 **Method**
 
@@ -419,7 +419,7 @@ b) discriminator D (variant `PatchGAN <https://arxiv.org/abs/1611.07004>`_)
 
 The 
 
-:1. cGAN: predicts pixelwise roatmaps
+:1. cGAN: predicts pixelwise roat maps
           learns a pixelwise segmentation generator G
           D detects G's misleading road outputs
           
@@ -446,7 +446,7 @@ Discriminator Architecture:
 * Optimize negative log-likelihood 
 * mini-batch stochastic gradient decent
 * Adam solver, LR = 2e-4, momentum = 0.5
-* 200 epochs (60th was the bes, afterwards overfitting)
+* 200 epochs (60th was the best, afterwards overfitting)
 
 **Remarks**
 
@@ -467,13 +467,13 @@ Discriminator Architecture:
 
 
 
-**Approach (simultanous building and road detection)**
+**Approach (simultaneous building and road detection)**
 
-Deep residual U-Net:  combines advantages of residual learning and U-Net architechture.  
+Deep residual U-Net:  combines advantages of residual learning and U-Net architecture.  
 
 Difference to U-Net:
 
-1. Residual units instad of plain neural units (basic block)
+1. Residual units instead of plain neural units (basic block)
 2. No cropping operation required.
 
 
@@ -483,14 +483,14 @@ Difference to U-Net:
 
 The U-Net (basically encoder - bridge - decoder structure):
 
-* to get a finer result, it is important to use low level deails while retaining high-level segmantic information
+* to get a finer result, it is important to use low level details while retaining high-level semantic information
 * training is very hard also due to limitations on training samples 
           
-          -> solve this by emplying pre-trained networks, then fine-tune them on target data
+          -> solve this by employing per-trained networks, then fine-tune them on target data
           
-          OR: emplying extensive data augmentation (as done here)
+          OR: employing extensive data augmentation (as done here)
           
- The `Resiudal unit <https://arxiv.org/abs/1512.03385>`_:
+ The `Residual unit <https://arxiv.org/abs/1512.03385>`_:
  
  * consists of a series of stacked residual units
 
@@ -498,10 +498,12 @@ The U-Net (basically encoder - bridge - decoder structure):
 **Training**
 
 * no data augmentation during training 
-* 224x244 omage size
+* 224x244 image size
 * 30000 samples
 * convergence after 50 epochs
 * Mini-batches (size 8)
 * LR 10e3, reduced by factor of 0.1 every 20 epochs
 
-
+**Remarks**
+Achieves promising results although parameters of the residual U-Net are only 1/4 of the one required for an U-Net
+ 7.8M  versus  30.6M).

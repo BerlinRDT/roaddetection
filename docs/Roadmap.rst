@@ -4,8 +4,8 @@
 Portfolio Project by Lisa Hesse, Kiran Prakash and Harald Hentschke, Data Science Retreat Berlin (Batch 15)
 
 Challenges/things to consider/questions
----------------------------------------
-* how to deal with edges and differences in resolution resulting from the overlay of images taken by different satellites or at different times?
+---------------------------------------
+* how to deal with edges and differences in resolution resulting from the overlay of images taken by different satellites or at different times?
 * clouds may be an issue
 * shall we do rural areas only or include settlements? Use different networks for different areas?
 * averaging images taken over time to enhance signal to noise ratio - does Google Earth (GE) do that already? In general, what kind of satellite imagery do we get out of GE, and how (API)?

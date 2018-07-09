@@ -1,12 +1,18 @@
-Road detection and classification in satellite images
+﻿Road detection and classification in satellite images
 =====================================================
 
 Portfolio Project by Lisa Hesse, Kiran Prakash and Harald Hentschke, Data Science Retreat Berlin (Batch 15)
 
-Roadmap/To-do list
-------------------
-* get examples of satellite imagery with labels (training set): selected areas in Indonesia (Sumatra and Borneo)
-* clarify which images had best be used for the task: if from different satellites, there may be problems because an algorithm tuned to images from one satellite may not be the best for those from a different satellite
+Challenges/things to consider/questions
+---------------------------------------
+* how to deal with edges and differences in resolution resulting from the overlay of images taken by different satellites or at different times?
+* clouds may be an issue
+* shall we do rural areas only or include settlements? Use different networks for different areas?
+* averaging images taken over time to enhance signal to noise ratio - does Google Earth (GE) do that already? In general, what kind of satellite imagery do we get out of GE, and how (API)?
+* hi-resolution images: tire tracks may be a defining feature of unpaved roads
+* we should decide on fixed image sizes for both hi and lo resolution images early on
+* maybe label and classify creeks and rivers as well so as to prevent the network from misclassifing them?
+* maybe classify not only paved and unpaved roads, but also 'roads in settlements'?
 
 Ressources
 ----------
@@ -36,3 +42,4 @@ Copernicus satellite info (from Wikipedia)
 Ideas
 -----
 * divide each satellite image into small segments, possibly in several runs of overlapping segments, classify these into two or three categories (paved road/unpaved road/no road), then try to stick the road-detecting ones together so that we have an outline of the roads
+* use nested crossvalidation on small sample-dats sets

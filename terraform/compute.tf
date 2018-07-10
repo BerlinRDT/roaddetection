@@ -1,4 +1,9 @@
 variable "project_name" {}
+variable "region" {}
+
+provider "google" {
+ region = "${var.region}"
+}
 
 data "google_compute_zones" "available" {}
 

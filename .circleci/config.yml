@@ -51,8 +51,8 @@ jobs:
           destination: test-reports  
   train_large:
     docker:
-      - image: google/cloud-sdk
-      - image: circleci/terraform:0.11.7
+      # - image: google/cloud-sdk
+      - image: hashicorp/terraform:0.11.7
     working_directory: ~/repo/terraform
 
     steps:
@@ -63,8 +63,8 @@ jobs:
           command: echo $GCLOUD_SERVICE_KEY > ${HOME}/gcloud-service-key.json
 
       - run:
-          name: Terraform Plan
-          command: terraform plan
+          name: Terraform init
+          command: terraform init
 
 workflows:
   version: 2

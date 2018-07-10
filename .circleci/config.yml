@@ -68,7 +68,7 @@ jobs:
 
       - run:
           name: Terraform Apply
-          command: terraform apply --quiet
+          command: terraform apply -auto-approve
 
       - run:
           name: Terraform Destroy

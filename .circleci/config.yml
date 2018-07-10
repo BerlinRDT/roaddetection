@@ -61,7 +61,7 @@ jobs:
       - run:
           name: Store Service Account
           command: echo $GCLOUD_SERVICE_KEY > ${HOME}/gcloud-service-key.json
-          # working_directory: ~/repo/terraform
+          # working_directory: ./terraform
 
       - run:
           name: Terraform init
@@ -70,12 +70,12 @@ jobs:
 
       - run:
           name: Terraform Apply
-          command: cd terraform &&  terraform apply -auto-approve
+          command: terraform apply -auto-approve
           working_directory: ./terraform
 
       - run:
           name: Terraform Destroy
-          command: cd terraform && terraform destroy --force
+          command: terraform destroy --force
           working_directory: ./terraform
           when: always
 

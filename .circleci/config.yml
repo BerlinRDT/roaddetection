@@ -65,17 +65,17 @@ jobs:
       - run:
           name: Terraform init
           command: terraform init
-          working_directory: terraform
+          working_directory: ~/repo/terraform
 
       - run:
           name: Terraform Apply
           command: terraform apply -auto-approve
-          working_directory: terraform
+          working_directory: ~/repo/terraform
 
       - run:
           name: Terraform Destroy
           command: terraform destroy --force
-          working_directory: terraform
+          working_directory: ~/repo/terraform
 
 workflows:
   version: 2

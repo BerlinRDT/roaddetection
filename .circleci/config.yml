@@ -59,24 +59,23 @@ jobs:
       - checkout
 
       - run:
-          name: Swith to terraform dir
-          command: cd terraform
-
-      - run:
           name: Store Service Account
           command: echo $GCLOUD_SERVICE_KEY > ${HOME}/gcloud-service-key.json
 
       - run:
           name: Terraform init
           command: terraform init
+          working_directory: terraform
 
       - run:
           name: Terraform Apply
           command: terraform apply -auto-approve
+          working_directory: terraform
 
       - run:
           name: Terraform Destroy
           command: terraform destroy --force
+          working_directory: terraform
 
 workflows:
   version: 2

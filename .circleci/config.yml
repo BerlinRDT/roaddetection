@@ -61,6 +61,7 @@ jobs:
       - run:
           name: Store Service Account
           command: echo $GCLOUD_SERVICE_KEY > ${HOME}/gcloud-service-key.json
+          working_directory: ~/repo/terraform
 
       - run:
           name: Terraform init

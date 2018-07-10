@@ -66,6 +66,14 @@ jobs:
           name: Terraform init
           command: terraform init
 
+      - run:
+          name: Terraform Apply
+          command: terraform apply --quiet
+
+      - run:
+          name: Terraform Destroy
+          command: terraform destroy --force
+
 workflows:
   version: 2
   build_and_deploy:

@@ -10,18 +10,28 @@ data "google_compute_zones" "available" {}
 resource "google_compute_instance" "default" {
  zone = "${data.google_compute_zones.available.names[0]}"
  project = "${var.project_name}"
- name = "tf-compute-1"
- machine_type = "f1-micro"
+ name = "road-detection"
+ machine_type = "n1-standard-1"
  boot_disk {
    initialize_params {
-     image = "ubuntu-1604-xenial-v20170328"
+     image = "ubuntu-gpu-1531339168"
    }
  }
+
  network_interface {
    network = "default"
    access_config {
    }
  }
+
+ guest_accelerator {
+  type = "nvidia-tesla-k80"
+  count = 1
+}
+ 
+ scheduling {
+  on_host_maintenance="TERMINATE"
+ } 
 }
 
 output "instance_id" {

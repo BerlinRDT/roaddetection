@@ -1,7 +1,14 @@
-RoadDetection
-==============================
+Detection and classification of roads in satellite imagery of rural areas
+=========================================================================
 
-Detection and classification of roads in satellite images
+Portfolio project at Data Science Retreat (Berlin), Batch # 15, June-September 2018
+-----------------------------------------------------------------------------------
+Lisa Heße, Kiran Prakash and Harald Hentschke
+---------------------------------------------
+
+In the 21st century, intense road construction in rural areas all over the world is anticipated. A large part of this construction work will occur in an unplanned manner and have negative repercussions, partly because a large part of roads in rural areas are undocumented. This project is a machine learning attempt at detecting roads in rural areas, and particularly at discriminating between paved and unpaved roads, inspired by a recent appeal to the AI community (Laurance, W. F. Road mapping needs AI experts. Nature 558, 30; 2018). Based on labeled roads in selected areas of Southeastern Borneo, kindly provided by the group of Prof. Laurance (James Cook University, Australia), we are currently setting up bespoke training data and developing a deep learning model. 
+
+More details will follow as the work progresses.
 
 Project Organization
 ------------

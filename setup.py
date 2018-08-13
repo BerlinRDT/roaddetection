@@ -7,4 +7,6 @@ setup(
     description='Detection and classification of roads in satellite images',
     author='DSR_RDTeam',
     license='BSD-3',
+    setup_requires=["pytest-runner"],
+    tests_require=["pytest"],
 )

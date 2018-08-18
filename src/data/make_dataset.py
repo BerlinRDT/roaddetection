@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+
 import click
 import logging
 from pathlib import Path
@@ -6,6 +7,7 @@ from dotenv import find_dotenv, load_dotenv
 
 from raster import Raster
 from utils import get_meta_data
+from spatial_index import create_spatial_index
 import kml2geojson as k2g
 
 
@@ -24,6 +26,7 @@ def main(input_filepath, output_filepath):
     labels_path = "{}/labels".format(input_filepath)
 
     convert_kml_to_geojson(labels_path)
+    create_spatial_index(labels_path)
     make_tiles(images_path, output_filepath)
 
 

@@ -1,7 +1,7 @@
 import logging
 
 from pathlib import Path
-from shapely.geometry import mapping, LineString, shape, Polygon, box
+from shapely.geometry import LineString
 from rtree import index
 import fiona
 

@@ -1,4 +1,4 @@
-.PHONY: clean data lint requirements sync_train_data_to_cloud sync_raw_data_from_cloud
+.PHONY: clean data clean_data lint requirements sync_train_data_to_cloud sync_raw_data_from_cloud
 
 #################################################################################
 # GLOBALS                                                                       #
@@ -33,6 +33,11 @@ endif
  clean:
 	find . -type f -name "*.py[co]" -delete
 	find . -type d -name "__pycache__" -delete
+
+## Delete all contents of data/train/map and data/train/sat
+ clean_data:
+	rm -f data/train/map/*
+	rm -f data/train/sat/*
 
 ## Lint using flake8
  lint:

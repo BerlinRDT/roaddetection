@@ -13,3 +13,4 @@ kml2geojson
 rasterio
 geopandas
 fiona
+s3cmd

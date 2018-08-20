@@ -1,4 +1,4 @@
-from shapely.geometry import mapping, shape, Polygon, box
+from shapely.geometry import mapping, shape, Polygon, box, GeometryCollection
 from shapely import wkt
 
 import geopandas as gp
@@ -44,8 +44,5 @@ def cut_linestrings_at_bounds(bounds, linestring):
     lineobj = wkt.loads(str(shape(linestring)))
     conus_transformed_poly = wkt.loads(str(bounds))
     conus_intersection = conus_transformed_poly.intersection(lineobj)
-    print("mapping(conus_intersection)")
-    print(mapping(conus_intersection))
-    s = shape(mapping(conus_intersection))
-    print("done mapping(conus_intersection)")
-    return s
+    if conus_intersection != GeometryCollection():
+        return shape(mapping(conus_intersection))

@@ -32,7 +32,7 @@ def main(input_filepath, output_filepath):
 
 def make_tiles(images_path, output_filepath, idx):
     for file in Path(images_path).iterdir():
-        if file.name.endswith(('.tif', '.tiff')):
+        if file.name.endswith(('newVisual.tif', 'newVisual.tiff')):
             meta_data = get_meta_data(images_path, file.name)
             raster = Raster(file, meta_data)
             raster.to_tiles(output_path=output_filepath, window_size=1024, idx=idx)

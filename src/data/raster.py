@@ -14,6 +14,7 @@ from utils import get_tile_prefix
 from bounding_box import inner_bbox, window_trueBoundingBox, cut_linestrings_at_bounds
 import pyproj
 from functools import partial
+from operator import is_not
 
 
 class Raster(object):
@@ -58,9 +59,11 @@ class Raster(object):
 
         dst_bounds = mapping(sec_WindowImageBBox.geometry)['bbox']
 
-        intersecting_road_items = spatial_idx.intersection(windowBounds, objects=True)
+        intersecting_road_items = spatial_idx.intersection(dst_bounds, objects=True)
 
-        lines = [r.object for r in intersecting_road_items]
+        lines = [cut_linestrings_at_bounds(sec_WindowImageBBox.geometry.values[0], r.object)
+                 for r in intersecting_road_items]
+        lines = list(filter(partial(is_not, None), lines))
 
         m2 = meta.copy()
         m2['count'] = 1

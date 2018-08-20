@@ -10,3 +10,7 @@ python-dotenv>=0.5.1
 pytest
 pyproj
 kml2geojson
+rasterio
+geopandas
+fiona
+s3cmd

@@ -10,7 +10,7 @@ from rasterio.warp import transform_bounds
 
 import numpy as np
 from itertools import product
-from utils import get_tile_prefix, output_sat_path, output_sat_rgb_path, output_map_path
+from utils import output_sat_path, output_sat_rgb_path, output_map_path
 from bounding_box import inner_bbox, window_trueBoundingBox, cut_linestrings_at_bounds
 import pyproj
 from functools import partial
@@ -101,7 +101,7 @@ class Raster(object):
             w = raster_rgb.read(window=window)
             with rio.open(outpath, 'w', **m2) as outds:
                 outds.write(w)
- 
+
     def is_window_empty(self, w):
         return not np.any(w)
 

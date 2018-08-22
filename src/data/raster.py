@@ -10,7 +10,7 @@ from rasterio.warp import transform_bounds
 
 import numpy as np
 from itertools import product
-from utils import get_tile_prefix
+from utils import get_tile_prefix, output_sat_path, output_sat_rgb_path, output_map_path
 from bounding_box import inner_bbox, window_trueBoundingBox, cut_linestrings_at_bounds
 import pyproj
 from functools import partial
@@ -19,10 +19,11 @@ from operator import is_not
 
 class Raster(object):
 
-    def __init__(self, imageFile, meta):
+    def __init__(self, analyticFile, rgbFile, meta):
         self.logger = logging.getLogger(__name__)
 
-        self.imageFile = imageFile
+        self.analyticFile = analyticFile
+        self.rgbFile = rgbFile
         self.meta = meta
         self.DST_CRS = "EPSG:4326"
 
@@ -37,18 +38,19 @@ class Raster(object):
             yield window, transform
 
     def to_tiles(self, output_path, window_size, idx):
-        logging.info("Generating tiles for image : {}".format(self.imageFile.name))
+        logging.info("Generating tiles for image : {}".format(self.analyticFile.name))
 
         i = 0
-        with rio.open(self.imageFile) as raster:
+        with rio.open(self.analyticFile) as raster:
             innerBBox = inner_bbox(self.meta)
             meta = raster.meta.copy()
             for window, t in self.get_windows(raster, window_size, window_size):
-                w = raster.read(window=window)
-                if not self.is_window_empty(w):
+                w_img = raster.read(window=window)
+                if not self.is_window_empty(w_img):
                     meta['transform'] = t
                     meta['width'], meta['height'] = window.width, window.height
-                    self.write_tile(w, meta, output_path, i)
+                    self.write_analytic_tile(w_img, meta, output_path, i)
+                    self.write_rgb_tile(window, meta, output_path, i)
                     self.write_map(raster, window, output_path, idx, i, meta, innerBBox, window_size)
                     i += 1
 
@@ -70,7 +72,7 @@ class Raster(object):
         m2['dtype'] = 'uint8'
         nodata = 255
 
-        with rio.open(self.output_map_path(i, output_path), 'w', **m2) as outds:
+        with rio.open(output_map_path(self.analyticFile, i, output_path), 'w', **m2) as outds:
             if len(lines) > 0:
                 g2 = [transform(self.project(), line) for line in lines]
                 burned = features.rasterize(g2,
@@ -86,23 +88,20 @@ class Raster(object):
         project = partial(pyproj.transform, p1, p2)
         return project
 
-    def write_tile(self, window, meta, output_path, i):
-        outpath = self.output_sat_path(i, output_path)
+    def write_analytic_tile(self, window, meta, output_path, i):
+        outpath = output_sat_path(self.analyticFile, i, output_path)
         with rio.open(outpath, 'w', **meta) as outds:
             outds.write(window)
 
-    def output_sat_path(self, i, output_path):
-        TRAINING_SAT_DIR = '{}/sat'.format(output_path)
-        output_tile_filename = '{}/{}_{}.tif'
-        outpath = output_tile_filename.format(TRAINING_SAT_DIR, get_tile_prefix(self.imageFile.name), i)
-        return outpath
-
-    def output_map_path(self, i, output_path):
-        TRAINING_MAP_DIR = '{}/map'.format(output_path)
-        output_tile_filename = '{}/{}_{}.tif'
-        outpath = output_tile_filename.format(TRAINING_MAP_DIR, get_tile_prefix(self.imageFile.name), i)
-        return outpath
-
+    def write_rgb_tile(self, window, meta, output_path, i):
+        outpath = output_sat_rgb_path(self.analyticFile, i, output_path)
+        m2 = meta.copy()
+        m2['dtype'] = 'uint8'
+        with rio.open(self.rgbFile.as_posix()) as raster_rgb:
+            w = raster_rgb.read(window=window)
+            with rio.open(outpath, 'w', **m2) as outds:
+                outds.write(w)
+ 
     def is_window_empty(self, w):
         return not np.any(w)
 

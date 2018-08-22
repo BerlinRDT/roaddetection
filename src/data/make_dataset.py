@@ -6,7 +6,7 @@ from pathlib import Path
 from dotenv import find_dotenv, load_dotenv
 
 from raster import Raster
-from utils import get_meta_data
+from utils import get_meta_data_filename, get_rgb_filename
 from spatial_index import create_spatial_index
 import kml2geojson as k2g
 
@@ -31,10 +31,11 @@ def main(input_filepath, output_filepath):
 
 
 def make_tiles(images_path, output_filepath, idx):
-    for file in Path(images_path).iterdir():
-        if file.name.endswith(('newVisual.tif', 'newVisual.tiff')):
-            meta_data = get_meta_data(images_path, file.name)
-            raster = Raster(file, meta_data)
+    for r_analytic in Path(images_path).iterdir():
+        if r_analytic.name.endswith(('AnalyticMS.tif', 'AnalyticMS_SR.tif', 'AnalyticMS.tiff', 'AnalyticMS_SR.tiff')):
+            meta_data_filename = get_meta_data_filename(images_path, r_analytic.name)
+            r_visual_rgb_filename = get_rgb_filename(images_path, r_analytic.name)
+            raster = Raster(r_analytic, r_visual_rgb_filename, meta_data_filename)
             raster.to_tiles(output_path=output_filepath, window_size=1024, idx=idx)
 
 

@@ -38,7 +38,8 @@ endif
  clean_data:
 	rm -f data/train/map/*
 	rm -f data/train/sat/*
-
+	rm -f data/train/sat_rgb/*
+	
 ## Lint using flake8
  lint:
 	flake8 src

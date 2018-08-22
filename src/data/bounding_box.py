@@ -40,9 +40,22 @@ def window_trueBoundingBox(windowBox, imageBox):
     return gdf_TrueBounds
 
 
-def cut_linestrings_at_bounds(bounds, linestring):
-    lineobj = wkt.loads(str(shape(linestring)))
-    conus_transformed_poly = wkt.loads(str(bounds))
-    conus_intersection = conus_transformed_poly.intersection(lineobj)
-    if conus_intersection != GeometryCollection():
-        return shape(mapping(conus_intersection))
+def cut_linestrings_at_bounds(bounds, intersecting_road_items):
+    geom = []
+    iden = []
+    for geo_object in intersecting_road_items:
+        road = geo_object.object['geometry']
+        label = geo_object.object['label']
+        for boundingBox in bounds.geometry.values:
+            lineobj = wkt.loads(str(shape(road)))
+            conus_transformed_poly = wkt.loads(str(boundingBox))
+            conus_intersection = conus_transformed_poly.intersection(lineobj)
+            if not shape(mapping(conus_intersection)).is_empty and shape(mapping(conus_intersection)).is_valid:
+                geom.append(shape(mapping(conus_intersection)))
+                iden.append(label)
+
+    gpd = gp.GeoDataFrame({'label': iden}, geometry=geom, crs={'init': 'epsg:4326'})
+    # For testing if different colors appear in the rasterized labels
+    # if len(gpd) > 3:
+    #     gpd.loc['label'] = 1
+    return gpd

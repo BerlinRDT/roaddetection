@@ -15,12 +15,18 @@ def create_spatial_index(labels_path):
         if file.name.endswith('.geojson'):
             with fiona.open('{}/{}'.format(labels_path, file.name), "r") as geojson:
                 lines = [
-                    LineString(feature["geometry"]["coordinates"])
+                    (LineString(feature["geometry"]["coordinates"]), feature['properties']['name'])
                     for feature in geojson
                     if len(feature["geometry"]["coordinates"]) >= 2
                 ]
                 count = -1
-                for line in lines:
+                for line, prop_name in lines:
                     count += 1
-                    idx.insert(count, line.bounds, obj=line)
+                    payload = {'geometry': line, 'label': get_road_label(prop_name)}
+                    idx.insert(count, line.bounds, obj=payload)
     return idx
+
+
+def get_road_label(prop_name):
+    labels = prop_name.split('_')
+    return labels[2] if len(labels) > 2 else 2

@@ -63,9 +63,7 @@ class Raster(object):
 
         intersecting_road_items = spatial_idx.intersection(dst_bounds, objects=True)
 
-        lines = [cut_linestrings_at_bounds(sec_WindowImageBBox.geometry.values[0], r.object)
-                 for r in intersecting_road_items]
-        lines = list(filter(partial(is_not, None), lines))
+        linesDf = cut_linestrings_at_bounds(sec_WindowImageBBox, intersecting_road_items)
 
         m2 = meta.copy()
         m2['count'] = 1
@@ -73,9 +71,9 @@ class Raster(object):
         nodata = 255
 
         with rio.open(output_map_path(self.analyticFile, i, output_path), 'w', **m2) as outds:
-            if len(lines) > 0:
-                g2 = [transform(self.project(), line) for line in lines]
-                burned = features.rasterize(g2,
+            if len(linesDf) > 0:
+                g2 = linesDf.to_crs(m2['crs'].data)
+                burned = features.rasterize(shapes=[(x.geometry, int(x.label)) for i, x in g2.iterrows()],
                                             fill=nodata,
                                             out_shape=(window_size, window_size),
                                             all_touched=True,

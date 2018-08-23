@@ -97,18 +97,25 @@ class Raster(object):
         m2 = meta.copy()
         m2['count'] = 1
         m2['dtype'] = 'uint8'
-        nodata = 255
+        nodata = 0
 
         with rio.open(output_map_path(self.analyticFile, i, output_path), 'w', **m2) as outds:
             if len(linesDf) > 0:
                 g2 = linesDf.to_crs(m2['crs'].data)
-                burned = features.rasterize(shapes=[(x.geometry, int(x.label)) for i, x in g2.iterrows()],
+                burned = features.rasterize(shapes=[(x.geometry, self.get_pixel_value(int(x.label))) for i, x in g2.iterrows()],
                                             fill=nodata,
                                             out_shape=(window_size, window_size),
                                             all_touched=True,
                                             transform=meta['transform'])
                 outds.write(burned, indexes=1)
 
+    def get_pixel_value(self,label):
+        if label == 1:
+            return 127
+        elif label == 2:
+            return 255
+        return 0
+        
     def project(self):
         p1 = pyproj.Proj(init=self.DST_CRS)
         p2 = pyproj.Proj(init='EPSG:32750')  # the is the crs of the source raster file

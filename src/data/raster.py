@@ -115,12 +115,6 @@ class Raster(object):
         elif label == 2:
             return 255
         return 0
-        
-    def project(self):
-        p1 = pyproj.Proj(init=self.DST_CRS)
-        p2 = pyproj.Proj(init='EPSG:32750')  # the is the crs of the source raster file
-        project = partial(pyproj.transform, p1, p2)
-        return project
 
     def write_analytic_tile(self, window, meta, output_path, i):
         outpath = output_sat_path(self.analyticFile, i, output_path)

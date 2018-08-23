@@ -27,23 +27,22 @@ def get_tile_prefix(rasterFileName):
     """
     return rasterFileName.rsplit("_", 1)[0].rsplit("_AnalyticMS")[0]
 
-
 def output_sat_path(analyticFile, i, output_path):
     TRAINING_SAT_DIR = '{}/sat'.format(output_path)
-    output_tile_filename = '{}/{}_{}.tif'
+    output_tile_filename = '{0:s}/{1:s}_{2:04d}.tif'
     outpath = output_tile_filename.format(TRAINING_SAT_DIR, get_tile_prefix(analyticFile.name), i)
     return outpath
 
 
 def output_sat_rgb_path(analyticFile, i, output_path):
     TRAINING_SAT_RGB_DIR = '{}/sat_rgb'.format(output_path)
-    output_tile_filename = '{}/{}_{}.tif'
+    output_tile_filename = '{0:s}/{1:s}_{2:04d}.tif'
     outpath = output_tile_filename.format(TRAINING_SAT_RGB_DIR, get_tile_prefix(analyticFile.name), i)
     return outpath
 
 
 def output_map_path(analyticFile, i, output_path):
     TRAINING_MAP_DIR = '{}/map'.format(output_path)
-    output_tile_filename = '{}/{}_{}.tif'
+    output_tile_filename = '{0:s}/{1:s}_{2:04d}.tif'
     outpath = output_tile_filename.format(TRAINING_MAP_DIR, get_tile_prefix(analyticFile.name), i)
     return outpath

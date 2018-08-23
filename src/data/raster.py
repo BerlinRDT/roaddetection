@@ -27,24 +27,53 @@ class Raster(object):
         self.meta = meta
         self.DST_CRS = "EPSG:4326"
 
-    def get_windows(self, raster, width, height):
-        nols, nrows = raster.meta['width'], raster.meta['height']
-        offsets = product(range(0, nols, width), range(0, nrows, height))
-        big_window = windows.Window(col_off=0, row_off=0, width=nols, height=nrows)
+    def get_windows(self, raster, width, height, overlap=None):
+        """
+        Produces regularly spaced tiles (instances of rasterio.window.Window) 
+        of size [width, height] pixels from rasterio DataSetReader (image file opened 
+        with rasterio.open) with overlap 
+        width: width of tiles (pixels)
+        height: height of tiles (pixels)
+        overlap: overlap of tiles in each dimension (relative units, range [0 1[)
+        """    
+        # check overlap
+        if overlap is None:
+            overlap = 0.0
+        else:
+            assert (overlap >= 0.0) and (overlap < 1.0), "overlap must be in [0 1["
+        
+        width_masterImg, height_masterImg = raster.meta['width'], raster.meta['height']
+        
+        # check that tiles are within master image
+        assert (width <= width_masterImg) and (height <= height_masterImg), "tiles are too large for image"
+        
+        # produce a list of regularly spaced horizontal offsets such that all tiles produced 
+        # from it fit into the master image, plus one offset which ensures that the right edge 
+        # of the last tile is identical to the right edge of the master window (the implication
+        # is that the last tile has a different degree of overlap with its neighbor than the other
+        # images)
+        offsets_horiz = list(range(0, width_masterImg, round(width *(1.0 - overlap))))
+        offsets_horiz[-1] = width_masterImg - width
+        # same for vertical offsets
+        offsets_vert = list(range(0, height_masterImg, round(height * (1.0 - overlap))))
+        offsets_vert[-1] = height_masterImg - height
+        # construct iterator
+        offsets = product(offsets_horiz, offsets_vert)
+        
         for col_off, row_off in offsets:
-            window = windows.Window(col_off=col_off, row_off=row_off, width=width, height=height).intersection(
-                big_window)
+            window = windows.Window(col_off=col_off, row_off=row_off, width=width, height=height)
             transform = windows.transform(window, raster.transform)
             yield window, transform
 
-    def to_tiles(self, output_path, window_size, idx):
-        logging.info("Generating tiles for image : {}".format(self.analyticFile.name))
 
+    def to_tiles(self, output_path, window_size, idx, overlap):
+        logging.info("Generating tiles for image : {}".format(self.analyticFile.name) + \
+                     " with edge overlap {}".format(overlap))
         i = 0
         with rio.open(self.analyticFile) as raster:
             innerBBox = inner_bbox(self.meta)
             meta = raster.meta.copy()
-            for window, t in self.get_windows(raster, window_size, window_size):
+            for window, t in self.get_windows(raster, window_size, window_size, overlap):
                 w_img = raster.read(window=window)
                 if not self.is_window_empty(w_img):
                     meta['transform'] = t

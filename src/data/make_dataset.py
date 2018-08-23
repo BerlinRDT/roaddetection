@@ -27,16 +27,16 @@ def main(input_filepath, output_filepath):
 
     convert_kml_to_geojson(labels_path)
     idx = create_spatial_index(labels_path)
-    make_tiles(images_path, output_filepath, idx)
+    make_tiles(images_path, output_filepath, idx, overlap=0.25)
 
 
-def make_tiles(images_path, output_filepath, idx):
+def make_tiles(images_path, output_filepath, idx, overlap):
     for r_analytic in Path(images_path).iterdir():
         if r_analytic.name.endswith(('AnalyticMS.tif', 'AnalyticMS_SR.tif', 'AnalyticMS.tiff', 'AnalyticMS_SR.tiff')):
             meta_data_filename = get_meta_data_filename(images_path, r_analytic.name)
             r_visual_rgb_filename = get_rgb_filename(images_path, r_analytic.name)
             raster = Raster(r_analytic, r_visual_rgb_filename, meta_data_filename)
-            raster.to_tiles(output_path=output_filepath, window_size=1024, idx=idx)
+            raster.to_tiles(output_path=output_filepath, window_size=1024, idx=idx, overlap=overlap)
 
 
 def convert_kml_to_geojson(labels_path):

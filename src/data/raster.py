@@ -1,14 +1,13 @@
 import logging
 # from shapely.ops import transform
+import numpy as np
 from shapely.geometry import mapping
-
 import rasterio as rio
-
 from rasterio import windows
 from rasterio import features
 from rasterio.warp import transform_bounds
+from skimage import exposure
 
-import numpy as np
 from itertools import product
 from utils import output_sat_path, output_sat_rgb_path, output_map_path
 from bounding_box import inner_bbox, window_trueBoundingBox, cut_linestrings_at_bounds
@@ -70,15 +69,36 @@ class Raster(object):
         Scales values in numpy array img_arr, representing an image obtained via a rasterio 
         read operation, converts their number type and returns the array thus altered.
         img_arr: input array (different color bands are in the first dimension!)
-        file_handle: handle to underlying file resulting from rasterio.open
+        meta: meta data from underlying file
         dtype: string, number type of output array, e.g. "uint8"
+        scaling_type: determines how pixel intensity values are scaled, legal 
+        values are 'percentile' and 'equalize_adapthist'
         """
         # scale 
-        logging.info("Scaling image using method {}".format(scaling_type))   
+        logging.info("Scaling image using method {}".format(scaling_type))  
+        # percentile-based method: band by band
         if scaling_type is "percentile":
-            pass
+            prc = np.zeros([meta["count"]])
+            for band_ix in range(0, meta["count"]):
+                prc[band_ix] = np.percentile(img_arr[band_ix,:,:], (99.9,))
+                img_arr[band_ix] = exposure.rescale_intensity(img_arr[band_ix,:,:], in_range=(0, prc[band_ix]))
+            # scale down for type cast
+            if dtype is meta["dtype"]:
+                pass
+            elif ((dtype is 'uint8') and (meta["dtype"] is 'uint16')):
+                img_arr = img_arr >> 8
+            else:
+                raise Exception("scaling for any cast other than uint16->uint8 not yet defined")
         elif scaling_type is "equalize_adapthist":
-            pass
+            # convert to float temporarily
+            img_arr = img_arr.astype("float32")
+            meta["dtype"] = "float32"
+            for band_ix in range(0, meta["count"]):
+                img_arr[band_ix] = img_arr[band_ix]/img_arr[band_ix].max()
+                img_arr[band_ix] = exposure.equalize_adapthist(img_arr[band_ix], clip_limit=0.03)
+            # scaling
+            img_arr = (img_arr * np.iinfo(dtype).max)
+        
         if dtype is not meta["dtype"]:
             logging.info("Converting from {} to {}".format(meta["dtype"], dtype))
             # type cast 

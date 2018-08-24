@@ -21,22 +21,34 @@ def main(input_filepath, output_filepath):
          be analyzed (saved in {Root}/data/train).
     """
     logger = logging.getLogger(__name__)
+    # set a few parameters that should be made input parameters
+    window_size=1024
+    overlap=0.25
+    dtype="uint8"
+    scaling_type="percentile" #"equalize_adapthist" #"percentile"
+    
+    # some error checks
+    assert(dtype in ("uint8", "uint16"))
+    assert(scaling_type in ("percentile", "equalize_adapthist"))
+    
     logger.info('making final data set from raw data')
     images_path = "{}/images".format(input_filepath)
     labels_path = "{}/labels".format(input_filepath)
 
     convert_kml_to_geojson(labels_path)
     idx = create_spatial_index(labels_path)
-    make_tiles(images_path, output_filepath, idx, overlap=0.25)
+    make_tiles(images_path, output_filepath, window_size=window_size, idx=idx, \
+               overlap=overlap, dtype=dtype, scaling_type=scaling_type)
 
 
-def make_tiles(images_path, output_filepath, idx, overlap):
+def make_tiles(images_path, output_filepath, window_size, idx, overlap, dtype, scaling_type):
     for r_analytic in Path(images_path).iterdir():
         if r_analytic.name.endswith(('AnalyticMS.tif', 'AnalyticMS_SR.tif', 'AnalyticMS.tiff', 'AnalyticMS_SR.tiff')):
             meta_data_filename = get_meta_data_filename(images_path, r_analytic.name)
             r_visual_rgb_filename = get_rgb_filename(images_path, r_analytic.name)
             raster = Raster(r_analytic, r_visual_rgb_filename, meta_data_filename)
-            raster.to_tiles(output_path=output_filepath, window_size=1024, idx=idx, overlap=overlap, dtype='uint8', scaling_type=None)
+            raster.to_tiles(output_path=output_filepath, window_size=window_size, \
+                            idx=idx, overlap=overlap, dtype=dtype, scaling_type=scaling_type)
 
 
 def convert_kml_to_geojson(labels_path):

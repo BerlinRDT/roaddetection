@@ -65,19 +65,40 @@ class Raster(object):
             transform = windows.transform(window, raster.transform)
             yield window, transform
 
+    def scale_and_typecast(self, img_arr, meta, dtype, scaling_type=None):
+        """
+        Scales values in numpy array img_arr, representing an image obtained via a rasterio 
+        read operation, converts their number type and returns the array thus altered.
+        img_arr: input array (different color bands are in the first dimension!)
+        file_handle: handle to underlying file resulting from rasterio.open
+        dtype: string, number type of output array, e.g. "uint8"
+        """
+        # scale 
+        logging.info("Scaling image using method {}".format(scaling_type))   
+        if scaling_type is "percentile":
+            pass
+        elif scaling_type is "equalize_adapthist":
+            pass
+        if dtype is not meta["dtype"]:
+            logging.info("Converting from {} to {}".format(meta["dtype"], dtype))
+            # type cast 
+            img_arr = img_arr.astype(dtype)
+            # don't forget to adjust metadata
+            meta["dtype"] = dtype
+        return img_arr, meta
 
-    def to_tiles(self, output_path, window_size, idx, overlap):
+    def to_tiles(self, output_path, window_size, idx, overlap, dtype, scaling_type):
         logging.info("Generating tiles for image : {}".format(self.analyticFile.name) + \
                      " with edge overlap {}".format(overlap))
         
         i = 0
         with rio.open(self.analyticFile) as raster:
+            innerBBox = inner_bbox(self.meta)
+            meta = raster.meta.copy()            
             # open and read full image file
             fullImg = raster.read()
-            # scaling and type conversion belong here
-            
-            innerBBox = inner_bbox(self.meta)
-            meta = raster.meta.copy()
+            # scale and convert
+            fullImg, meta = self.scale_and_typecast(fullImg, meta, dtype, scaling_type=scaling_type)
             # loop over windows
             for window, t in self.get_windows(raster, window_size, window_size, overlap):
                 # convert windows to numpy array slice indexes

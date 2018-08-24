@@ -36,7 +36,7 @@ def make_tiles(images_path, output_filepath, idx, overlap):
             meta_data_filename = get_meta_data_filename(images_path, r_analytic.name)
             r_visual_rgb_filename = get_rgb_filename(images_path, r_analytic.name)
             raster = Raster(r_analytic, r_visual_rgb_filename, meta_data_filename)
-            raster.to_tiles(output_path=output_filepath, window_size=1024, idx=idx, overlap=overlap)
+            raster.to_tiles(output_path=output_filepath, window_size=1024, idx=idx, overlap=overlap, dtype='uint8', scaling_type=None)
 
 
 def convert_kml_to_geojson(labels_path):

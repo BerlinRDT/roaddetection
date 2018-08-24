@@ -75,7 +75,7 @@ jobs:
 
       - run:
           name: Terraform Destroy
-          command: terraform destroy --force
+          command: terraform destroy -target google_compute_instance.default --force
           working_directory: ./terraform
           when: always
 

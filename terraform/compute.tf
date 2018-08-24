@@ -13,9 +13,8 @@ resource "google_compute_instance" "default" {
  name = "road-detection"
  machine_type = "n1-standard-1"
  boot_disk {
-   initialize_params {
-     image = "ubuntu-gpu-1531339168"
-   }
+   auto_delete = false
+   source = "${google_compute_disk.default.name}"
  }
 
  network_interface {

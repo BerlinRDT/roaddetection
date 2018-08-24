@@ -1,5 +1,5 @@
 import logging
-from shapely.ops import transform
+# from shapely.ops import transform
 from shapely.geometry import mapping
 
 import rasterio as rio
@@ -12,9 +12,9 @@ import numpy as np
 from itertools import product
 from utils import output_sat_path, output_sat_rgb_path, output_map_path
 from bounding_box import inner_bbox, window_trueBoundingBox, cut_linestrings_at_bounds
-import pyproj
-from functools import partial
-from operator import is_not
+# import pyproj
+# from functools import partial
+# from operator import is_not
 
 
 class Raster(object):
@@ -69,12 +69,21 @@ class Raster(object):
     def to_tiles(self, output_path, window_size, idx, overlap):
         logging.info("Generating tiles for image : {}".format(self.analyticFile.name) + \
                      " with edge overlap {}".format(overlap))
+        
         i = 0
         with rio.open(self.analyticFile) as raster:
+            # open and read full image file
+            fullImg = raster.read()
+            # scaling and type conversion belong here
+            
             innerBBox = inner_bbox(self.meta)
             meta = raster.meta.copy()
+            # loop over windows
             for window, t in self.get_windows(raster, window_size, window_size, overlap):
-                w_img = raster.read(window=window)
+                # convert windows to numpy array slice indexes
+                ix = window.toslices()
+                # excise data
+                w_img = fullImg[:,ix[0], ix[1]]
                 if not self.is_window_empty(w_img):
                     meta['transform'] = t
                     meta['width'], meta['height'] = window.width, window.height

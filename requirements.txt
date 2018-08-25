@@ -17,3 +17,4 @@ s3cmd
 scikit-image
 keras
 rtree
+pillow

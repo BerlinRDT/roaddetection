@@ -16,3 +16,4 @@ fiona
 s3cmd
 scikit-image
 keras
+rtree

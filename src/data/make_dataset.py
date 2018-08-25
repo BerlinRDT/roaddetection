@@ -22,7 +22,7 @@ def main(input_filepath, output_filepath):
     """
     logger = logging.getLogger(__name__)
     # set a few parameters that should be made input parameters
-    window_size=1024
+    window_size=256
     overlap=0.25
     dtype="uint8"
     scaling_type="percentile" #"equalize_adapthist" #"percentile"

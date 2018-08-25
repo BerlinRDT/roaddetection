@@ -44,6 +44,14 @@ endif
  lint:
 	flake8 src
 
+## Upload Models to cloud
+ sync_models_to_cloud: requirements
+	s3cmd sync models/ s3://satellite_images/models/ --host=https://storage.googleapis.com --region=eu-west1  --exclude=".DS_Store"
+
+## Download Models from cloud
+ sync_models_from_cloud: requirements
+	s3cmd sync s3://satellite_images/models/ models/  --host=https://storage.googleapis.com --region=eu-west1  --exclude=".DS_Store"
+
 ## Upload Training Data to Cloud
  sync_train_data_to_cloud: requirements
 	s3cmd sync data/train/ s3://satellite_images/train/ --host=https://storage.googleapis.com --region=eu-west1  --exclude=".DS_Store"

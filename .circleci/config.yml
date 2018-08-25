@@ -84,6 +84,6 @@ workflows:
   build_and_deploy:
     jobs:
       - build
-      - train_large
+#      - train_large
           # requires: 
           #   - build

@@ -86,3 +86,4 @@ target/
 
 .pytest_cache/
 
+*.hdf5

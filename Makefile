@@ -1,4 +1,4 @@
-.PHONY: clean data clean_data lint requirements sync_train_data_to_cloud sync_raw_data_from_cloud
+.PHONY: clean data clean_data lint requirements sync_train_data_to_cloud sync_raw_data_from_cloud create_data_folders
 
 #################################################################################
 # GLOBALS                                                                       #
@@ -25,9 +25,16 @@ endif
 	pip install -U pip setuptools wheel --user
 	pip install -r requirements.txt --user
 
+
+
 ## Make Dataset
- data: requirements
+ data: requirements create_data_folders
 	$(PYTHON_INTERPRETER) src/data/make_dataset.py  data/raw data/train
+
+ create_data_folders:
+	mkdir -p /data/train/sat
+	mkdir -p /data/train/sat_rgb
+	mkdir -p /data/train/map
 
 ## Delete all compiled Python files
  clean:

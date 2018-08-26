@@ -5,6 +5,7 @@ import os
 import glob
 import skimage.io as io
 import skimage.transform as trans
+from pathlib import Path
 
 Sky = [128, 128, 128]
 Building = [128, 0, 0]
@@ -78,13 +79,13 @@ def trainGenerator(batch_size, train_path, image_folder, mask_folder, aug_dict, 
         seed=seed)
     train_generator = zip(image_generator, mask_generator)
     for (img, mask) in train_generator:
-        #img, mask = adjustData(img, mask, flag_multi_class, num_class)
+        img, mask = adjustData(img, mask, flag_multi_class, num_class)
         yield (img, mask)
 
 
 def testGenerator(test_path, num_image=30, target_size=(256, 256), flag_multi_class=False, as_gray=True):
-    for i in range(num_image):
-        img = io.imread(os.path.join(test_path, "%d.png" % i), as_gray=as_gray)
+    for file in Path(test_path).iterdir():
+        img = io.imread(file, as_gray=as_gray)
         img = img / 255
         img = trans.resize(img, target_size)
         img = np.reshape(img, img.shape + (1,)) if (not flag_multi_class) else img

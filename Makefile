@@ -32,9 +32,9 @@ endif
 	$(PYTHON_INTERPRETER) src/data/make_dataset.py  data/raw data/train
 
  create_data_folders:
-	mkdir -p /data/train/sat
-	mkdir -p /data/train/sat_rgb
-	mkdir -p /data/train/map
+	mkdir -p data/train/sat
+	mkdir -p data/train/sat_rgb
+	mkdir -p data/train/map
 
 ## Delete all compiled Python files
  clean:

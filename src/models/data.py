@@ -35,15 +35,15 @@ def adjustData(img, mask, flag_multi_class, num_class):
             # index_mask = (index[0],index[1],index[2],np.zeros(len(index[0]),dtype = np.int64) + i) if (len(mask.shape) == 4) else (index[0],index[1],np.zeros(len(index[0]),dtype = np.int64) + i)
             # new_mask[index_mask] = 1
             new_mask[mask == i, i] = 1
-        new_mask = np.reshape(new_mask, (new_mask.shape[0], new_mask.shape[1] * new_mask.shape[2],
+            new_mask = np.reshape(new_mask, (new_mask.shape[0], new_mask.shape[1] * new_mask.shape[2],
                                          new_mask.shape[3])) if flag_multi_class else np.reshape(new_mask, (
             new_mask.shape[0] * new_mask.shape[1], new_mask.shape[2]))
         mask = new_mask
     elif (np.max(img) > 1):
         img = img / 255
         mask = mask / 255
-        mask[mask > 0.5] = 1
-        mask[mask <= 0.5] = 0
+        mask[mask > 0.3] = 1
+        mask[mask <= 0.3] = 0
     return (img, mask)
 
 

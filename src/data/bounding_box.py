@@ -31,11 +31,22 @@ def bounds2polygon(metafile_data):
     return bounds
 
 
+#def window_trueBoundingBox(windowBox, imageBox):
+#    gdf_WindowBounds = bounds2box(windowBox)
+#    gdf_ImageBounds = bounds2polygon(imageBox)
+#   
+#    gdf_TrueBounds = gp.GeoDataFrame(gp.overlay(gdf_WindowBounds, gdf_ImageBounds, how='intersection').geometry)
+#    gdf_TrueBounds.crs = ({'init': 'epsg:4326'})
+#    return gdf_TrueBounds
+
 def window_trueBoundingBox(windowBox, imageBox):
     gdf_WindowBounds = bounds2box(windowBox)
     gdf_ImageBounds = bounds2polygon(imageBox)
-
-    gdf_TrueBounds = gp.GeoDataFrame(gp.overlay(gdf_WindowBounds, gdf_ImageBounds, how='intersection').geometry)
+    temp  = gp.overlay(gdf_WindowBounds, gdf_ImageBounds, how='intersection')
+    if len(temp.index) == 0:
+        gdf_TrueBounds = gdf_WindowBounds
+    else:
+        gdf_TrueBounds = gp.GeoDataFrame(gp.overlay(gdf_WindowBounds, gdf_ImageBounds, how='intersection').geometry)
     gdf_TrueBounds.crs = ({'init': 'epsg:4326'})
     return gdf_TrueBounds
 

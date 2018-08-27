@@ -152,7 +152,7 @@ class Raster(object):
         with rio.open(output_map_path(self.analyticFile, i, output_path), 'w', **m2) as outds:
             if len(linesDf) > 0:
                 g2 = linesDf.to_crs(m2['crs'].data)
-                burned = features.rasterize(shapes=[(x.geometry, self.get_pixel_value(int(x.label))) for i, x in g2.iterrows()],
+                burned = features.rasterize(shapes=[(x.geometry, self.get_pixel_value(x.label)) for i, x in g2.iterrows()],
                                             fill=nodata,
                                             out_shape=(window_size, window_size),
                                             all_touched=True,
@@ -160,9 +160,9 @@ class Raster(object):
                 outds.write(burned, indexes=1)
 
     def get_pixel_value(self,label):
-        if label == 1:
+        if int(label) == 1:
             return 127
-        elif label == 2:
+        elif int(label) == 2:
             return 255
         return 0
 

@@ -31,10 +31,10 @@ def bounds2polygon(metafile_data):
     return bounds
 
 
-#def window_trueBoundingBox(windowBox, imageBox):
+# def window_trueBoundingBox(windowBox, imageBox):
 #    gdf_WindowBounds = bounds2box(windowBox)
 #    gdf_ImageBounds = bounds2polygon(imageBox)
-#   
+#
 #    gdf_TrueBounds = gp.GeoDataFrame(gp.overlay(gdf_WindowBounds, gdf_ImageBounds, how='intersection').geometry)
 #    gdf_TrueBounds.crs = ({'init': 'epsg:4326'})
 #    return gdf_TrueBounds
@@ -42,7 +42,7 @@ def bounds2polygon(metafile_data):
 def window_trueBoundingBox(windowBox, imageBox):
     gdf_WindowBounds = bounds2box(windowBox)
     gdf_ImageBounds = bounds2polygon(imageBox)
-    temp  = gp.overlay(gdf_WindowBounds, gdf_ImageBounds, how='intersection')
+    temp = gp.overlay(gdf_WindowBounds, gdf_ImageBounds, how='intersection')
     if len(temp.index) == 0:
         gdf_TrueBounds = gdf_WindowBounds
     else:
@@ -61,8 +61,9 @@ def cut_linestrings_at_bounds(bounds, intersecting_road_items):
             lineobj = wkt.loads(str(shape(road)))
             conus_transformed_poly = wkt.loads(str(boundingBox))
             conus_intersection = conus_transformed_poly.intersection(lineobj)
-            if not shape(mapping(conus_intersection)).is_empty and shape(mapping(conus_intersection)).is_valid:
-                geom.append(shape(mapping(conus_intersection)))
+            cut_line = shape(mapping(conus_intersection))
+            if not cut_line.is_empty and cut_line.is_valid:
+                geom.append(buffered_line(cut_line, label))
                 iden.append(label)
 
     gpd = gp.GeoDataFrame({'label': iden}, geometry=geom, crs={'init': 'epsg:4326'})
@@ -70,3 +71,9 @@ def cut_linestrings_at_bounds(bounds, intersecting_road_items):
     # if len(gpd) > 3:
     #     gpd.loc['label'] = 1
     return gpd
+
+
+def buffered_line(cut_line, label):
+    buffer_distance = 0.00005
+    buffer_distance = buffer_distance / 3 if int(label) == 2 else buffer_distance
+    return cut_line.buffer(buffer_distance)

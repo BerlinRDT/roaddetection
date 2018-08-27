@@ -12,24 +12,26 @@ import kml2geojson as k2g
 
 
 @click.command()
+@click.option('--window_size', default=512, help='Length of edges of image tiles')
+@click.option('--overlap', default=0.25, help='Overlap of edges of image tiles [0.0  1.0[')
+@click.option('--scaling_type', default='equalize_adapthist', help='Image scaling: [equalize_adapthist] | percentile')
 @click.argument('input_filepath', type=click.Path(exists=True))
 @click.argument('output_filepath', type=click.Path())
-def main(input_filepath, output_filepath):
+def main(window_size, overlap, scaling_type, input_filepath, output_filepath):
     """
         Runs data processing scripts to turn raw data
          from ({Root}/data/raw) into cleaned data ready to
          be analyzed (saved in {Root}/data/train).
     """
     logger = logging.getLogger(__name__)
-    # set a few parameters that should be made input parameters
-    window_size=512
-    overlap=0.25
+
+    # number type of output image files
     dtype="uint8"
-    scaling_type="percentile" #"equalize_adapthist" #"percentile"
     
     # some error checks
-    assert(dtype in ("uint8", "uint16"))
-    assert(scaling_type in ("percentile", "equalize_adapthist"))
+    assert(0.0 <= overlap < 1.0), "overlap must be in [0.0 1.0["
+    assert(dtype in ("uint8", "uint16")), "dtype must be 'uint8' or 'uint16'"
+    assert(scaling_type in ("percentile", "equalize_adapthist")), "scaling_type must be 'percentile' or 'equalize_adapthist'"
     
     logger.info('making final data set from raw data')
     images_path = "{}/images".format(input_filepath)

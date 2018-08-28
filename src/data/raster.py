@@ -64,7 +64,7 @@ class Raster(object):
             transform = windows.transform(window, raster.transform)
             yield window, transform
 
-    def scale_and_typecast(self, img_arr, meta, dtype, scaling_type=None):
+    def scale_and_typecast(self, img_arr, meta, mask, dtype, scaling_type):
         """
         Scales values in numpy array img_arr, representing an image obtained via a rasterio 
         read operation, converts their number type and returns the array thus altered.
@@ -77,19 +77,19 @@ class Raster(object):
         # scale 
         logging.info("Scaling image using method {}".format(scaling_type))  
         # percentile-based method: band by band
-        if scaling_type is "percentile":
+        if scaling_type == "percentile":
             prc = np.zeros([meta["count"]])
             for band_ix in range(0, meta["count"]):
                 prc[band_ix] = np.percentile(img_arr[band_ix,:,:], (99.9,))
                 img_arr[band_ix] = exposure.rescale_intensity(img_arr[band_ix,:,:], in_range=(0, prc[band_ix]))
             # scale down for type cast
-            if dtype is meta["dtype"]:
+            if dtype == meta["dtype"]:
                 pass
-            elif ((dtype is 'uint8') and (meta["dtype"] is 'uint16')):
+            elif ((dtype == 'uint8') and (meta["dtype"] == 'uint16')):
                 img_arr = img_arr >> 8
             else:
                 raise Exception("scaling for any cast other than uint16->uint8 not yet defined")
-        elif scaling_type is "equalize_adapthist":
+        elif scaling_type == "equalize_adapthist":
             # convert to float temporarily
             img_arr = img_arr.astype("float32")
             meta["dtype"] = "float32"
@@ -98,8 +98,9 @@ class Raster(object):
                 img_arr[band_ix] = exposure.equalize_adapthist(img_arr[band_ix], clip_limit=0.03)
             # scaling
             img_arr = (img_arr * np.iinfo(dtype).max)
-        
-        if dtype is not meta["dtype"]:
+         # apply mask
+        img_arr = img_arr * mask
+        if dtype != meta["dtype"]:
             logging.info("Converting from {} to {}".format(meta["dtype"], dtype))
             # type cast 
             img_arr = img_arr.astype(dtype)
@@ -108,17 +109,23 @@ class Raster(object):
         return img_arr, meta
 
     def to_tiles(self, output_path, window_size, idx, overlap, dtype, scaling_type):
-        logging.info("Generating tiles for image : {}".format(self.analyticFile.name) + \
-                     " with edge overlap {}".format(overlap))
-        
+        logging.info("Generating tiles for image {} with edge length {} and relative edge overlap {}"\
+                     .format(self.analyticFile.name, window_size, overlap))        
         i = 0
         with rio.open(self.analyticFile) as raster:
             innerBBox = inner_bbox(self.meta)
             meta = raster.meta.copy()            
             # open and read full image file
             fullImg = raster.read()
+            # open and read mask (one mask for whole image, not for bands separately):
+            # per definition, it contains 0 for invalid and 255 for valid pixels
+            mask = raster.dataset_mask()
+            # modify mask such that it contains 1 for valid pixels
+            mask[mask > 0] = 1
+            # reshape such that it can be multiplied with image 
+            mask = mask.reshape((1, raster.height, raster.width))
             # scale and convert
-            fullImg, meta = self.scale_and_typecast(fullImg, meta, dtype, scaling_type=scaling_type)
+            fullImg, meta = self.scale_and_typecast(fullImg, meta, mask, dtype, scaling_type)
             # loop over windows
             for window, t in self.get_windows(raster, window_size, window_size, overlap):
                 # convert windows to numpy array slice indexes

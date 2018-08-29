@@ -29,7 +29,7 @@ endif
 
 ## Make Dataset
  data: requirements create_data_folders
-	$(PYTHON_INTERPRETER) src/data/make_dataset.py --window_size=512 --overlap=0.25 --scaling_type=percentile data/raw data/train
+	$(PYTHON_INTERPRETER) src/data/make_dataset.py --window_size=512 --overlap=0.25 --scaling_type=equalize_adapthist --raw_prefix=$(raw_prefix) data/raw data/train
 
  create_data_folders:
 	mkdir -p data/train/sat

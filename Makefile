@@ -31,10 +31,23 @@ endif
  data: requirements create_data_folders
 	$(PYTHON_INTERPRETER) src/data/make_dataset.py --window_size=512 --overlap=0.25 --scaling_type=equalize_adapthist --raw_prefix=$(raw_prefix) data/raw data/train
 
+## Make Dataset
+ test: requirements create_data_folders
+	$(PYTHON_INTERPRETER) src/data/make_dataset.py --window_size=512 --overlap=0.25 --scaling_type=equalize_adapthist --raw_prefix=$(raw_prefix) data/raw data/test
+
  create_data_folders:
 	mkdir -p data/train/sat
 	mkdir -p data/train/sat_rgb
 	mkdir -p data/train/map
+
+	mkdir -p data/validate/sat
+	mkdir -p data/validate/sat_rgb
+	mkdir -p data/validate/map
+
+	mkdir -p data/test/sat
+	mkdir -p data/test/sat_rgb
+	mkdir -p data/test/map
+	mkdir -p data/test/predict
 
 ## Delete all compiled Python files
  clean:
@@ -46,7 +59,16 @@ endif
 	rm -f data/train/map/*
 	rm -f data/train/sat/*
 	rm -f data/train/sat_rgb/*
-	
+
+	rm -f data/validate/map/*
+	rm -f data/validate/sat/*
+	rm -f data/validate/sat_rgb/*
+
+	rm -f data/test/map/*
+	rm -f data/test/sat/*
+	rm -f data/test/sat_rgb/*
+	rm -f data/test/predict/*
+
 ## Lint using flake8
  lint:
 	flake8 src

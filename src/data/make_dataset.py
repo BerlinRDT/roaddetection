@@ -35,7 +35,8 @@ def main(window_size, overlap, scaling_type, raw_prefix, input_filepath, output_
     assert (scaling_type in (
         "percentile", "equalize_adapthist")), "scaling_type must be 'percentile' or 'equalize_adapthist'"
 
-    logger.info('making final data set from raw data with filter {}'.format(raw_prefix))
+    logger.info('making tiles data set from raw data into folder {} with raw image filter {}'.format(output_filepath,
+                                                                                                     raw_prefix))
     images_path = "{}/images".format(input_filepath)
     labels_path = "{}/labels".format(input_filepath)
 

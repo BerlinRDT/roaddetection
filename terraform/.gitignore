@@ -1,4 +1,6 @@
 tf.env
 .terraform/
+.terraform-lisa/
+.terraform-harald/
 terraform.tfstate
 terraform.tfstate.backup

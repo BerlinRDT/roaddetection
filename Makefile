@@ -35,6 +35,7 @@ endif
  test: requirements create_data_folders
 	$(PYTHON_INTERPRETER) src/data/make_dataset.py --window_size=512 --overlap=0.25 --scaling_type=equalize_adapthist --raw_prefix=$(raw_prefix) data/raw data/test
 
+## Create all necessary data folders
  create_data_folders:
 	mkdir -p data/train/sat
 	mkdir -p data/train/sat_rgb

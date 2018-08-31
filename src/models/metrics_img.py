@@ -2,20 +2,53 @@
 Collection of metrics to be used for evaluating accuracy of road detection.
 y_true and y_pred are tensors of dimensions (<batch size>, 512, 512).
 Output must be a tensor.
-Ergo, for reasons of efficiency, all operations had best be done with tensorflow
-methods so that we don't have to convert tensors to numpy arrays back and forth.
 """
 
 import numpy as np
 import keras.backend as K
 import tensorflow as tf
+import functools
 
-def IoU_binary(y_true, y_pred):
+# -----------------------------------------------------------------------------
+# This is the central function posted by Christian Skoldt which allows us to 
+# wrap any tf.metrics or tf.streaming.metrics method to Keras
+# https://stackoverflow.com/questions/45947351/how-to-use-tensorflow-metrics-in-keras/50527423#50527423
+# -----------------------------------------------------------------------------
+def as_keras_metric(method):
+    @functools.wraps(method)
+    def wrapper(self, args, **kwargs):
+        """ Wrapper for turning tensorflow metrics into keras metrics """
+        value, update_op = method(self, args, **kwargs)
+        K.get_session().run(tf.local_variables_initializer())
+        with tf.control_dependencies([update_op]):
+            value = tf.identity(value)
+        return value
+    return wrapper
+
+@as_keras_metric
+def auc_roc(y_true, y_pred, summation_method='careful_interpolation', num_thresholds=1000, curve='ROC'):
+    return tf.metrics.auc(y_true, y_pred, summation_method=summation_method, num_thresholds=num_thresholds, curve=curve)
+    
+def test_auc_roc():
+    """Run a few simple tests on auroc"""
+    # set up a set of simple arrays with the same principal shape and data type 
+    # as our image arrays
+    y_true = np.zeros([20, 3, 3], dtype=np.int32)
+    y_true[:, :, 0] = 1
+    y_pred = np.float32(np.random.rand(20, 3, 3))
+    y_pred[:, :, 0] += 0.5 
+    # 
+    res = auc_roc(tf.convert_to_tensor(y_true), tf.convert_to_tensor(y_pred))
+    print(K.eval(res))
+    assert(K.eval(res) > 0.5)
+
+
+def iou_binary(y_true, y_pred):
     """
-    Returns the Intersection over Union (IoU) of binary classifier
+    Returns the Intersection over Union (iou) of binary classifier
     """
     # for now, value of threshold is set arbitrarily here!
-    threshold = tf.constant(0.25, dtype=tf.float32)
+    threshold = tf.constant(0.03, dtype=tf.float32)
     zero_int = tf.constant(0, dtype=tf.int64)
     nometric_val = tf.constant(-1.0, dtype=tf.float32)
     # tensor of booleans 
@@ -42,35 +75,38 @@ def test_IoU_binary():
     y_pred = np.zeros([1, 3, 3], dtype=np.float32)
     # all zeros: should return -1
     res = IoU_binary(tf.convert_to_tensor(y_true), tf.convert_to_tensor(y_pred))
-    print(res.eval())
-    assert(abs(res.eval()+1.0) < 1e-6)
+    print(K.eval(res))
+    assert(abs(K.eval(res)+1.0) < 1e-6)
     # after the two lines below, y_true and y_pred have one intersecting element,
     # and their union is five, so the expected value is 1/5
     y_true[0, :, 0] = 1.0
     y_pred[0, 0, :] = 0.7
     res = IoU_binary(tf.convert_to_tensor(y_true), tf.convert_to_tensor(y_pred))
-    print(res.eval())
-    assert(abs(res.eval()-0.2) < 1e-6)
+    print(K.eval(res))
+    assert(abs(K.eval(res)-0.2) < 1e-6)
     # two images
     y_true = np.ones([2, 3, 3], dtype=np.float32)
     y_pred = np.zeros([2, 3, 3], dtype=np.float32)
     y_pred[0,:,:] = 1.0
     # should return 0.5
     res = IoU_binary(tf.convert_to_tensor(y_true), tf.convert_to_tensor(y_pred))
-    print(res.eval())
-    assert(abs(res.eval()-0.5) < 1e-6)
+    print(K.eval(res))
+    assert(abs(K.eval(res)-0.5) < 1e-6)
     # should return 1.0
     y_pred = np.ones([2, 3, 3], dtype=np.float32)
     res = IoU_binary(tf.convert_to_tensor(y_true), tf.convert_to_tensor(y_pred))
-    print(res.eval())
-    assert(abs(res.eval()-1.0) < 1e-6)
+    print(K.eval(res))
+    assert(abs(K.eval(res)-1.0) < 1e-6)
     
     
 
 def dummy_metric(y_true, y_pred):
     # this is the place to try out stuff
     # return K.shape(K.flatten(y_pred))
-    whatever = 9
-    return tf.convert_to_tensor(whatever)
-    # return K.sum(K.flatten(y_true))
+    # whatever = 9
+    # return tf.convert_to_tensor(whatever)
+    #return K.eval(K.flatten(y_true))
+    #return tf.reduce_max(y_pred)
+    return tf.contrib.metrics.streaming_pearson_correlation(y_pred, y_true)[0]
+
     

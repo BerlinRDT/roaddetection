@@ -26,18 +26,20 @@ def as_keras_metric(method):
     return wrapper
 
 @as_keras_metric
-def auc_roc(y_true, y_pred, summation_method='careful_interpolation', num_thresholds=1000, curve='ROC'):
-    return tf.metrics.auc(y_true, y_pred, summation_method=summation_method, num_thresholds=num_thresholds, curve=curve)
+def auc_roc(y_true, y_pred, summation_method='careful_interpolation', num_thresholds=400, curve='ROC'):
+    # note that y_true and y_pred are flattened - this should not be necessary, 
+    # but makes sure that there will be no undocumented computation of auc_roc
+    # per image (see note above on the size of these variables)
+    return tf.metrics.auc(K.flatten(y_true), K.flatten(y_pred), summation_method=summation_method, num_thresholds=num_thresholds, curve=curve)
     
 def test_auc_roc():
     """Run a few simple tests on auroc"""
     # set up a set of simple arrays with the same principal shape and data type 
     # as our image arrays
-    y_true = np.zeros([20, 3, 3], dtype=np.int32)
+    y_true = np.zeros([100, 3, 3], dtype=np.int32)
     y_true[:, :, 0] = 1
-    y_pred = np.float32(np.random.rand(20, 3, 3))
+    y_pred = np.float32(np.random.rand(100, 3, 3))
     y_pred[:, :, 0] += 0.5 
-    # 
     res = auc_roc(tf.convert_to_tensor(y_true), tf.convert_to_tensor(y_pred))
     print(K.eval(res))
     assert(K.eval(res) > 0.5)
@@ -97,8 +99,6 @@ def test_IoU_binary():
     res = IoU_binary(tf.convert_to_tensor(y_true), tf.convert_to_tensor(y_pred))
     print(K.eval(res))
     assert(abs(K.eval(res)-1.0) < 1e-6)
-    
-    
 
 def dummy_metric(y_true, y_pred):
     # this is the place to try out stuff
@@ -108,5 +108,3 @@ def dummy_metric(y_true, y_pred):
     #return K.eval(K.flatten(y_true))
     #return tf.reduce_max(y_pred)
     return tf.contrib.metrics.streaming_pearson_correlation(y_pred, y_true)[0]
-
-    

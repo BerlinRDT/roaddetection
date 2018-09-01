@@ -10,6 +10,10 @@ from utils import get_meta_data_filename, get_rgb_filename
 from spatial_index import create_spatial_index
 import kml2geojson as k2g
 
+from joblib import Parallel, delayed
+import multiprocessing
+from functools import partial
+
 
 @click.command()
 @click.option('--window_size', default=512, help='Length of edges of image tiles')
@@ -47,13 +51,26 @@ def main(window_size, overlap, scaling_type, raw_prefix, input_filepath, output_
 
 
 def make_tiles(images_path, output_filepath, window_size, idx, overlap, dtype, scaling_type, raw_prefix_filter):
-    for r_analytic in Path(images_path).iterdir():
-        if should_make_tiles_from(r_analytic.name, raw_prefix_filter):
-            meta_data_filename = get_meta_data_filename(images_path, r_analytic.name)
-            r_visual_rgb_filename = get_rgb_filename(images_path, r_analytic.name)
-            raster = Raster(r_analytic, r_visual_rgb_filename, meta_data_filename)
-            raster.to_tiles(output_path=output_filepath, window_size=window_size, idx=idx, overlap=overlap, dtype=dtype,
-                            scaling_type=scaling_type)
+    # num_cores = multiprocessing.cpu_count()
+    num_cores = 4
+    partial_make_tiles = partial(
+        make_tiles_single, images_path, output_filepath, window_size, idx, overlap, dtype, scaling_type,
+        raw_prefix_filter)
+    Parallel(n_jobs=num_cores)(delayed(partial_make_tiles)(r_analytic) for r_analytic in Path(images_path).iterdir())
+
+    # for r_analytic in Path(images_path).iterdir():
+    #     make_tile_single(dtype, idx, images_path, output_filepath, overlap, r_analytic, raw_prefix_filter, scaling_type,
+    #                      window_size)
+
+
+def make_tiles_single(images_path, output_filepath, window_size, idx, overlap, dtype, scaling_type, raw_prefix_filter,
+                      r_analytic):
+    if should_make_tiles_from(r_analytic.name, raw_prefix_filter):
+        meta_data_filename = get_meta_data_filename(images_path, r_analytic.name)
+        r_visual_rgb_filename = get_rgb_filename(images_path, r_analytic.name)
+        raster = Raster(r_analytic, r_visual_rgb_filename, meta_data_filename)
+        raster.to_tiles(output_path=output_filepath, window_size=window_size, idx=idx, overlap=overlap, dtype=dtype,
+                        scaling_type=scaling_type)
 
 
 def should_make_tiles_from(r_analytic_name, raw_prefix_filter):

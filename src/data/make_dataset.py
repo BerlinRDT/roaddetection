@@ -9,6 +9,7 @@ from raster import Raster
 from utils import get_meta_data_filename, get_rgb_filename
 from spatial_index import create_spatial_index
 import kml2geojson as k2g
+import pandas as pd
 
 
 @click.command()
@@ -16,9 +17,11 @@ import kml2geojson as k2g
 @click.option('--overlap', default=0.25, help='Overlap of edges of image tiles [0.0  1.0[')
 @click.option('--scaling_type', default='equalize_adapthist', help='Image scaling: [equalize_adapthist] | percentile')
 @click.option('--raw_prefix', default=None, help='Filter (prefix) raw images to be picked up for creating tiles.')
+@click.option('--region', '-r', default='all', type=click.Choice(['all', 'borneo', 'harz']),
+              help='Create tiles from a given region')
 @click.argument('input_filepath', type=click.Path(exists=True))
 @click.argument('output_filepath', type=click.Path())
-def main(window_size, overlap, scaling_type, raw_prefix, input_filepath, output_filepath):
+def main(window_size, overlap, scaling_type, raw_prefix, input_filepath, output_filepath, region):
     """
         Runs data processing scripts to turn raw data
          from ({Root}/data/raw) into cleaned data ready to
@@ -35,33 +38,62 @@ def main(window_size, overlap, scaling_type, raw_prefix, input_filepath, output_
     assert (scaling_type in (
         "percentile", "equalize_adapthist")), "scaling_type must be 'percentile' or 'equalize_adapthist'"
 
-    logger.info('making tiles data set from raw data into folder {} with raw image filter {}'.format(output_filepath,
-                                                                                                     raw_prefix))
+    logger.info('making tiles from region {} into folder {} with raw image filter {}'.format(region,
+                                                                                             output_filepath,
+                                                                                             raw_prefix or "None"))
     images_path = "{}/images".format(input_filepath)
     labels_path = "{}/labels".format(input_filepath)
 
     convert_kml_to_geojson(labels_path)
     idx = create_spatial_index(labels_path)
     make_tiles(images_path, output_filepath, window_size=window_size, idx=idx,
-               overlap=overlap, dtype=dtype, scaling_type=scaling_type, raw_prefix_filter=raw_prefix)
+               overlap=overlap, dtype=dtype, scaling_type=scaling_type,
+               raw_prefix_filter=raw_prefix, region_filter=region)
 
 
-def make_tiles(images_path, output_filepath, window_size, idx, overlap, dtype, scaling_type, raw_prefix_filter):
+def make_tiles(images_path, output_filepath, window_size, idx, overlap, dtype, scaling_type,
+               raw_prefix_filter, region_filter):
+    img_list = pd.read_json("list_satellite_images_training.json")
+
     for r_analytic in Path(images_path).iterdir():
-        if should_make_tiles_from(r_analytic.name, raw_prefix_filter):
+        if should_make_tiles_from(r_analytic.name, raw_prefix_filter, region_filter, img_list):
             meta_data_filename = get_meta_data_filename(images_path, r_analytic.name)
             r_visual_rgb_filename = get_rgb_filename(images_path, r_analytic.name)
             raster = Raster(r_analytic, r_visual_rgb_filename, meta_data_filename)
-            raster.to_tiles(output_path=output_filepath, window_size=window_size, idx=idx, overlap=overlap, dtype=dtype,
+            raster.to_tiles(output_path=output_filepath, window_size=window_size, idx=idx, overlap=overlap,
+                            dtype=dtype,
                             scaling_type=scaling_type)
 
 
-def should_make_tiles_from(r_analytic_name, raw_prefix_filter):
-    is_analytic_tif = r_analytic_name.endswith(
+def should_make_tiles_from(r_analytic_name, raw_prefix_filter, region_filter, img_list):
+    return is_analytic_tif(r_analytic_name) and \
+           name_begins_with_prefix(r_analytic_name, raw_prefix_filter) and \
+           is_raster_from_desired_region(r_analytic_name, region_filter, img_list)
+
+
+def name_begins_with_prefix(r_analytic_name, raw_prefix_filter):
+    return r_analytic_name.startswith(raw_prefix_filter) if raw_prefix_filter else True
+
+
+def is_analytic_tif(r_analytic_name):
+    return r_analytic_name.endswith(
         ('AnalyticMS.tif', 'AnalyticMS_SR.tif', 'AnalyticMS.tiff', 'AnalyticMS_SR.tiff')
     )
-    name_begins_with = r_analytic_name.startswith(raw_prefix_filter) if raw_prefix_filter else True
-    return is_analytic_tif & name_begins_with
+
+
+def is_raster_from_desired_region(r_analytic_name, region_filter, img_list):
+    if (region_filter == "all"):
+        return True
+
+    logger = logging.getLogger(__name__)
+
+    filtered_by_region = img_list.loc[img_list.directory.str.contains(region_filter, case=False)]
+    shouldIgnore = filtered_by_region.loc[filtered_by_region.analyticImgName.str.contains(r_analytic_name)].empty
+
+    if shouldIgnore:
+        logger.info("Ignoring raster {} because of region filter {}".format(r_analytic_name, region_filter))
+
+    return not shouldIgnore
 
 
 def convert_kml_to_geojson(labels_path):

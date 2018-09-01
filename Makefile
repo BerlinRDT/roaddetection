@@ -16,6 +16,9 @@ else
 HAS_CONDA=True
 endif
 
+ifndef region
+  region = all
+endif
 #################################################################################
 # COMMANDS                                                                      #
 #################################################################################
@@ -29,10 +32,10 @@ endif
 
 ## Make Dataset
  data: requirements create_data_folders
-	$(PYTHON_INTERPRETER) src/data/make_dataset.py --window_size=512 --overlap=0.25 --scaling_type=equalize_adapthist --raw_prefix=$(raw_prefix) data/raw data/train
+	$(PYTHON_INTERPRETER) src/data/make_dataset.py --window_size=512 --overlap=0.25 --scaling_type=equalize_adapthist --raw_prefix=$(raw_prefix) --region=$(region) data/raw data/train
 
-## Make Dataset
- test: requirements create_data_folders
+## Make test data dataset
+ test_data: requirements create_data_folders
 	$(PYTHON_INTERPRETER) src/data/make_dataset.py --window_size=512 --overlap=0.25 --scaling_type=equalize_adapthist --raw_prefix=$(raw_prefix) data/raw data/test
 
 ## Create all necessary data folders

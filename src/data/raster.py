@@ -132,7 +132,7 @@ class Raster(object):
                 ix = window.toslices()
                 # excise data
                 w_img = fullImg[:,ix[0], ix[1]]
-                if not self.is_window_empty(w_img):
+                if not self.is_window_almost_empty(w_img):
                     meta['transform'] = t
                     meta['width'], meta['height'] = window.width, window.height
                     self.write_analytic_tile(w_img, meta, output_path, i)
@@ -190,5 +190,13 @@ class Raster(object):
     def is_window_empty(self, w):
         return not np.any(w)
 
+    def is_window_almost_empty(self, w, fract=0.25):
+        # returns true if a fraction of less than fract entries in a selected 
+        # slice of array w (representing a channels-first ordered image tile) 
+        # are different from zero
+        slice_ix = 0
+        f = np.sum(w[slice_ix,:,:] > 0) / np.size(w[slice_ix,:,:])
+        return f < fract
+    
     def transform_bnds(self, src_crs, dst_crs, src_bounds):
         return transform_bounds(src_crs, dst_crs, src_bounds[0], src_bounds[1], src_bounds[2], src_bounds[3])

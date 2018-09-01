@@ -9,9 +9,7 @@ from keras.optimizers import *
 from keras.callbacks import ModelCheckpoint, LearningRateScheduler
 from keras import backend as keras
 
-from src.models.metrics_img import auc_roc
-
-def unet(pretrained_weights=None, input_size=(512, 512, 4)):
+def unet(input_size=(512, 512, 4)):
     inputs = Input(input_size)
     conv1 = layers.Conv2D(64, 3, activation='relu', padding='same', kernel_initializer='he_normal')(inputs)
     conv1 = layers.Conv2D(64, 3, activation='relu', padding='same', kernel_initializer='he_normal')(conv1)
@@ -58,13 +56,5 @@ def unet(pretrained_weights=None, input_size=(512, 512, 4)):
     conv10 = layers.Conv2D(1, 1, activation='sigmoid')(conv9)
 
     model = Model(input=inputs, output=conv10)
-
-    #model.compile(optimizer=Adam(lr=1e-4), loss='binary_crossentropy', metrics=['accuracy'])
-    model.compile(optimizer=Adam(lr=1e-4), loss='binary_crossentropy', metrics=['accuracy', auc_roc])
-
-    model.summary()
-
-    if (pretrained_weights):
-        model.load_weights(pretrained_weights)
 
     return model

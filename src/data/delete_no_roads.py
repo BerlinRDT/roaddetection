@@ -11,9 +11,11 @@ import click
 def main(tiles_folder):
     logger = logging.getLogger(__name__)
     logger.info("Deleting empty tiles from folder : {}".format(tiles_folder))
-    tiles_with_no_roads = [fname.name for fname in
-                           Path(os.path.join(tiles_folder, 'map')).iterdir()
-                           if not np.any(io.imread(fname.as_posix()))]
+    tiles_with_no_roads = [
+        fname.name
+        for fname in Path(os.path.join(tiles_folder, 'map')).iterdir()
+        if should_delete(fname)
+    ]
 
     if click.confirm('This action cannot be undone'.format(tiles_folder)):
         for fname in tiles_with_no_roads:
@@ -23,6 +25,10 @@ def main(tiles_folder):
                     os.remove(src)
 
         click.echo("Deleted {} tiles with no roads".format(len(tiles_with_no_roads)))
+
+
+def should_delete(fname):
+    return not np.any(io.imread(fname.as_posix()))
 
 
 if __name__ == '__main__':

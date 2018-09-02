@@ -1,4 +1,4 @@
-.PHONY: clean data clean_data lint requirements sync_train_data_to_cloud sync_raw_data_from_cloud create_data_folders
+.PHONY: clean data clean_data lint requirements sync_train_data_to_cloud sync_raw_data_from_cloud create_data_folders delete_no_roads
 
 #################################################################################
 # GLOBALS                                                                       #
@@ -33,6 +33,10 @@ endif
 ## Make Dataset
  data: requirements create_data_folders
 	$(PYTHON_INTERPRETER) src/data/make_dataset.py --window_size=512 --overlap=0.25 --scaling_type=equalize_adapthist --raw_prefix=$(raw_prefix) --region=$(region) data/raw data/train
+
+## Delete tiles with no road labels from sat, map and sat_rgb folders
+ delete_no_roads:
+	$(PYTHON_INTERPRETER) src/data/delete_no_roads.py data/train
 
 ## Make test data dataset
  test_data: requirements create_data_folders

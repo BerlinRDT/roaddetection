@@ -41,7 +41,7 @@ def adjustData(img, mask, flag_multi_class, num_class):
         mask = new_mask
     elif (np.max(img) > 1):
         img = img / 255
-        img = (img - np.mean(img)) / np.std(img)
+        # img = (img - np.mean(img)) / np.std(img)
 
         mask = mask / 255
         # mask = (mask - np.mean(mask)) / np.std(mask)

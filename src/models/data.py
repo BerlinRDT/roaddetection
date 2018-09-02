@@ -36,12 +36,16 @@ def adjustData(img, mask, flag_multi_class, num_class):
             # new_mask[index_mask] = 1
             new_mask[mask == i, i] = 1
             new_mask = np.reshape(new_mask, (new_mask.shape[0], new_mask.shape[1] * new_mask.shape[2],
-                                         new_mask.shape[3])) if flag_multi_class else np.reshape(new_mask, (
-            new_mask.shape[0] * new_mask.shape[1], new_mask.shape[2]))
+                                             new_mask.shape[3])) if flag_multi_class else np.reshape(new_mask, (
+                new_mask.shape[0] * new_mask.shape[1], new_mask.shape[2]))
         mask = new_mask
     elif (np.max(img) > 1):
         img = img / 255
+        img = (img - np.mean(img)) / np.std(img)
+
         mask = mask / 255
+        # mask = (mask - np.mean(mask)) / np.std(mask)
+
         mask[mask > 0.3] = 1
         mask[mask <= 0.3] = 0
     return (img, mask)
@@ -122,4 +126,4 @@ def labelVisualize(num_class, color_dict, img):
 def saveResult(save_path, npyfile, name, flag_multi_class=False, num_class=2):
     # print(npyfile)
     for i, item in enumerate(npyfile):
-        io.imsave(os.path.join(save_path, name), item.reshape((512,512)))
+        io.imsave(os.path.join(save_path, name), item.reshape((512, 512)))

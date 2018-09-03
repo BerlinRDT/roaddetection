@@ -74,6 +74,6 @@ def cut_linestrings_at_bounds(bounds, intersecting_road_items):
 
 
 def buffered_line(cut_line, label):
-    buffer_distance = 0.00005
+    buffer_distance = 0.0001
     buffer_distance = buffer_distance / 3 if int(label) == 2 else buffer_distance
     return cut_line.buffer(buffer_distance)

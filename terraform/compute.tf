@@ -27,7 +27,8 @@ resource "google_compute_instance" "default" {
   }
 
   guest_accelerator {
-    type = "nvidia-tesla-k80"
+    type = "nvidia-tesla-p100"
+//    type = "nvidia-tesla-k80"
     count = 1
   }
 
@@ -36,7 +37,9 @@ resource "google_compute_instance" "default" {
   }
 
   scheduling {
-    on_host_maintenance = "TERMINATE"
+    on_host_maintenance = "TERMINATE",
+    preemptible = true,
+    automatic_restart = false
   }
 
   provisioner "remote-exec" {

@@ -18,14 +18,14 @@ def main(train_dir, partial_dir, threshold, window_size):
                                                                                                         partial_dir,
                                                                                                         threshold,
                                                                                                         window_size))
-    tiles_with_no_roads = [
+    tiles_with_roads_above_threshold = [
         fname.name
         for fname in Path(os.path.join(train_dir, 'map')).iterdir()
         if should_move(fname, threshold, window_size)
     ]
 
     # if click.confirm('This action cannot be undone'.format(tiles_folder)):
-    for fname in tiles_with_no_roads:
+    for fname in tiles_with_roads_above_threshold:
         for file_type in ["sat", "map", "sat_rgb"]:
             src = os.path.join(train_dir, file_type, fname)
             dest = os.path.join(partial_dir, file_type, fname)
@@ -33,12 +33,12 @@ def main(train_dir, partial_dir, threshold, window_size):
                 logger.debug("moving {} to {}".format(src, dest))
                 shutil.copy(src, dest)
 
-    click.echo("Created partial train set with {} tiles".format(len(tiles_with_no_roads)))
+    click.echo("Created partial train set with {} tiles".format(len(tiles_with_roads_above_threshold)))
 
 
 def should_move(fname, threshold, window_size):
-    img = io.imread(fname.as_posix())
-    above_threshold = (len(img[img != 0.0]) * 100) / (window_size * window_size) >= threshold
+    map = io.imread(fname.as_posix())
+    above_threshold = (len(map[map != 0.0]) * 100) / (window_size * window_size) >= threshold
     return above_threshold
 
 

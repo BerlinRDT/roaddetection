@@ -127,3 +127,26 @@ def saveResult(save_path, npyfile, name, flag_multi_class=False, num_class=2):
     # print(npyfile)
     for i, item in enumerate(npyfile):
         io.imsave(os.path.join(save_path, name), item.reshape((512, 512)))
+
+
+def refactor_labels(x, y, class_dict, model_is_binary=True, meta=None):
+    """
+    Returns modified label array y:
+    - if model_is_binary is True, any label with a value above that of 'no_road' will be
+       converted to 'any_road'
+    - pixels which are outside original image bounds are converted to 'no_img'
+    """
+    # determine invalid pixels (for now defined as those with a vale of zero
+    # in the first band). Variable mask could be used to create a masked array,
+    # but scikit-learn does not support masked arrays
+    if ((x.dtype == np.float64) or (x.dtype == np.float32)):
+        raise Exception("img must be converted after label refactoring")
+    mask = x[:,:,0] == 0;
+    # set masked values: first, set zeros in label file to 'no road' value...
+    y[np.logical_and(np.logical_not(mask), np.logical_not(y))] = class_dict["no_road"]
+    # then set pixel positions found to not belong to image to 'no_img' value
+    y[mask] = class_dict["no_img"]
+    # if the model used for prediction is a binary one, set any value above no_road to any_road
+    if model_is_binary:
+        y[y>class_dict["no_road"]] = class_dict["any_road"]
+    return y, mask

@@ -25,6 +25,8 @@ def main(tiles_folder, spare):
         if should_delete(fname)
     ]
     number_of_no_road_tiles = len(tiles_with_no_roads)
+
+    random.seed(42)
     spared = random.sample(tiles_with_no_roads, int(number_of_no_road_tiles * spare / 100))
 
     tiles_with_no_roads = set(tiles_with_no_roads)

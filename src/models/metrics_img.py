@@ -32,6 +32,10 @@ def auc_roc(y_true, y_pred, summation_method='careful_interpolation', num_thresh
     # per image (see note above on the size of these variables)
     return tf.metrics.auc(K.flatten(y_true), K.flatten(y_pred), summation_method=summation_method, num_thresholds=num_thresholds, curve=curve)
     
+@as_keras_metric
+def auc_pr(y_true, y_pred, summation_method='careful_interpolation', num_thresholds=400, curve='PR'):
+    return tf.metrics.auc(K.flatten(y_true), K.flatten(y_pred), summation_method=summation_method, num_thresholds=num_thresholds, curve=curve)
+
 def test_auc_roc():
     """Run a few simple tests on auroc"""
     # set up a set of simple arrays with the same principal shape and data type 

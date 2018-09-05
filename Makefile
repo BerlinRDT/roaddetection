@@ -1,4 +1,4 @@
-.PHONY: clean data clean_data lint requirements sync_train_data_to_cloud sync_raw_data_from_cloud create_data_folders delete_no_roads
+.PHONY: clean data clean_data lint requirements sync_train_data_to_cloud sync_raw_data_from_cloud create_data_folders clean_partial partial_train clean_validate_test validation_test_set delete_no_roads
 
 #################################################################################
 # GLOBALS                                                                       #
@@ -19,6 +19,14 @@ endif
 ifndef region
   region = all
 endif
+
+ifndef threshold
+  threshold = 5000
+endif
+
+ifndef window_size
+  window_size = 512
+endif
 #################################################################################
 # COMMANDS                                                                      #
 #################################################################################
@@ -28,15 +36,21 @@ endif
 	pip install -U pip setuptools wheel --user
 	pip install -r requirements.txt --user
 
-
-
 ## Make Dataset
  data: requirements create_data_folders
 	$(PYTHON_INTERPRETER) src/data/make_dataset.py --window_size=512 --overlap=0.25 --scaling_type=equalize_adapthist --raw_prefix=$(raw_prefix) --region=$(region) data/raw data/train
 
+## Make Partial train set
+ partial_train: requirements create_data_folders
+	$(PYTHON_INTERPRETER) src/data/make_partial_train.py data/train data/train_partial --threshold=$(threshold) --window_size=$(window_size)
+
 ## Delete tiles with no road labels from sat, map and sat_rgb folders
  delete_no_roads:
-	$(PYTHON_INTERPRETER) src/data/delete_no_roads.py data/train
+	$(PYTHON_INTERPRETER) src/data/delete_no_roads.py data/train --spare=5
+
+## Split train data into validation and test set
+ validation_test_set: requirements create_data_folders
+	$(PYTHON_INTERPRETER) src/data/make_validation_test.py data/raw/images data/train data/validate data/test
 
 ## Make test data dataset
  test_data: requirements create_data_folders
@@ -47,6 +61,10 @@ endif
 	mkdir -p data/train/sat
 	mkdir -p data/train/sat_rgb
 	mkdir -p data/train/map
+
+	mkdir -p data/train_partial/sat
+	mkdir -p data/train_partial/sat_rgb
+	mkdir -p data/train_partial/map
 
 	mkdir -p data/validate/sat
 	mkdir -p data/validate/sat_rgb
@@ -63,7 +81,7 @@ endif
 	find . -type d -name "__pycache__" -delete
 
 ## Delete all contents of data/train/map and data/train/sat
- clean_data:
+ clean_data: clean_partial
 	rm -f data/train/map/*
 	rm -f data/train/sat/*
 	rm -f data/train/sat_rgb/*
@@ -76,6 +94,23 @@ endif
 	rm -f data/test/sat/*
 	rm -f data/test/sat_rgb/*
 	rm -f data/test/predict/*
+
+## Delete all contents of data/validate and data/test
+ clean_validate_test:
+	rm -f data/validate/map/*
+	rm -f data/validate/sat/*
+	rm -f data/validate/sat_rgb/*
+
+	rm -f data/test/map/*
+	rm -f data/test/sat/*
+	rm -f data/test/sat_rgb/*
+	rm -f data/test/predict/*
+
+## Delete all contents of data/train_partial
+ clean_partial:
+	rm -f data/train_partial/map/*
+	rm -f data/train_partial/sat/*
+	rm -f data/train_partial/sat_rgb/*
 
 ## Lint using flake8
  lint:

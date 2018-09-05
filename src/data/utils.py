@@ -1,5 +1,6 @@
+import numpy as np
 from pathlib import PurePosixPath
-
+import os
 
 def get_meta_data_filename(input_path, rasterFileName):
     """
@@ -46,3 +47,33 @@ def output_map_path(analyticFile, i, output_path):
     output_tile_filename = '{0:s}/{1:s}_{2:04d}.tif'
     outpath = output_tile_filename.format(TRAINING_MAP_DIR, get_tile_prefix(analyticFile.name), i)
     return outpath
+
+
+def get_list_samplefiles(dir_samples):
+    """
+    Returns a list of and the number of sample files (satellite image tiles) in given directory
+    """
+    # list of satellite image files & their number
+    _, _, file_list_x = next(os.walk(dir_samples))
+    num_x = len(file_list_x)
+    return file_list_x, num_x
+
+def gen_sample_index(num_x_available, num_x_use, mode_sample_choice="random", metric=None):
+    """
+    Returns an array of indexes to samples, given the number of samples available (num_x_available)
+    and the number to be used (num_x_use). Indexes can either be random, correspond to the head and tail
+    of the samples according to a quantitiy listed in metric, or be an explicit list, the limits of
+    which will be checked against num_x_available.
+    """
+    if (mode_sample_choice=="head_tail"):
+        assert(metric is not None), "'head_tail' mode of choosing samples requires a metric"
+    if mode_sample_choice == "random":
+        samples_ix = np.random.choice(num_x_available, num_x_use, replace=False)
+    elif mode_sample_choice == "head_tail":
+        # indexes to best and worst examples
+        ix_sorted = np.argsort(metric)
+        samples_ix = np.hstack((ix_sorted[:(num_x_use//2)],ix_sorted[(-num_x_use//2):]))
+    elif type(mode_sample_choice) is list:
+        samples_ix = np.array(mode_sample_choice, dtype=int)
+        samples_ix = samples_ix[samples_ix < num_x_available]
+    return samples_ix

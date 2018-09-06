@@ -21,8 +21,14 @@ def get_class_plot_prop():
 
 def show_tile(tile, ax, cmap=None, show_colorbar=False, title=None, **kwargs):
     """
-    Custom wrapper for imshow tailored to satellite image tiles and related images
+    Custom wrapper for imshow tailored to satellite image tiles and numpy
+    arrays derived from them
     """
+    # get rid of singleton 3rd dimension
+    if tile.ndim >=3:
+        if tile.shape[2] == 1:
+            tile = tile.reshape(tile.shape[:2])
+    
     im_h = ax.imshow(tile, cmap=cmap, **kwargs);
     ax.set_yticklabels([])
     ax.set_xticklabels([])
@@ -55,7 +61,7 @@ def plot_pr(recall_dict, precision_dict, auc_pr_dict, beven_ix_dict, beven_thres
                        linestyle=':', color='gray')
                 ax.plot(recall_dict[k][beven_ix_dict[k]]*np.array([1, 1],dtype=int), np.r_[0, precision_dict[k][beven_ix_dict[k]]],
                        linestyle=':', color='gray')
-                ax.text(0.1, 0.9 - i*0.15, 
+                ax.text(0.1, 0.9 - i*0.1, 
                         "break-even {0:0.2f} @thresh {1:0.2f}".format(recall_dict[k][beven_ix_dict[k]], beven_thresh_dict[k]))
         ax.set_yticks(np.arange(0, 1.25, 0.25))
         ax.set_xticks(np.arange(0, 1.25, 0.25))
@@ -95,7 +101,18 @@ def show_sample_prediction(x, y, yscore, cmap="gnuplot", title=None):
     Produces a multipanel plot of an individual sample (image tile), its
     label, its prediction and analytics
     """
-    # make a copy for display in which we get rid of upper small percentile 
+    img_size = np.prod(y.shape)
+    if yscore.ndim > 2:
+        dim_yscore = yscore.shape[2]
+        type_dict = "multiclass"
+        cmap = "PuOr"
+    else:
+        dim_yscore = 1
+        type_dict = "binary"
+    # reshaped versions for metric
+    y_reshaped = y.reshape((img_size, 1), order = 'C')
+    yscore_reshaped = yscore.reshape((img_size, dim_yscore), order = 'C')
+    # versions for display in which we get rid of upper small percentile 
     yscore_plot = np.copy(yscore)
     prc = np.percentile(yscore_plot, [99.9])
     yscore_plot[yscore_plot >= prc] = prc
@@ -114,6 +131,7 @@ def show_sample_prediction(x, y, yscore, cmap="gnuplot", title=None):
     show_tile(exposure.adjust_gamma(x[:,:,[2, 1, 0]], 0.5), axs[1,0]);
     show_tile(yscore_plot, axs[1,0], cmap=cmap, title="rgb + prediction", alpha=.5);
     # auc_roc, auc_pr
+    
     (fpr_sample_dict,
     tpr_sample_dict,
     roc_auc_sample_dict,
@@ -121,7 +139,7 @@ def show_sample_prediction(x, y, yscore, cmap="gnuplot", title=None):
     recall_sample_dict,
     pr_auc_sample_dict,
     _, _,
-    reduced_label_sample_dict) = multiclass_roc_pr(y.ravel(), yscore.ravel())
+    reduced_label_sample_dict) = multiclass_roc_pr(y_reshaped, yscore_reshaped, class_dict=get_class_dict(type_dict))
     plot_pr(recall_sample_dict, precision_sample_dict, pr_auc_sample_dict, None, None, axs[1, 1])
     plot_roc(fpr_sample_dict, tpr_sample_dict, roc_auc_sample_dict, axs[1, 2])
     plt.show()

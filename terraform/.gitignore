@@ -4,3 +4,4 @@ tf.env
 .terraform-harald/
 terraform.tfstate
 terraform.tfstate.backup
+.terraform-seema

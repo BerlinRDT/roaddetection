@@ -96,7 +96,7 @@ def multiclass_roc_pr(y, yscore, class_dict=get_class_dict()):
     yscore - n by num_class array of prediction scores
     class_dict - dictionary listing all legal values in y
     """
-    debug_mode = True
+    debug_mode = False
     # - instantiate
     fpr = dict()
     tpr = dict()
@@ -108,7 +108,7 @@ def multiclass_roc_pr(y, yscore, class_dict=get_class_dict()):
     beven_thresh = dict()
     reduced_class_dict = dict()
     # sanity check: make sure all labels in y actually exist in class_dict:
-    unique_labels = np.unique(y)    
+    unique_labels = np.unique(y)
     assert(not set(unique_labels).difference(set(class_dict.values()))), "illegal label"
     #--------------------------------------------------------------------------
     # only if any class other than no_img and no_road are present do we proceed

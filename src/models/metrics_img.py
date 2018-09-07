@@ -36,6 +36,22 @@ def auc_roc(y_true, y_pred, summation_method='careful_interpolation', num_thresh
 def auc_pr(y_true, y_pred, summation_method='careful_interpolation', num_thresholds=400, curve='PR'):
     return tf.metrics.auc(K.flatten(y_true), K.flatten(y_pred), summation_method=summation_method, num_thresholds=num_thresholds, curve=curve)
 
+@as_keras_metric
+def auc_pr_multiclass(y_true, y_pred, summation_method='careful_interpolation', num_thresholds=400, curve='PR'):
+    # set up a weight tensor which is all zeros where the y scores for the 
+    # no_road values reside
+    shape_4thdim = tf.shape(y_pred)[3]
+    zeros_shape = tf.add(tf.shape(y_pred), tf.convert_to_tensor([0, 0, 0, 1-shape_4thdim]))
+    ones_shape = tf.add(tf.shape(y_pred), tf.convert_to_tensor([0, 0, 0, -1]))
+    weights = tf.concat([tf.zeros(zeros_shape, dtype=tf.float32),
+                         tf.ones(ones_shape, dtype=tf.float32)], 3)
+    return tf.metrics.auc(K.flatten(y_true), 
+                          K.flatten(y_pred), 
+                          weights = K.flatten(weights),
+                          summation_method=summation_method, 
+                          num_thresholds=num_thresholds, 
+                          curve=curve)
+
 def test_auc_roc():
     """Run a few simple tests on auroc"""
     # set up a set of simple arrays with the same principal shape and data type 
@@ -106,9 +122,12 @@ def test_IoU_binary():
 
 def dummy_metric(y_true, y_pred):
     # this is the place to try out stuff
-    # return K.shape(K.flatten(y_pred))
+    #return K.shape(K.flatten(y_pred))
+    return K.shape(y_pred)[3]
     # whatever = 9
     # return tf.convert_to_tensor(whatever)
     #return K.eval(K.flatten(y_true))
     #return tf.reduce_max(y_pred)
-    return tf.contrib.metrics.streaming_pearson_correlation(y_pred, y_true)[0]
+    #return tf.contrib.metrics.streaming_pearson_correlation(y_pred, y_true)[0]
+
+    

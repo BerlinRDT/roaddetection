@@ -46,11 +46,11 @@ def plot_pr(recall_dict, precision_dict, auc_pr_dict, beven_ix_dict, beven_thres
     """
     if len(recall_dict):
         for i, k in enumerate(recall_dict.keys()):
-            # determine downsampling factor for plot:
-            ds_fac = np.max([len(recall_dict[k]) // 5e3, 1]).astype(int)
-            # downsampling:
-            recall = recall_dict[k][::ds_fac]
-            precision = precision_dict[k][::ds_fac]
+            # downsampling for plot:
+            ix = (len(recall_dict[k]) - np.logspace(0, np.log10(len(recall_dict[k])), num=2000)).astype(np.int64)
+            ix = ix[::-1]
+            recall = recall_dict[k][ix]
+            precision = precision_dict[k][ix]
             # plot curve
             ax.plot(recall, precision, \
                     label="{0:s}: auc = {1:0.2f}".format(str(k), auc_pr_dict[k]),
@@ -67,7 +67,7 @@ def plot_pr(recall_dict, precision_dict, auc_pr_dict, beven_ix_dict, beven_thres
         ax.set_ylim(-0.01, 1.01)
         ax.set_xlim(-0.01, 1.01)
         ax.legend(loc="lower right")
-        ax.set(title='PR', xlabel='recall', ylabel='precision')        
+        ax.set(title='PR', xlabel='recall', ylabel='precision')
 
 
 def plot_roc(fpr_dict, tpr_dict, auc_roc_dict, ax, plot_prop=get_class_plot_prop()):
@@ -139,8 +139,7 @@ def show_sample_prediction(x, y, yscore, class_dict, title=None):
         show_tile(yscore_plot[:,:,1], axs[0,3], cmap=cmap, show_colorbar=True, title="prediction (paved roads)");
         cmap = class_plot_prop["unpaved_road"][1]
         show_tile(yscore_plot[:,:,2], axs[1,0], cmap=cmap, show_colorbar=True, title="prediction (unpaved roads");
-        
-        
+
     # auc_roc, auc_pr
     (fpr_sample_dict,
     tpr_sample_dict,

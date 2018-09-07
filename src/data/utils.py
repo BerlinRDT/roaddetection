@@ -61,19 +61,16 @@ def get_list_samplefiles(dir_samples):
 def gen_sample_index(num_x_available, num_x_use, mode_sample_choice="random", metric=None):
     """
     Returns an array of indexes to samples, given the number of samples available (num_x_available)
-    and the number to be used (num_x_use). Indexes can either be random, correspond to the head and tail
-    of the samples according to a quantitiy listed in metric, or be an explicit list, the limits of
-    which will be checked against num_x_available.
+    and the number to be used (num_x_use). Indexes can either be random or correspond to the head and tail
+    of the samples according to a quantitiy listed in metric.
     """
-    if (mode_sample_choice=="head_tail"):
-        assert(metric is not None), "'head_tail' mode of choosing samples requires a metric"
     if mode_sample_choice == "random":
         samples_ix = np.random.choice(num_x_available, num_x_use, replace=False)
     elif mode_sample_choice == "head_tail":
+        assert(metric is not None), "'head_tail' mode of choosing samples requires a metric"
         # indexes to best and worst examples
         ix_sorted = np.argsort(metric)
         samples_ix = np.hstack((ix_sorted[:(num_x_use//2)],ix_sorted[(-num_x_use//2):]))
-    elif type(mode_sample_choice) is list:
-        samples_ix = np.array(mode_sample_choice, dtype=int)
-        samples_ix = samples_ix[samples_ix < num_x_available]
+    else:
+        raise Exception("illegal choice for mode_sample_choice")
     return samples_ix

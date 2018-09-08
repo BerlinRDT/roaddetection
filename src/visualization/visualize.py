@@ -8,15 +8,42 @@ def get_class_plot_prop():
     """
     Returns dict specifying colors and other graphics properties 
     to be used for plotting. Specifically:
-    color for line plots, colormap for images
+    color name for line plots, colormap for images, RGB color vector for individual pixels
     """
     CLASS_PLOT_PROP = {
-        "no_road": ["gray", "gray"],
-        "paved_road": ["navy", "bone"],
-        "any_road": ["blue", "gnuplot"],
-        "unpaved_road": ["darkorange", "copper"],
+        "no_img": ["black", "gray", np.array([0, 0, 0], dtype=np.uint8).reshape(1, 1, 3)],
+        "no_road": ["gray", "gray", np.array([40, 40, 40], dtype=np.uint8).reshape(1, 1, 3)],
+        "paved_road": ["blue", "bone", np.array([120, 120, 255], dtype=np.uint8).reshape(1, 1, 3)],
+        "any_road": ["black", "gnuplot", np.array([200, 200, 200], dtype=np.uint8).reshape(1, 1, 3)],
+        "unpaved_road": ["darkorange", "copper", np.array([200, 180, 10], dtype=np.uint8).reshape(1, 1, 3)],
     }
     return CLASS_PLOT_PROP
+
+
+def grayscale_to_rgb(x, class_plot_prop, class_dict):
+    """
+    Converts a 2D array representing road labels into a 3D array such that when
+    it is imshown any legal labels appear in colors defined by class_plot_prop
+    """
+    assert(x.ndim >= 2), "x must be at least 2D"
+    if x.ndim == 3:
+        if x.shape[2] == 3:
+            print("x is 3D already")
+            rgb = x
+        elif x.shape[2] == 1:
+            rgb = np.tile(x.copy(), [1, 1, 3])
+        else:
+            # give up
+            raise Exception("x is 3D with two layers")
+    else:
+        rgb = np.tile(x.copy().reshape(x.shape +(1,)), [1, 1, 3])
+    inverted_class_dict = {value: key for key, value in zip(class_dict.keys(), class_dict.values())}
+    unique_vals = np.unique(x)
+    # loop thru unique values
+    for uix in set(unique_vals).intersection(set(inverted_class_dict.keys())):
+        map = x.reshape(x.shape[:2]) == uix
+        rgb[map,:] = class_plot_prop[inverted_class_dict[uix]][2]
+    return rgb
 
 
 def show_tile(tile, ax, cmap=None, show_colorbar=False, title=None, **kwargs):
@@ -95,7 +122,7 @@ def plot_roc(fpr_dict, tpr_dict, auc_roc_dict, ax, plot_prop=get_class_plot_prop
         ax.set(title='ROC', xlabel='false positive rate', ylabel='true positive rate')
 
 
-def show_sample_prediction(x, y, yscore, class_dict, title=None):
+def show_sample_prediction(x, y, yscore, ypred, class_dict, title=None):
     """
     Produces a multipanel plot of an individual sample (image tile), its
     label, its prediction and analytics
@@ -122,23 +149,29 @@ def show_sample_prediction(x, y, yscore, class_dict, title=None):
     show_tile(x[:,:,[2, 1, 0]], axs[0,0], title="RGB");
     # nir
     show_tile(x[:,:,3], axs[0,1], cmap="gray",  title="infrared");
-    # labels § to be replaced by Lisa's code
-    show_tile(y, axs[0,2], cmap="gray",  title="labels");
-
+    
+    # y score (prediction)
     if type_model == "binary":
         cmap = class_plot_prop["any_road"][1]
-        # y score (prediction)
-        show_tile(yscore_plot, axs[0,3], cmap=cmap, show_colorbar=True,  title="prediction");
+        show_tile(yscore_plot, axs[1,0], cmap=cmap, show_colorbar=True,  title="prediction");
         # pale rgb + transparent prediction
-        show_tile(exposure.adjust_gamma(x[:,:,[2, 1, 0]], 0.5), axs[1,0]);
-        show_tile(yscore_plot, axs[1,0], cmap=cmap, title="rgb + prediction", alpha=.5);
+        show_tile(exposure.adjust_gamma(x[:,:,[2, 1, 0]], 0.5), axs[1,1]);
+        show_tile(yscore_plot, axs[1,1], cmap=cmap, title="rgb + prediction", alpha=.5);
     else:
         cmap = class_plot_prop["paved_road"][1]
         # assume that the first layer represents scores for no_road
-        # y score (prediction)
-        show_tile(yscore_plot[:,:,1], axs[0,3], cmap=cmap, show_colorbar=True, title="prediction (paved roads)");
+        show_tile(yscore_plot[:,:,1], axs[1,0], cmap=cmap, show_colorbar=True, title="prediction (paved roads)");
         cmap = class_plot_prop["unpaved_road"][1]
-        show_tile(yscore_plot[:,:,2], axs[1,0], cmap=cmap, show_colorbar=True, title="prediction (unpaved roads");
+        show_tile(yscore_plot[:,:,2], axs[1,1], cmap=cmap, show_colorbar=True, title="prediction (unpaved roads");
+        # convert true labels to rgb
+        y = grayscale_to_rgb(y, class_plot_prop, class_dict)
+        # convert predicted labels to rgb
+        ypred = grayscale_to_rgb(ypred, class_plot_prop, class_dict)
+
+    # true labels (cmap will be ignored if y is rgb)
+    show_tile(y, axs[0,2], cmap="gray", title="true labels");
+    # predicted labels
+    show_tile(ypred, axs[0,3], cmap="gray", title="predicted labels");
 
     # auc_roc, auc_pr
     (fpr_sample_dict,
@@ -148,7 +181,7 @@ def show_sample_prediction(x, y, yscore, class_dict, title=None):
     recall_sample_dict,
     pr_auc_sample_dict,
     _, _,
-    reduced_label_sample_dict) = multiclass_roc_pr(y_reshaped, yscore_reshaped, class_dict=get_class_dict(type_model))
+    reduced_label_sample_dict) = multiclass_roc_pr(y_reshaped, yscore_reshaped, class_dict=class_dict)
     plot_pr(recall_sample_dict, precision_sample_dict, pr_auc_sample_dict, None, None, axs[1, 2])
     plot_roc(fpr_sample_dict, tpr_sample_dict, roc_auc_sample_dict, axs[1, 3])
     plt.show()

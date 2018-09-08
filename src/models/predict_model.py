@@ -40,7 +40,6 @@ def get_class_dict(type_dict="all_legal"):
             "paved_road": 127,
             "unpaved_road": 255
         }
-        
     return class_dict
 
 
@@ -58,6 +57,25 @@ def get_sorted_key_index(class_key, class_dict):
     return ix[0]
 
 
+def predict_labels(yscore, thresh_dict, class_dict):
+    local_thresh_dict = thresh_dict.copy()
+    model_is_binary = not ((yscore.ndim == 3) and (yscore.shape[2] > 1))
+    # for the purpose of generating muticlass predicted labels the union of all
+    # roads, termed "any_road" (as in the binary case), is not helpful at all,
+    # so get rid of it
+    if not model_is_binary:
+        del local_thresh_dict["any_road"]
+    ypred = np.ones(yscore.shape[:2] + (1,), dtype=np.uint8) * class_dict["no_road"]
+    for i, k in enumerate(local_thresh_dict):
+        if model_is_binary:
+            ix = 0
+        else:
+            ix = get_sorted_key_index(k, class_dict)
+        above = yscore[:,:,ix] >= thresh_dict[k]
+        ypred[above] = class_dict[k]
+    return ypred
+        
+    
 def refactor_labels(x, y, class_dict, model_is_binary=True, meta=None):
     """
     Returns label array y which will be modified according to these rules:
@@ -70,7 +88,7 @@ def refactor_labels(x, y, class_dict, model_is_binary=True, meta=None):
     # in the first band). Variable mask could be used to create a masked array,
     # but scikit-learn does not support masked arrays
     if ((x.dtype == np.float64) or (x.dtype == np.float32)):
-        raise Exception("img must be converted after label refactoring")
+        raise Exception("img must be a uint for label refactoring")
     mask = x[:,:,0] == 0;
     # set masked values: first, set zeros in label file to 'no road' value...
     y[np.logical_and(np.logical_not(mask), np.logical_not(y))] = class_dict["no_road"]

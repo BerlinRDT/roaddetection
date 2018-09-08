@@ -71,6 +71,6 @@ def gen_sample_index(num_x_available, num_x_use, mode_sample_choice="random", me
         # indexes to best and worst examples
         ix_sorted = np.argsort(metric)
         samples_ix = np.hstack((ix_sorted[:(num_x_use//2)],ix_sorted[(-num_x_use//2):]))
-    else:
+    elif mode_sample_choice is not None:
         raise Exception("illegal choice for mode_sample_choice")
     return samples_ix

@@ -5,6 +5,8 @@ import os
 import glob
 import skimage.io as io
 import skimage.transform as trans
+from scipy import signal
+
 from pathlib import Path
 
 Sky = [128, 128, 128]
@@ -128,4 +130,23 @@ def saveResult(save_path, npyfile, name, flag_multi_class=False, num_class=2):
     for i, item in enumerate(npyfile):
         io.imsave(os.path.join(save_path, name), item.reshape((512, 512)))
 
-
+def feature_eng_conv(x, conv_matrix, collapse_bands=False):
+    """
+    Feature engineering on input array x, representing an [height, width, band] image:
+    Performs 2D convolution on each band of x with array conv_matrix, preserving the shape of x.
+    If collapse_bands is True, a single-band average across bands will be returned.
+    Each band of the resulting output is standardized (divided by the sd of its elements)
+    """
+    x_conv = np.empty(x.shape, dtype = np.float32)
+    for band_ix in range(x.shape[2]):
+        x_conv[:,:,band_ix] = signal.convolve2d(x[:,:,band_ix].astype(np.float32), conv_matrix, boundary='symm', mode='same')
+        # subtract band-wise grand average
+        x_conv[:,:,band_ix] -= np.mean(x_conv[:,:,band_ix])
+        if not collapse_bands:
+            # divide by std
+            x_conv[:,:,band_ix] /= np.std(x_conv[:,:,band_ix])
+    if collapse_bands:
+        x_conv = np.mean(x_conv, axis=2)
+        x_conv /= np.std(x_conv)
+        
+    return x_conv

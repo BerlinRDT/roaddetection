@@ -83,6 +83,8 @@ target/
 
 # specific directory for non-distributable material (e.g. copyrighted pdfs)
 /not_for_distribution/
+# figures
+/reports/figures/
 
 .pytest_cache/
 

@@ -46,23 +46,33 @@ def grayscale_to_rgb(x, class_plot_prop, class_dict):
     return rgb
 
 
-def show_tile(tile, ax, cmap=None, show_colorbar=False, title=None, **kwargs):
+def show_tile(tile, ax, cmap=None, scale=None, show_colorbar=False, title=None, **kwargs):
     """
     Custom wrapper for imshow tailored to satellite image tiles and numpy
     arrays derived from them
+    scale must be specified as pixels per meter
     """
-    # get rid of singleton 3rd dimension
-    if tile.ndim >=3:
-        if tile.shape[2] == 1:
-            tile = tile.reshape(tile.shape[:2])
-    im_h = ax.imshow(tile, cmap=cmap, **kwargs);
-    ax.set_yticklabels([])
-    ax.set_xticklabels([])
-    if show_colorbar:
-        divider = make_axes_locatable(ax)
-        cax = divider.append_axes("right", size="5%", pad=0.05)
-        plt.colorbar(im_h, cax=cax)
-    ax.set(title=title)
+    im_h = None
+    if ax:
+        # get rid of singleton 3rd dimension
+        if tile.ndim >=3:
+            if tile.shape[2] == 1:
+                tile = tile.reshape(tile.shape[:2])
+        im_h = ax.imshow(tile, cmap=cmap, **kwargs);
+        ax.set_yticklabels([])
+        ax.set_xticklabels([])
+        if scale:
+            print('plotting scale')
+            # depict a line representing 200 m in lower left 
+            x_span = 200.0 * scale
+            x_co = np.array(tile.shape[1] * 0.05) + np.array([0, x_span])
+            y_co = np.array(tile.shape[0] * 0.95) + np.zeros((2))
+            ax.plot(x_co, y_co, color = 'white', linewidth = 3)            
+        if show_colorbar:
+            divider = make_axes_locatable(ax)
+            cax = divider.append_axes("right", size="5%", pad=0.05)
+            plt.colorbar(im_h, cax=cax)
+        ax.set(title=title)
     return im_h
 
 
@@ -122,17 +132,42 @@ def plot_roc(fpr_dict, tpr_dict, auc_roc_dict, ax, plot_prop=get_class_plot_prop
         ax.set(title='ROC', xlabel='false positive rate', ylabel='true positive rate')
 
 
-def show_sample_prediction(x, y, yscore, ypred, class_dict, title=None):
+def show_sample_prediction(x, y, yscore, ypred, class_dict, scale=None, title=None, display_mode="full"):
     """
     Produces a multipanel plot of an individual sample (image tile), its
     label, its prediction and analytics
     """
+    assert(display_mode in ["full", "compact"]), "display mode must be either of 'compact' and 'full'"
     img_size = np.prod(y.shape[:2])
     dim_yscore = yscore.shape[2]
     if dim_yscore > 1:
         type_model = "multiclass"
     else:
         type_model = "binary"
+    
+    if display_mode == "full":
+        sp_r, sp_c = 2, 4
+        fig_sample, axs = plt.subplots(sp_r, sp_c, figsize=(12, 6))
+        ax_rgb = axs[0,0]
+        ax_nir = axs[0,1]
+        ax_yscore_binary = axs[1,0]
+        ax_yscore_rgb_binary = axs[1,1]
+        ax_yscore_paved = axs[1,0]
+        ax_yscore_unpaved = axs[1,1]
+        ax_ylabel = axs[0,2]
+        ax_ylabel_pred = axs[0,3]
+    else:
+        sp_r, sp_c = 1, 4 + int(type_model == "multiclass")
+        fig_sample, axs = plt.subplots(sp_r, sp_c, figsize=(12, 3))
+        ax_rgb = axs[0]
+        ax_nir = None
+        ax_yscore_binary = None
+        ax_yscore_rgb_binary = axs[2]
+        ax_yscore_paved = axs[2]
+        ax_yscore_unpaved = axs[3]
+        ax_ylabel = axs[1]
+        ax_ylabel_pred = axs[4]
+        
     # retrieve plot properties of different classes
     class_plot_prop = get_class_plot_prop()
     # reshaped versions for metric
@@ -142,47 +177,45 @@ def show_sample_prediction(x, y, yscore, ypred, class_dict, title=None):
     yscore_plot = np.copy(yscore)
     prc = np.percentile(yscore_plot, [99.9])
     yscore_plot[yscore_plot >= prc] = prc
-    # ----------------set up figure ---------------
-    fig_sample, axs = plt.subplots(2, 4, figsize=(15, 7))
+    # ----------------plot ---------------
     fig_sample.suptitle(title, fontsize=16)
     # plot rgb part of image
-    show_tile(x[:,:,[2, 1, 0]], axs[0,0], title="RGB");
+    show_tile(x[:,:,[2, 1, 0]], ax_rgb, title="RGB", scale=scale);
     # nir
-    show_tile(x[:,:,3], axs[0,1], cmap="gray",  title="infrared");
-    
+    show_tile(x[:,:,3], ax_nir, cmap="gray",  title="infrared");
     # y score (prediction)
     if type_model == "binary":
         cmap = class_plot_prop["any_road"][1]
-        show_tile(yscore_plot, axs[1,0], cmap=cmap, show_colorbar=True,  title="prediction");
+        show_tile(yscore_plot, ax_yscore_binary, cmap=cmap, show_colorbar=True,  title="prediction");
         # pale rgb + transparent prediction
-        show_tile(exposure.adjust_gamma(x[:,:,[2, 1, 0]], 0.5), axs[1,1]);
-        show_tile(yscore_plot, axs[1,1], cmap=cmap, title="rgb + prediction", alpha=.5);
+        show_tile(exposure.adjust_gamma(x[:,:,[2, 1, 0]], 0.5), ax_yscore_rgb_binary);
+        show_tile(yscore_plot, ax_yscore_rgb_binary, cmap=cmap, title="rgb + prediction", alpha=.5);
     else:
         cmap = class_plot_prop["paved_road"][1]
         # assume that the first layer represents scores for no_road
-        show_tile(yscore_plot[:,:,1], axs[1,0], cmap=cmap, show_colorbar=True, title="prediction (paved roads)");
+        show_tile(yscore_plot[:,:,1], ax_yscore_paved, cmap=cmap, show_colorbar=True, title="pred. (paved)");
         cmap = class_plot_prop["unpaved_road"][1]
-        show_tile(yscore_plot[:,:,2], axs[1,1], cmap=cmap, show_colorbar=True, title="prediction (unpaved roads");
+        show_tile(yscore_plot[:,:,2], ax_yscore_unpaved, cmap=cmap, show_colorbar=True, title="prediction (unpaved");
         # convert true labels to rgb
         y = grayscale_to_rgb(y, class_plot_prop, class_dict)
         # convert predicted labels to rgb
         ypred = grayscale_to_rgb(ypred, class_plot_prop, class_dict)
 
     # true labels (cmap will be ignored if y is rgb)
-    show_tile(y, axs[0,2], cmap="gray", title="true labels");
+    show_tile(y, ax_ylabel, cmap="gray", title="true labels");
     # predicted labels
-    show_tile(ypred, axs[0,3], cmap="gray", title="predicted labels");
-
-    # auc_roc, auc_pr
-    (fpr_sample_dict,
-    tpr_sample_dict,
-    roc_auc_sample_dict,
-    precision_sample_dict,
-    recall_sample_dict,
-    pr_auc_sample_dict,
-    _, _,
-    reduced_label_sample_dict) = multiclass_roc_pr(y_reshaped, yscore_reshaped, class_dict=class_dict)
-    plot_pr(recall_sample_dict, precision_sample_dict, pr_auc_sample_dict, None, None, axs[1, 2])
-    plot_roc(fpr_sample_dict, tpr_sample_dict, roc_auc_sample_dict, axs[1, 3])
-    plt.show()
+    show_tile(ypred, ax_ylabel_pred, cmap="gray", title="predicted labels");
+    if display_mode == "full":
+        # auc_roc, auc_pr
+        (fpr_sample_dict,
+        tpr_sample_dict,
+        roc_auc_sample_dict,
+        precision_sample_dict,
+        recall_sample_dict,
+        pr_auc_sample_dict,
+        _, _,
+        reduced_label_sample_dict) = multiclass_roc_pr(y_reshaped, yscore_reshaped, class_dict=class_dict)
+        plot_pr(recall_sample_dict, precision_sample_dict, pr_auc_sample_dict, None, None, axs[1, 2])
+        plot_roc(fpr_sample_dict, tpr_sample_dict, roc_auc_sample_dict, axs[1, 3])
+    
     return fig_sample

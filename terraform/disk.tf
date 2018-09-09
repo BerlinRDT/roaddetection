@@ -1,5 +1,5 @@
 data "google_compute_image" "my_image" {
-  name    = "ubuntu-gpu-1535059965"
+  name    = "ubuntu-gpu-1535189112"
   project = "berlin-rdt"
 }
 

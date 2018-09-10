@@ -166,8 +166,11 @@ def show_sample_prediction(x, y, yscore, ypred, class_dict, scale=None, title=No
         ax_yscore_paved = axs[2]
         ax_yscore_unpaved = axs[3]
         ax_ylabel = axs[1]
-        ax_ylabel_pred = axs[4]
-        
+        if type_model == "binary":
+            ax_ylabel_pred = axs[3]
+        else:
+            ax_ylabel_pred = axs[4]
+            
     # retrieve plot properties of different classes
     class_plot_prop = get_class_plot_prop()
     # reshaped versions for metric

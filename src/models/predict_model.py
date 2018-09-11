@@ -170,7 +170,6 @@ def multiclass_roc_pr(y, yscore, class_dict=get_class_dict()):
         # if it's a binary problem, y_multilabel is [nsamples x 1], so we have to reshape
         if num_class == 2:
             y_multilabel = y_multilabel.reshape((-1,1))
-        
         union_ix = []
         for i, k in enumerate(keys):
             if num_class == 2:
@@ -178,16 +177,21 @@ def multiclass_roc_pr(y, yscore, class_dict=get_class_dict()):
             else:
                 ix = get_sorted_key_index(k, reduced_class_dict)
             union_ix.append(ix)
-            fpr[k], tpr[k], _ = metrics.roc_curve(y_multilabel[:,ix], yscore[:,ix])
+            fpr[k], tpr[k], _ = metrics.roc_curve(y_multilabel[:,ix].ravel(), yscore[:,ix].ravel())
             roc_auc[k] = metrics.auc(fpr[k], tpr[k])
             # precision-recall and its auc
             precision[k], recall[k], thresholds = \
-                    metrics.precision_recall_curve(y_multilabel[:,ix], yscore[:,ix])
-            pr_auc[k] = metrics.auc(recall[k], precision[k])
+                    metrics.precision_recall_curve(y_multilabel[:,ix].ravel(), yscore[:,ix].ravel())
+            pr_auc[k] = metrics.auc(recall[k].reshape(-1,), precision[k].reshape(-1,))
             # breakeven point (threshold at which recall and precision are identical)
             beven_ix[k] = np.argmin(np.abs(precision[k] - recall[k]))
             beven_thresh[k] = thresholds[beven_ix[k]]
-        
+            # diagnostics (to be removed in the future)
+            if np.mean(np.diff(precision[k][::10])) <= 0.0:
+                print("WARNING: precision values should be ascending")
+            if np.mean(np.diff(recall[k][::10])) >= 0.0:
+                print("WARNING: recall values should be descending")
+         
         if num_class > 2:
             # compute union of roads vs no_road
             k = "any_road"

@@ -46,7 +46,7 @@ def grayscale_to_rgb(x, class_plot_prop, class_dict):
     return rgb
 
 
-def show_tile(tile, ax, cmap=None, scale=None, show_colorbar=False, title=None, **kwargs):
+def show_tile(tile, ax, cmap=None, scale=None, scale_len=200, show_colorbar=False, title=None, **kwargs):
     """
     Custom wrapper for imshow tailored to satellite image tiles and numpy
     arrays derived from them
@@ -62,9 +62,8 @@ def show_tile(tile, ax, cmap=None, scale=None, show_colorbar=False, title=None, 
         ax.set_yticklabels([])
         ax.set_xticklabels([])
         if scale:
-            print('plotting scale')
-            # depict a line representing 200 m in lower left 
-            x_span = 200.0 * scale
+            # depict a line representing scale_len m in lower left 
+            x_span = scale_len * scale
             x_co = np.array(tile.shape[1] * 0.05) + np.array([0, x_span])
             y_co = np.array(tile.shape[0] * 0.95) + np.zeros((2))
             ax.plot(x_co, y_co, color = 'white', linewidth = 3)            
@@ -181,7 +180,7 @@ def show_sample_prediction(x, y, yscore, ypred, class_dict, scale=None, title=No
     prc = np.percentile(yscore_plot, [99.9])
     yscore_plot[yscore_plot >= prc] = prc
     # ----------------plot ---------------
-    fig_sample.suptitle(title, fontsize=16)
+    fig_sample.suptitle(title, fontsize=14)
     # plot rgb part of image
     show_tile(x[:,:,[2, 1, 0]], ax_rgb, title="RGB", scale=scale);
     # nir

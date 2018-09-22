@@ -77,12 +77,12 @@ def show_tile(tile, ax, cmap=None, scale=None, scale_len=200, show_colorbar=Fals
 
 def plot_pr(recall_dict, precision_dict, auc_pr_dict, beven_ix_dict, beven_thresh_dict, ax, plot_prop=get_class_plot_prop()):
     """
-    Generates precision-recall curve plot with embellishments. Downsamples
-    inputs recall and precision for plot to between 5000 and 10000 points.
+    Generates precision-recall curve plot with embellishments
     """
     if len(recall_dict):
         for i, k in enumerate(recall_dict.keys()):
-            # downsampling for plot:
+            # downsampling of precision and recall for plot: logarithmic spacing 
+            # is essential, otherwise curves appear cut
             ix = (len(recall_dict[k]) - np.logspace(0, np.log10(len(recall_dict[k])), num=2000)).astype(np.int64)
             ix = ix[::-1]
             recall = recall_dict[k][ix]
@@ -108,8 +108,7 @@ def plot_pr(recall_dict, precision_dict, auc_pr_dict, beven_ix_dict, beven_thres
 
 def plot_roc(fpr_dict, tpr_dict, auc_roc_dict, ax, plot_prop=get_class_plot_prop()):
     """
-    Generates receiver-operating characteristic (roc) curve plot with embellishments. 
-    Downsamples inputs recall and precision for plot to between 5000 and 10000 points.
+    Generates receiver-operating characteristic (roc) curve plot with embellishments
     """    
     if len(fpr_dict):
         # plot diagonal

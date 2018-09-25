@@ -131,7 +131,7 @@ def saveResult(save_path, npyfile, name, flag_multi_class=False, num_class=2):
         io.imsave(os.path.join(save_path, name), item.reshape((512, 512)))
 
 
-# -------------- below here, functions for feature engineering ----------------
+# ------- below here, functions for experimental feature engineering ----------
 def conv_img(x, conv_matrix, collapse_bands=False):
     """
     Performs 2D convolution on each band of input matrix x, representing an 
@@ -153,9 +153,12 @@ def conv_img(x, conv_matrix, collapse_bands=False):
         
     return x_conv
 
-def feature_eng_conv(x, conv_fun, **kwargs):
+def feature_eng_conv(x, conv_fun, n=5, **kwargs):
     """
-    Feature engineering on input matrix x, representing an [height, width, band] image
+    Performs feature engineering via convolution on input matrix x, representing an
+    [height, width, bands] image. conv_fun must be a list of functions producing
+    2D matrices to be used for convolution. Frequency bands will be collapsed (the
+    images resulting from the convolution of each band will be averaged)
     """
     xf = None
     num_feature = len(conv_fun)
@@ -163,23 +166,23 @@ def feature_eng_conv(x, conv_fun, **kwargs):
         # preallocate
         xf = np.empty(x.shape[:2] + (num_feature,))
         for i, f in enumerate(conv_fun):
-            xf[:,:,i] = conv_img(x, f(), collapse_bands=True)
+            xf[:,:,i] = conv_img(x, f(n), collapse_bands=True)
     return xf
             
 
 # matrices to be used for convolution
 def conv_matrix_inhibsurround(n=7):
     """
-    n by n, positive center, negative surround
+    n by n (n>=5), positive 3 by 3 center, negative surround
     Elements sum to zero
     """
     assert(n>=5)
     m = np.ones((n, n), dtype=np.float32) / -(n**2 - 3**2)
-    m[n//2-1:n//2+1, n//2-1:n//2+1] = 1.0/3**2
+    m[n//2-1:n//2+2, n//2-1:n//2+2] = 1.0/3**2
     return m
 
 
-def conv_matrix_horizontalbar(n=7):
+def conv_matrix_horizontalbar(n=3):
     """
     n by n, positive center row, negative surround
     Elements sum to zero
@@ -188,7 +191,7 @@ def conv_matrix_horizontalbar(n=7):
     m[n//2, :] = 1.0/n
     return m
 
-def conv_matrix_verticalbar(n=7):
+def conv_matrix_verticalbar(n=3):
     """
     n by n, positive center column, negative surround
     Elements sum to zero
@@ -197,29 +200,19 @@ def conv_matrix_verticalbar(n=7):
     m[:, n//2] = 1.0/n
     return m
 
-def conv_matrix_diag_ullr():
+def conv_matrix_diag_ullr(n=3):
     """
-    3 by 3, positive diagonal, negative surround
+    n by n, positive diagonal (identity matrix), negative surround
     Elements sum to zero
     """
-    m = np.eye(3, dtype=np.float32) / 3.0
-    m[m<=0.0] = -1.0/6.0
+    m = np.eye(n, dtype=np.float32) / n
+    m[m<=0.0] = -1.0 / (n**2 - n)
     return m
 
-def conv_matrix_diag_llur():
+def conv_matrix_diag_llur(n=3):
     """
-    3 by 3, positive diagonal, negative surround
+    n by n, positive diagonal (identity matrix flipped left-right), negative surround
     Elements sum to zero
     """
-    m = np.eye(3, dtype=np.float32) / 3.0
-    m[m<=0.0] = -1.0/6.0
-    m = np.fliplr(m)
+    m = np.fliplr(conv_matrix_diag_ullr(n))
     return m
-            
-            
-            
-
-
-
-
-

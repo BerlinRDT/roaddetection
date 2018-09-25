@@ -1,7 +1,7 @@
 import numpy as np
 from keras import backend as K
 
-def categoricalCrossentropy(y_noisy, y_pred, the0, the1):
+def categoricalCrossentropy(y_noisy, y_pred, the0, the1, the2, the3):
     '''
     Calculate the class-weighted categorical cross-entropy for the given
     predicted and true sets.
@@ -30,7 +30,7 @@ def categoricalCrossentropy(y_noisy, y_pred, the0, the1):
 
     return  K.categorical_crossentropy(y_true, y_pred)
 
-def noisy_loss(the0, the1):    
+def noisy_loss(the0, the1, the2, the3):    
     def loss(y_true, y_pred):
-        return categoricalCrossentropy(y_true, y_pred, the0, the1)
+        return categoricalCrossentropy(y_true, y_pred,  the0, the1, the2, the3)
     return loss

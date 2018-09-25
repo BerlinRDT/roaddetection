@@ -8,8 +8,9 @@ from keras.models import *
 from keras.optimizers import *
 from keras.callbacks import ModelCheckpoint, LearningRateScheduler
 from keras import backend as keras
+from src.models.model import *
 
-def unet(input_size=(512, 512, 4), nClasses=3):
+def munet(input_size=(512, 512, 4), nClasses=3, use_binary = True):
     inputs = Input(input_size)
     conv1 = layers.Conv2D(64, 3, activation='relu', padding='same', kernel_initializer='he_normal')(inputs)
     conv1 = layers.Conv2D(64, 3, activation='relu', padding='same', kernel_initializer='he_normal')(conv1)
@@ -53,14 +54,26 @@ def unet(input_size=(512, 512, 4), nClasses=3):
     conv9 = layers.Conv2D(64, 3, activation='relu', padding='same', kernel_initializer='he_normal')(merge9)
     conv9 = layers.Conv2D(64, 3, activation='relu', padding='same', kernel_initializer='he_normal')(conv9)
     conv9 = layers.Conv2D(2, 3, activation='relu', padding='same', kernel_initializer='he_normal')(conv9)
+    
+    
+
+
+    
     conv10 = layers.Conv2D(nClasses, 1, 1, activation='relu',border_mode='same')(conv9)
     conv10 = layers.core.Reshape((input_size[0]*input_size[1], nClasses))(conv10)
     #conv10 = layers.core.Permute((2,1))(conv10)
 
-
     conv10 = layers.core.Activation('softmax')(conv10)
     conv10 = layers.core.Reshape((input_size[0], input_size[1], nClasses))(conv10)
+    
     model = Model(input=inputs, output=conv10)
+    
+    # Load binary results weights
+    if (use_binary == True):
+        binary_model = load_model('../../models/unet_membrane_analytic_31_08_18_19_13.hdf5')
+
+        for layer, pretrained_layer in zip(model.layers[1:38], binary_model.layers[1:38]):
+            layer.set_weights(pretrained_layer.get_weights())
 
     return model
 

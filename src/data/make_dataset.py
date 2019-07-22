@@ -4,7 +4,6 @@ import click
 import logging
 from pathlib import Path
 from dotenv import find_dotenv, load_dotenv
-
 from raster import Raster
 from utils import get_meta_data_filename, get_rgb_filename
 from spatial_index import create_spatial_index
@@ -53,7 +52,7 @@ def main(window_size, overlap, scaling_type, raw_prefix, input_filepath, output_
 
 def make_tiles(images_path, output_filepath, window_size, idx, overlap, dtype, scaling_type,
                raw_prefix_filter, region_filter):
-    img_list = pd.read_json("list_satellite_images_training.json")
+    img_list = pd.read_json("data/list_satellite_images.json")
 
     for r_analytic in Path(images_path).iterdir():
         if should_make_tiles_from(r_analytic.name, raw_prefix_filter, region_filter, img_list):
@@ -84,15 +83,11 @@ def is_analytic_tif(r_analytic_name):
 def is_raster_from_desired_region(r_analytic_name, region_filter, img_list):
     if (region_filter == "all"):
         return True
-
     logger = logging.getLogger(__name__)
-
     filtered_by_region = img_list.loc[img_list.directory.str.contains(region_filter, case=False)]
     shouldIgnore = filtered_by_region.loc[filtered_by_region.analyticImgName.str.contains(r_analytic_name)].empty
-
     if shouldIgnore:
         logger.info("Ignoring raster {} because of region filter {}".format(r_analytic_name, region_filter))
-
     return not shouldIgnore
 
 

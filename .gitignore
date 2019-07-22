@@ -80,19 +80,21 @@ target/
 
 .pytest_cache/
 
-# data except .gitkeep
-/data/
-!/data/.gitkeep
+# data except json files
+/data/*
+!/data/*.json
 
 # models except .gitkeep
-/models/
+/models/*
 !/models/.gitkeep
 
+
 # reports/figures and /figures* except figures_readme
-/reports/figures/
+/reports/figures/*
 !/reports/figures/.gitkeep
 /reports/figures*
 !/reports/figures_readme/
 
+# no serialized models (just to make sure)
 *.hdf5
 *.pkl

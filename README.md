@@ -11,9 +11,9 @@ The project was developed up to the working prototype level by Lisa Heße, Kiran
 In May 2019, an extended team (now also including Tim Sergio Gago, Matthias Bohner, and Erik Seiert) received an [AI for Earth](https://www.microsoft.com/en-us/ai/ai-for-earth) grant by Microsoft to further develop the project.
 
 
-![example_prediction](/reports/figures/models_unet_borneo_and_harz_05_09_16_22_20180427_020503_103c_3B_0094_exc.png)
+![example_prediction](/reports/figures_readme/models_unet_borneo_and_harz_05_09_16_22_20180427_020503_103c_3B_0094_exc.png)
 
-Project Organization
+Project Organization (under construction)
 ------------
 
     ├── LICENSE
@@ -25,9 +25,10 @@ Project Organization
     │   ├── processed      <- The final, canonical data sets for modeling.
     │   └── raw            <- The original, immutable data dump.
     │
-    ├── docs               <- A default Sphinx project; see sphinx-doc.org for details
+    ├── docs               <- A default Sphinx project; see sphinx-doc.org for details.
+    ├── logs               <- Logs from python's logging module.
     │
-    ├── models             <- Trained and serialized models, model predictions, or model summaries
+    ├── models             <- Trained and serialized models.
     │
     ├── notebooks          <- Jupyter notebooks. Naming convention is a number (for ordering),
     │                         the creator's initials, and a short `-` delimited description, e.g.

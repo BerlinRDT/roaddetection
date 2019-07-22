@@ -1,6 +1,5 @@
 *.py            text
 *.json		text
-*.ipynb         binary
 *.pdf 		binary
 *.png		binary
 

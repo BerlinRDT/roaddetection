@@ -1,7 +1,10 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# This is a collection of functions for the visualization of satellite
-# images and quantities derived from them
+
+"""
+A collection of functions for the characterization, visualization and 
+conversion of satellite images and quantities derived from them
+"""
 
 import numpy as np
 import pandas as pd
@@ -279,5 +282,3 @@ def convert_sat_img(img_arr, src, src_type, mask_arr=None, pca=False,  \
         return img_arr_rgb, img_arr_n, img_arr_nrg, img_arr_pc, pca
     else:
         return img_arr_rgb, img_arr_n, img_arr_nrg
-
-

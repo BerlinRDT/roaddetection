@@ -81,18 +81,18 @@ target/
 .pytest_cache/
 
 # data except .gitkeep
-data/
-!data/.gitkeep
+/data/
+!/data/.gitkeep
 
 # models except .gitkeep
-models/
-!models/.gitkeep
+/models/
+!/models/.gitkeep
 
 # reports/figures and /figures* except figures_readme
-reports/figures/
-!reports/figures/.gitkeep
-reports/figures*
-!reports/figures_readme/
+/reports/figures/
+!/reports/figures/.gitkeep
+/reports/figures*
+!/reports/figures_readme/
 
 *.hdf5
 *.pkl

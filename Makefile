@@ -1,4 +1,5 @@
-.PHONY: clean data clean_data lint requirements sync_train_data_to_cloud sync_raw_data_from_cloud create_data_folders clean_partial partial_train clean_validate_test validation_test_set delete_no_roads
+.PHONY: info requirements  data  partial_train  delete_no_roads  validation_test_set  test_data  create_data_folders  clean  clean_data  clean_validate_test  clean_partial  lint  sync_models_to_cloud  sync_models_from_cloud  sync_train_data_to_cloud  sync_raw_data_from_cloud
+    
 
 #################################################################################
 # GLOBALS                                                                       #
@@ -9,11 +10,12 @@ BUCKET = [OPTIONAL] your-bucket-for-syncing-data (do not include 's3://')
 PROFILE = default
 PROJECT_NAME = roaddetection
 PYTHON_INTERPRETER = python3
+HOSTNAME=$(shell hostname)
 
 ifeq (,$(shell which conda))
-HAS_CONDA=False
+  HAS_CONDA=False
 else
-HAS_CONDA=True
+  HAS_CONDA=True
 endif
 
 ifndef region
@@ -31,17 +33,26 @@ endif
 # COMMANDS                                                                      #
 #################################################################################
 
+## Display hostname & data directory
+ info: 
+	@echo "running on $(HOSTNAME); HAS_CONDA = $(HAS_CONDA); basic data directory is \n\t $(shell pwd)"
+
 ## Install Python Dependencies
  requirements: test_environment
-	pip install -U pip setuptools wheel --user
-	pip install -r requirements.txt --user
+ifeq (True,$(HAS_CONDA))
+	# Note that even updating an environment can take a long time
+	conda env update --file environment.yml
+else
+	pip install -U pip setuptools wheel
+	pip install -r requirements.txt
+endif
 
 ## Make Dataset
- data: requirements create_data_folders
+ data: create_data_folders
 	$(PYTHON_INTERPRETER) src/data/make_dataset.py --window_size=512 --overlap=0.25 --scaling_type=equalize_adapthist --raw_prefix=$(raw_prefix) --region=$(region) data/raw data/train
 
 ## Make Partial train set
- partial_train: requirements create_data_folders
+ partial_train: create_data_folders
 	$(PYTHON_INTERPRETER) src/data/make_partial_train.py data/train data/train_partial --threshold=$(threshold) --window_size=$(window_size)
 
 ## Delete tiles with no road labels from sat, map and sat_rgb folders
@@ -49,11 +60,11 @@ endif
 	$(PYTHON_INTERPRETER) src/data/delete_no_roads.py data/train --spare=5
 
 ## Split train data into validation and test set
- validation_test_set: requirements create_data_folders
+ validation_test_set: create_data_folders
 	$(PYTHON_INTERPRETER) src/data/make_validation_test.py data/raw/images data/train data/validate data/test
 
 ## Make test data dataset
- test_data: requirements create_data_folders
+ test_data: create_data_folders
 	$(PYTHON_INTERPRETER) src/data/make_dataset.py --window_size=512 --overlap=0.25 --scaling_type=equalize_adapthist --raw_prefix=$(raw_prefix) data/raw data/test
 
 ## Create all necessary data folders
@@ -117,38 +128,33 @@ endif
 	flake8 src
 
 ## Upload Models to cloud
- sync_models_to_cloud: requirements
+ sync_models_to_cloud: 
 	s3cmd sync models/ s3://satellite_images/models/ --host=https://storage.googleapis.com --region=eu-west1  --exclude=".DS_Store"
 
 ## Download Models from cloud
- sync_models_from_cloud: requirements
+ sync_models_from_cloud: 
 	s3cmd sync s3://satellite_images/models/ models/  --host=https://storage.googleapis.com --region=eu-west1  --exclude=".DS_Store"
 
 ## Upload Training Data to Cloud
- sync_train_data_to_cloud: requirements
+ sync_train_data_to_cloud: 
 	s3cmd sync data/train/ s3://satellite_images/train/ --host=https://storage.googleapis.com --region=eu-west1  --exclude=".DS_Store"
 
 ## Download Raw Data from Cloud
- sync_raw_data_from_cloud: requirements
+ sync_raw_data_from_cloud: 
 	s3cmd sync s3://satellite_images/raw/ data/raw/ --host=https://storage.googleapis.com --region=eu-west1 --delete-removed
 
 ## Set up python interpreter environment
  create_environment:
-	ifeq (True,$(HAS_CONDA))
-			@echo ">>> Detected conda, creating conda environment."
-	ifeq (3,$(findstring 3,$(PYTHON_INTERPRETER)))
-		conda create --name $(PROJECT_NAME) python=3
-	else
-		conda create --name $(PROJECT_NAME) python=2.7
-	endif
-			@echo ">>> New conda env created. Activate with:\nsource activate $(PROJECT_NAME)"
-	else
-		@pip install -q virtualenv virtualenvwrapper
-		@echo ">>> Installing virtualenvwrapper if not already intalled.\nMake sure the following lines are in shell startup file\n\
-		export WORKON_HOME=$$HOME/.virtualenvs\nexport PROJECT_HOME=$$HOME/Devel\nsource /usr/local/bin/virtualenvwrapper.sh\n"
-		@bash -c "source `which virtualenvwrapper.sh`;mkvirtualenv $(PROJECT_NAME) --python=$(PYTHON_INTERPRETER)"
-		@echo ">>> New virtualenv created. Activate with:\nworkon $(PROJECT_NAME)"
-	endif
+ifeq (True,$(HAS_CONDA))
+	@echo ">>> Detected conda, creating conda environment (look up environment.yml for its name)"
+	@conda env create --file environment.yml
+else
+	@pip install -q virtualenv virtualenvwrapper
+	@echo ">>> Installing virtualenvwrapper if not already intalled.\nMake sure the following lines are in shell startup file\n\
+	export WORKON_HOME=$$HOME/.virtualenvs\nexport PROJECT_HOME=$$HOME/Devel\nsource /usr/local/bin/virtualenvwrapper.sh\n"
+	@bash -c "source `which virtualenvwrapper.sh`;mkvirtualenv $(PROJECT_NAME) --python=$(PYTHON_INTERPRETER)"
+	@echo ">>> New virtualenv created. Activate with:\nworkon $(PROJECT_NAME)"
+endif
 
 ## Test python environment is setup correctly
  test_environment:

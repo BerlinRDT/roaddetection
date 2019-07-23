@@ -1,0 +1,39 @@
+name: roaddetection
+channels:
+  - defaults
+  - conda-forge
+dependencies:
+  - python
+  - ipython
+  - jupyter
+  - jupyterlab
+  - spyder
+  - tensorflow-gpu
+  - keras
+  - numpy
+  - pandas
+  - pillow  
+  - matplotlib
+  - seaborn
+  - imageio
+  - scipy
+  - scikit-learn
+  - scikit-image
+  - click
+  - python-dotenv
+  - coverage
+  - flake8
+  - pip
+  - requests
+  - shapely
+  - geopandas
+  - planet
+  - rasterio
+  - descartes
+  - fiona
+  - osmnx
+  - rtree
+  - gdal
+  - geos
+  - pip:
+    - kml2geojson

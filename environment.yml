@@ -8,8 +8,8 @@ dependencies:
   - jupyter
   - jupyterlab
   - spyder
-  - tensorflow-gpu=1.12
-  - keras
+  - tensorflow-gpu=1.14.0
+  - keras=2.2.4
   - numpy
   - pandas
   - pillow  

@@ -1,6 +1,7 @@
 .PHONY: info  requirements  create_tiles  copy_partial_train_tiles  delete_noroad_tiles\
-split_val_test_tiles  create_tile_folders  clean\
+split_val_test_tiles  create_tile_folders  create_model_folders  clean\
 clean_tiles  clean_validate_test_tiles  clean_partial_train_tiles  lint\
+train\
 sync_models_to_cloud  sync_models_from_cloud\
 sync_train_tiles_to_cloud  sync_raw_data_from_cloud\
     
@@ -105,6 +106,11 @@ endif
 	mkdir -p data/test/map
 	mkdir -p data/test/predict
 
+## Create all necessary model folders
+ create_model_folders:
+	mkdir -p -v models/UNet
+	mkdir -p -v models/SegNet
+
 ## Delete all compiled Python files
  clean:
 	find . -type f -name "*.py[co]" -delete
@@ -145,6 +151,10 @@ endif
 ## Lint using flake8
  lint:
 	flake8 src
+
+## Train model
+ train:
+	$(PYTHON_INTERPRETER) src/models/train_model.py
 
 ## Upload Models to cloud
  sync_models_to_cloud: 

@@ -1,8 +1,8 @@
 import logging
 from pathlib import Path
 import skimage.io as io
-import os, shutil
-import numpy as np
+import os
+import shutil
 import click
 
 
@@ -30,7 +30,7 @@ def main(train_dir, partial_dir, threshold, window_size):
             src = os.path.join(train_dir, file_type, fname)
             dest = os.path.join(partial_dir, file_type, fname)
             if (os.path.exists(src)):
-                logger.debug("moving {} to {}".format(src, dest))
+                logger.debug("copying {} to {}".format(src, dest))
                 shutil.copy(src, dest)
 
     click.echo("Created partial train set with {} tiles".format(len(tiles_with_roads_above_threshold)))

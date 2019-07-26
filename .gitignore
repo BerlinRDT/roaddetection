@@ -88,6 +88,8 @@ target/
 /models/*
 !/models/.gitkeep
 
+# logs
+/logs/
 
 # reports/figures and /figures* except figures_readme
 /reports/figures/*

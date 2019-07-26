@@ -1,4 +1,8 @@
-.PHONY: info requirements  data  partial_train  delete_no_roads  validation_test_set  test_data  create_data_folders  clean  clean_data  clean_validate_test  clean_partial  lint  sync_models_to_cloud  sync_models_from_cloud  sync_train_data_to_cloud  sync_raw_data_from_cloud
+.PHONY: info  requirements  create_tiles  copy_partial_train_tiles  delete_noroad_tiles\
+split_val_test_tiles  create_tile_folders  clean\
+clean_tiles  clean_validate_test_tiles  clean_partial_train_tiles  lint\
+sync_models_to_cloud  sync_models_from_cloud\
+sync_train_tiles_to_cloud  sync_raw_data_from_cloud\
     
 
 #################################################################################
@@ -18,24 +22,43 @@ else
   HAS_CONDA=True
 endif
 
+# ----------------------------------------------------------------------
+# below, current default settings for image tile generation and training
+# ----------------------------------------------------------------------
 ifndef region
   region = all
 endif
 
+# images with a road pixel content above threshold in % will be assigned  
+# to the 'partial train' group
 ifndef threshold
-  threshold = 5000
+  threshold = 2.0
 endif
 
+# width and height of image tiles in pixels
 ifndef window_size
   window_size = 512
 endif
+
+# overlap between tiles during generation (normalized length, in [0, 1])
+ifndef overlap
+  overlap = 0.25
+endif
+
+# type of intensity scaling of satellite images
+ifndef scaling_type
+  scaling_type = equalize_adapthist
+endif
+
+
 #################################################################################
 # COMMANDS                                                                      #
 #################################################################################
 
 ## Display hostname & data directory
  info: 
-	@echo "running on $(HOSTNAME); HAS_CONDA = $(HAS_CONDA); basic data directory is \n\t $(shell pwd)"
+	@echo "Running on $(HOSTNAME); HAS_CONDA = $(HAS_CONDA)"
+	@echo "Basic data directory is $(shell pwd)"
 
 ## Install Python Dependencies
  requirements: test_environment
@@ -48,27 +71,23 @@ else
 endif
 
 ## Make Dataset
- data: create_data_folders
-	$(PYTHON_INTERPRETER) src/data/make_dataset.py --window_size=512 --overlap=0.25 --scaling_type=equalize_adapthist --raw_prefix=$(raw_prefix) --region=$(region) data/raw data/train
+ create_tiles: create_tile_folders
+	$(PYTHON_INTERPRETER) src/data/make_dataset.py --window_size=window_size --overlap=overlap --scaling_type=equalize_adapthist --raw_prefix=$(raw_prefix) --region=$(region) data/raw data/train
 
 ## Make Partial train set
- partial_train: create_data_folders
+ copy_partial_train_tiles: create_tile_folders
 	$(PYTHON_INTERPRETER) src/data/make_partial_train.py data/train data/train_partial --threshold=$(threshold) --window_size=$(window_size)
 
 ## Delete tiles with no road labels from sat, map and sat_rgb folders
- delete_no_roads:
+ delete_noroad_tiles:
 	$(PYTHON_INTERPRETER) src/data/delete_no_roads.py data/train --spare=5
 
 ## Split train data into validation and test set
- validation_test_set: create_data_folders
+ split_val_test_tiles: create_tile_folders
 	$(PYTHON_INTERPRETER) src/data/make_validation_test.py data/raw/images data/train data/validate data/test
 
-## Make test data dataset
- test_data: create_data_folders
-	$(PYTHON_INTERPRETER) src/data/make_dataset.py --window_size=512 --overlap=0.25 --scaling_type=equalize_adapthist --raw_prefix=$(raw_prefix) data/raw data/test
-
 ## Create all necessary data folders
- create_data_folders:
+ create_tile_folders:
 	mkdir -p data/train/sat
 	mkdir -p data/train/sat_rgb
 	mkdir -p data/train/map
@@ -91,8 +110,8 @@ endif
 	find . -type f -name "*.py[co]" -delete
 	find . -type d -name "__pycache__" -delete
 
-## Delete all contents of data/train/map and data/train/sat
- clean_data: clean_partial
+## Delete all contents of all directories containing image tiles
+ clean_tiles: clean_partial_train_tiles
 	rm -f data/train/map/*
 	rm -f data/train/sat/*
 	rm -f data/train/sat_rgb/*
@@ -107,7 +126,7 @@ endif
 	rm -f data/test/predict/*
 
 ## Delete all contents of data/validate and data/test
- clean_validate_test:
+ clean_validate_test_tiles:
 	rm -f data/validate/map/*
 	rm -f data/validate/sat/*
 	rm -f data/validate/sat_rgb/*
@@ -118,7 +137,7 @@ endif
 	rm -f data/test/predict/*
 
 ## Delete all contents of data/train_partial
- clean_partial:
+ clean_partial_train_tiles:
 	rm -f data/train_partial/map/*
 	rm -f data/train_partial/sat/*
 	rm -f data/train_partial/sat_rgb/*
@@ -136,7 +155,7 @@ endif
 	s3cmd sync s3://satellite_images/models/ models/  --host=https://storage.googleapis.com --region=eu-west1  --exclude=".DS_Store"
 
 ## Upload Training Data to Cloud
- sync_train_data_to_cloud: 
+ sync_train_tiles_to_cloud: 
 	s3cmd sync data/train/ s3://satellite_images/train/ --host=https://storage.googleapis.com --region=eu-west1  --exclude=".DS_Store"
 
 ## Download Raw Data from Cloud

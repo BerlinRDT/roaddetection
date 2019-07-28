@@ -11,7 +11,7 @@
  """
 
 from src.models.data import trainGenerator
-from src.models.network_models import unet, unet_var
+from src.models.network_models import unet_flex
 from src.models.metrics_img import IoU_binary, precision, recall, f1_score
 import matplotlib.pyplot as plt
 from keras.callbacks import ModelCheckpoint, EarlyStopping, LambdaCallback
@@ -67,13 +67,12 @@ def main():
     # User settings
     # ------------- image characteristics and augmentation -----------------------------
     # size of tiles
-    target_size = (512,512)
+    target_size = (512, 512)
     # input arguments to Keras' ImageDataGenerator
     data_gen_args = dict(
-                        data_format="channels_last",
-                        horizontal_flip=True,
-                        vertical_flip=True
-     )
+        data_format="channels_last",
+        horizontal_flip=True,
+        vertical_flip=True)
     # directory into which to place *training* images from ImageDataGenerator for inspection;
     # default should be None because this slows things down
     imgdatagen_dir = None
@@ -83,18 +82,18 @@ def main():
     # path to & filename of pre-trained model to use - set to None if you want to start from scratch
     pretrained_model_fn = model_dir + '/models_unet_borneo_and_harz_05_09_16_22.hdf5'
     pretrained_model_fn = model_dir + '/unet_test.hdf5'
-    pretrained_model_fn = None
+    #pretrained_model_fn = None
 
     # path to & filename of model to save
-    trained_model_fn = model_dir + '/unet_test.hdf5'
+    trained_model_fn = model_dir + '/unet_test_full.hdf5'
 
     #--------------- training details / hyperparameters -----------------------------------
     # batch size
-    batch_size = 2
+    batch_size = 4
     # steps per epoch, should correspond to [number of training images] / batch size
     steps_per_epoch = 600 // batch_size
     # number of epochs
-    epochs = 10
+    epochs = 50
     # number of steps on validation set
     validation_steps = 60
     # self-explanatory variables:
@@ -111,16 +110,15 @@ def main():
 
 
     # Set up ImageDataGenerators for training and validation sets
-    train_gen = trainGenerator(batch_size, data_dir + '/train_partial','sat','map',
-                            data_gen_args, save_to_dir = imgdatagen_dir, image_color_mode="rgba", target_size=target_size)
+    train_gen = trainGenerator(batch_size, data_dir + '/train','sat','map',
+                               data_gen_args, save_to_dir = imgdatagen_dir, image_color_mode="rgba", target_size=target_size)
 
     validation_gen = trainGenerator(batch_size, data_dir + '/validate','sat','map',
-                            data_gen_args, save_to_dir = None, image_color_mode="rgba", target_size=target_size)
+                                    data_gen_args, save_to_dir = None, image_color_mode="rgba", target_size=target_size)
 
 
     # Define model
-    #model = unet_var()
-    model = unet()
+    model = unet_flex(num_filt_init=64, num_level=3)
 
     # compile
     model.compile(optimizer=optimizer,
@@ -131,7 +129,7 @@ def main():
     model.summary()
 
     # possibly load weights
-    if (pretrained_model_fn):
+    if pretrained_model_fn:
         model.load_weights(pretrained_model_fn)
 
     # define callbacks (including checkpoints)

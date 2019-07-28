@@ -6,77 +6,74 @@ Collection of network models.
 
 from keras import models, layers
 
-def unet_var(input_shape=(512, 512, 4), num_class=2, num_filt_init=32):
+def unet_flex(input_shape=(512, 512, 4), num_class=2, num_level=4, num_filt_init=32):
     """
-    A shallow variant of the U-net proposed by Ronneberger et al (2015). A major
-    difference to the original model is that 2D convolutions don't reduce the 
-    size of the images.
-    To Do:
-    - generalize even more, by making the number of levels an input arg
+    U-net-like model. Highly configurable.
+    Note that 2D convolutions don't reduce the size of the images, in contrast
+    to the original description by Ronneberger et al (2015).
     
     Input
     -----
-        input_shape: shape of the expected input
+        input_shape: shape of the expected input (height, width, depth)
         num_class: number of classes to be discriminated, default 2 (currently
-          without effect)
+          only allowed value)
+        num_level: number of depth levels of network, default 4
         num_filt_init: initial number of filters of the 2D conv (will be 
-          doubled at each level of the decoding part)
+          doubled at each level of the decoding part), default 32
     Output
     -----
         model: the Keras network model
-
     """
+    assert(num_class == 2), "number of classes different from 2 not yet implemented"
+    # disallow more than 6 levels (models get too large, likely with little benefit)
+    assert(num_level in range(1, 7)), "number of levels must be between 1 and 6"
+    # make sure that size of the images vibes with number of levels
+    assert(max(input_shape[:2]) >= 2**num_level), "number of levels too high for images of given size"
+    
     # a few parameters that may be made input parameters
-    layers.Dropout_rate = 0.5
+    dropout_rate = 0.5
     ki = 'he_normal'
 
-    # initialization
-    level = 0
+    # building block for the decoding part: convolutions, maxpool and 'horizontal' copy
+    def block_decode(input):
+        conv1 = layers.Conv2D(num_filt_init * 2**level, (3,3), activation='relu', padding='same', kernel_initializer=ki)(input)
+        conv2 = layers.Conv2D(num_filt_init * 2**level, (3,3), activation='relu', padding='same', kernel_initializer=ki)(conv1)
+        pool = layers.MaxPooling2D(pool_size=(2, 2))(conv2)
+        copy = layers.Dropout(dropout_rate)(conv2)
+        return pool, copy
+
+    def bottleneck(input):
+        conv1 = layers.Conv2D(num_filt_init * 2**level, (3,3), activation='relu', padding='same', kernel_initializer=ki)(input)
+        conv2 = layers.Conv2D(num_filt_init * 2**level, (3,3), activation='relu', padding='same', kernel_initializer=ki)(conv1)
+        return conv2
+
+    # building block for the encoding part: inverse convolution, concatenation, convolutions
+    def block_encode(conv_input, copy_input):
+        upconv = layers.Conv2DTranspose(num_filt_init * 2**level, (2,2), strides=(2,2), activation='relu', padding='same')(conv_input)
+        cat = layers.Concatenate(axis=3)([copy_input, upconv])
+        conv1 = layers.Conv2D(num_filt_init * 2**level, (3,3), activation='relu', padding='same')(cat)
+        conv2 = layers.Conv2D(num_filt_init * 2**level, (3,3), activation='relu', padding='same')(conv1)
+        return conv2
+
+    # --- initialization
+    # store horizontal connections in dict with level as key
+    horz_dict = {}
     inputs = layers.Input(shape=input_shape)
-
+    block_layer = inputs
     # --- DECODING PART
-    # level 1: convolutions, maxpool and 'horizontal' copy
+    for level in range(num_level):
+        block_layer, horz_dict[level] = block_decode(block_layer)
+    # --- BOTTLENECK (in terms of num_level, count as an additional level)
+    level = num_level
+    block_layer = bottleneck(block_layer)
     level += 1
-    conv1_1 = layers.Conv2D(num_filt_init * 2**(level-1), (3,3), activation='relu', padding='same', kernel_initializer=ki)(inputs)
-    conv1_2 = layers.Conv2D(num_filt_init * 2**(level-1), (3,3), activation='relu', padding='same', kernel_initializer=ki)(conv1_1)
-    copy1 = layers.Dropout(layers.Dropout_rate)(conv1_2)
-    pool1 = layers.MaxPooling2D(pool_size=(2, 2))(conv1_2)
-
-    # level 2: convolutions, maxpool and horizontal transfer
-    level += 1
-    conv2_1 = layers.Conv2D(num_filt_init * 2**(level-1), (3,3), activation='relu', padding='same', kernel_initializer=ki)(pool1)
-    conv2_2 = layers.Conv2D(num_filt_init * 2**(level-1), (3,3), activation='relu', padding='same', kernel_initializer=ki)(conv2_1)
-    copy2 = layers.Dropout(layers.Dropout_rate)(conv2_2)
-    pool2 = layers.MaxPooling2D(pool_size=(2, 2))(conv2_2)
-
-    # level 3: convolutions (deepest layer)
-    level += 1
-    conv3_1 = layers.Conv2D(num_filt_init * 2**(level-1), (3,3), activation='relu', padding='same', kernel_initializer=ki)(pool2)
-    conv3_2 = layers.Conv2D(num_filt_init * 2**(level-1), (3,3), activation='relu', padding='same', kernel_initializer=ki)(conv3_1)
-
-
     # --- ENCODING PART
-    # level 2: upsampling, convolution, concatenation, convolutions
-    level -= 1
-    upsample2 = layers.UpSampling2D((2, 2))(conv3_2)
-    upconv2_1 = layers.Conv2D(num_filt_init * 2**(level-1), (2,2), activation='relu', padding='same')(upsample2)
-    cat2 = layers.Concatenate(axis=3)([copy2, upconv2_1])
-    upconv2_2 = layers.Conv2D(num_filt_init * 2**(level-1), (3,3), activation='relu', padding='same')(cat2)
-    upconv2_3 = layers.Conv2D(num_filt_init * 2**(level-1), (3, 3), activation='relu', padding='same')(upconv2_2)
-
-    # level 1: upsampling, convolution, concatenation, convolutions
-    level -= 1
-    upsample1 = layers.UpSampling2D((2, 2))(upconv2_3)
-    upconv1_1 = layers.Conv2D(num_filt_init * 2**(level-1), (2,2), activation='relu', padding='same')(upsample1)
-    cat1 = layers.Concatenate(axis=3)([copy1, upconv1_1])
-    upconv1_2 = layers.Conv2D(num_filt_init * 2**(level-1), (3,3), activation='relu', padding='same')(cat1)
-    upconv1_3 = layers.Conv2D(num_filt_init * 2**(level-1), (3, 3), activation='relu', padding='same')(upconv1_2)
-
-    # output stage
-    upconv1_4 = layers.Conv2D(2, (3, 3), activation='relu', padding='same')(upconv1_3)
-    upconv1_5 = layers.Conv2D(1, (1, 1), activation='sigmoid', padding='same')(upconv1_4)
-
-    model = models.Model(inputs=inputs, outputs=upconv1_5)
+    for level in range(num_level-1, -1, -1):
+        block_layer = block_encode(block_layer, horz_dict[level])
+    # --- last step: 1x1 convolution & sigmoid activation
+    block_layer = layers.Conv2D(1, (1, 1), activation='sigmoid', padding='same')(block_layer)
+    # plug togeher
+    model = models.Model(inputs=inputs, outputs=block_layer)
     return model
 
 

@@ -35,5 +35,6 @@ dependencies:
   - rtree
   - gdal
   - geos
+  - toml
   - pip:
     - kml2geojson

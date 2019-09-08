@@ -1,0 +1,43 @@
+title = "Analysis parameters"
+# This is a toml file ("Tom"s Obvious, Minimal Language"): 
+# https://pypi.org/project/toml/
+# https://github.com/uiri/toml
+
+[paths]
+# Input and output paths for data
+input_filepath = "data/raw/"
+output_filepath = " data/train/"
+
+[satimg]
+# json file containing list of satellite images from which to generate image tiles
+satimg_list = "data/list_satellite_images.json"
+
+# Region from which to create tiles. Currently, any of ["all", "borneo", "harz"]
+region = "all"
+
+# File name prefix for satellite images to be used for creating image tiles: specify string (set to "None" or "" for no filter)
+raw_prefix = "None"
+
+# Allowed endings of file names of satellite images
+satimg_file_endings = ["AnalyticMS.tif", "AnalyticMS_SR.tif", "AnalyticMS.tiff", "AnalyticMS_SR.tiff"]
+
+# Scaling of satellite images before tile generation: any of "equalize_adapthist", "percentile"
+scaling_type ="equalize_adapthist"
+
+# Number type in image tiles
+dtype = "uint8"
+
+# Length of edges of image tiles; default 512
+window_size = 512
+
+# Normalized overlap of *edges* (not area) of image tiles [0.0  1.0[
+overlap = 0.25
+
+
+# NOTE: proc parameters not yet implemented in code, so are without effect
+[proc]
+# Set to true for concurrent processsing
+do_concurrent = true
+
+# The max number of workers (=CPU cores) that shall be put to work in concurrent processing (it need not necessarily correspond to the number of cores present in the system, which will be determined).
+max_workers = 4

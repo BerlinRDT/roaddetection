@@ -73,7 +73,7 @@ endif
 
 ## Make Dataset
  create_tiles: create_tile_folders
-	$(PYTHON_INTERPRETER) src/data/make_dataset.py --window_size=window_size --overlap=overlap --scaling_type=equalize_adapthist --raw_prefix=$(raw_prefix) --region=$(region) data/raw data/train
+	$(PYTHON_INTERPRETER) src/data/make_dataset.py MAKE_DATASET.toml
 
 ## Make Partial train set
  copy_partial_train_tiles: create_tile_folders

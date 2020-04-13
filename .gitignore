@@ -80,9 +80,12 @@ target/
 
 .pytest_cache/
 
-# data except json files
+# data subdir except json files and except labels subdirectory
 /data/*
 !/data/*.json
+!/data/raw
+/data/raw/*
+!/data/raw/labels
 
 # models except .gitkeep
 /models/*

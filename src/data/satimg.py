@@ -82,7 +82,7 @@ def convert_sat_img(img_arr, src, src_type, mask_arr=None, pca=False,  \
         - RGBA: RGB with alpha map
         - BGRN: 4-band image with N=near infrared
     mask_arr: numpy array, resulting from rasterio read_mask()
-    pca: object of type sklearn.decomposition.pca.PCA or boolean; if the former,
+    pca: object of type sklearn.decomposition.PCA or boolean; if the former,
         pixel values will be transformed accordingly; if boolean and True, PCA 
         of pixel values will be computed; additional output args will be returned 
         (see below)
@@ -102,7 +102,7 @@ def convert_sat_img(img_arr, src, src_type, mask_arr=None, pca=False,  \
     img_nrg: infrared-red-green array (if infrared is present in input, otherwise none)
     If input arg do_pca is true, additionally, the following outputs will be returned:
     img_pc:  false-color image of first three principal components
-    pca: an object of type sklearn.decomposition.pca.PCA that can be used as an input 
+    pca: an object of type sklearn.decomposition.PCA that can be used as an input 
         to this function to transform further image data in a reproducible manner
     """
     # input error checking:
@@ -113,7 +113,7 @@ def convert_sat_img(img_arr, src, src_type, mask_arr=None, pca=False,  \
     "scaling_type must be a LIST; legal entries are 'percentile' and 'equalize_adapthist'"
     if mask_arr is None:
         print("image transformations may not yield desired results due to absence of mask_arr")
-    if isinstance(pca, decomposition.pca.PCA):
+    if isinstance(pca, decomposition.PCA):
         do_pca = True
     elif isinstance(pca, bool):
         do_pca = pca

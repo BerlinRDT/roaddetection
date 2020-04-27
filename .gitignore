@@ -103,3 +103,17 @@ target/
 # no serialized models (just to make sure)
 *.hdf5
 *.pkl
+
+# Latex
+*.aux
+*.idx
+*.log
+*.toc
+*.ist
+*.bbl
+*.blg
+*.bcf
+*.run.xml
+*.synctex.gz
+*.out
+

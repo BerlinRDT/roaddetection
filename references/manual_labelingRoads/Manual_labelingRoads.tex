@@ -74,7 +74,6 @@ Material which is vital only initially or likely to be used as a reference (inst
 
 Contact: \url{hhntschk@gmail.com}
 
-
 \section{Definitions/abbreviations}
 \begin{itemize}
 	\item \textbf{Area of interest (AOI):} a region in which roads shall be labeled, for example, 50 by 50 km squares in Borneo as shown in Fig~\ref{fig:aoi}. An AOI is at least as large as a single satellite image, but otherwise its size is deliberately not exactly defined.
@@ -294,7 +293,9 @@ Digitizing:
 			\item make sure you labeled all roads in a given area that is to be labeled
 			\item avoid gaps and overshooting
 		\end{itemize}
-		See Figure \ref{fig:label_examples} for orientation.
+	The question, then, is how to deal with the various degrees of visibility of small roads. tbc: No clear-cut answer. Extrapolate to some degree. Use GE in case of doubt, but  pay close attention to date: some rural roads vanish/overgrown.
+	
+	See Figure \ref{fig:label_examples} for orientation.
 	}
 }
 \par
@@ -313,6 +314,8 @@ Digitizing:
 	\label{fig:label_examples}
 \end{figure}
 
+\subsubsection{Merging OSM and own labels}
+tbc
 
 \subsubsection{Exporting the data}
 When you are done, right click on the layer you created. Click  \textit{export} - \textit{Save layer as} - and then choose either \textit{ESRI Shape File}, \textit{Keyhole Markup Language (KML)}, or \textit{geojson} (text-based, lossy).

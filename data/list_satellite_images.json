@@ -1,5 +1,13 @@
 [
   {
+    "analyticImgName": "20190615_140900_103d_3B_AnalyticMS.tif",
+    "directory": "Brazil/Rondonia_PortoVelho/",
+    "labelFileNames": "Brazil_Rondonia_PortoVelho_RoadLabels.geojson",
+    "AOIName": "Brazil_Rondonia_PortoVelho",
+    "comment": "RDT manual labels",
+    "doUse": 1
+  },
+  {
     "analyticImgName": "20180419_074323_0c43_3B_AnalyticMS.tif",
     "directory": "Harz/",
     "labelFileNames": "RoadLabels_RDT_Harz3_a.geojson",

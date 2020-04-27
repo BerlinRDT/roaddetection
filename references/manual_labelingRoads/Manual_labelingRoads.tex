@@ -213,7 +213,7 @@ OSM label files usually comprise large geographic areas, so if they turn out to 
 	\item Load the OSM labels. Labels can be loaded in manners similar to those for images -- drag \& drop or via the Layer menu (labels should be defined as vector layers).
 	\item Inspect the label quality. If the labels don't trace the roads very well, delete the layer, and skip the remaining steps in this section. If a \textit{sizeable} amount of labels does trace the roads well, similar to how you would yourself label them, and if you are sure that correcting whichever imperfections these labels have is a substantial time saver over labeling the roads from scratch, continue.
 	\item Using one of QGIS' selection tools, select the road labels you'd like to keep (see Figure~\ref{fig:mark_osm_label} for details). Be precise -- road labels protruding beyond the area covered by the satellite images must be cut off, which may also be a lot of work.
-	\item The selected labels must be copied to a new layer. Click Edit-Copy Features (or hit Ctrl-C) and then Edit-Paste Features As (nope, Ctrl-V won't do the trick) and select new Vector layer. In the window that pops up, \textbf{select geojson as format. This is the only currently confirmed format which supports the steps further below}. To the right of the edit field for the file name, click on the three dots to be able to select a directory in which to save the data (otherwise QGIS may select your home directory!). Name the file according to the scheme <YYYY\_MM\_DD>\_<AOI>\_OSM, where the date is that of the data retrieval, e.g. 2020\_04\_23\_Brazil\_Rondonia\_PortoVelho\_OSM. The layer name will be identical, leave it at that. Make sure CRS is set correctly (see Section \ref{subsec:project_properties}) and leave all other settings as they are.
+	\item The selected labels must be copied to a new layer. Click Edit-Copy Features (or hit Ctrl-C) and then Edit-Paste Features As (nope, Ctrl-V won't do the trick) and select New Vector layer. In the window that pops up, \textbf{select geojson as format. This is the only currently confirmed format which supports the steps further below}. To the right of the edit field for the file name, click on the three dots to select a directory in which to save the data (otherwise QGIS may select your home directory and you may have trouble finding the file). Name the file according to the scheme <YYYY\_MM\_DD>\_<AOI>\_OSM, where the date is that of the data retrieval, e.g. 2020\_04\_23\_Brazil\_Rondonia\_PortoVelho\_OSM. The layer name will be identical, leave it at that. Make sure CRS is set correctly (see Section \ref{subsec:project_properties}) and leave all other settings as they are.
 	\item In the 'Layers' window, mark the whole set of OSM road labels and delete them - we won't need them anymore.
 	\item Mark the set of retained labels and go to the Layer Styling tab/window. There, set the width and color to eye-friendly values. This is now our reservoir of labeled roads which we need not label ourselves, but may have to correct.
 \end{enumerate}
@@ -236,7 +236,7 @@ Once again, a subAOI is the area within which the labels are garanteed to be a) 
 
 \begin{itemize}
 	\item Create a new layer in which the polygon will be stored: Click on the \textit{Layer} Menu Item - \textit{Create Layer} - \textit{New Shape File Layer}. A pop-up window appears.
-	\item To the right of the edit field for the file name, click on the three dots to select a directory in which to save the data (otherwise QGIS will select your home directory!) As filename set <YYYY\_MM\_DD>\_<AOI>\_subAOI
+	\item To the right of the edit field for the file name, click on the three dots to select a directory in which to save the data (otherwise QGIS may select your home directory and you may have trouble finding the file). As filename set <AOI>\_subAOI
 	\item Change the file encoding at UTF8 if it is not.
 	\item Change the geometry type to \textbf{Polygon}
 	\item Be sure to keep the coordinate system at WGS 84 if not specified otherwise
@@ -260,11 +260,11 @@ Once again, a subAOI is the area within which the labels are garanteed to be a) 
 Create a new layer in which the labels will be stored:
 \begin{itemize}
 	\item Click on the \textit{Layer} Menu Item - \textit{Create Layer} - \textit{New Shape File Layer}
-	\item To the right of the edit field for the file name, click on the three dots to select a directory in which to save the data (otherwise QGIS may select your home directory!) As filename set <YYYY\_MM\_DD>\_<AOI>\_road\_labels
+	\item To the right of the edit field for the file name, click on the three dots to select a directory in which to save the data (otherwise QGIS may select your home directory and you may have trouble finding the file). As filename set <AOI>\_roadlabels
 	\item Change the file encoding at UTF8 if it is not.
 	\item Change the geometry type to \textbf{Line}
 	\item Be sure to keep the coordinate system at WGS 84 if not specified otherwise
-	\item Add additional field 'type' (integer, 1 digit): this is the type of road (1=paved, 2=unpaved).
+	\item Add additional field 'label' (integer, 1 digit): this is the type of road (1=paved, 2=unpaved).
 	\item Click OK
 \end{itemize}
 
@@ -276,7 +276,7 @@ Digitizing:
 	When you now move the cursor to the map section of the screen, the cursor should change to a crosshair.
 	\item Now you can start clicking (diligently) along the roads, each point marking a new node of the line. 
 	\item To move the map, you can change to the hand tool during digitizing, or you can move across the map with the arrow keys. The middle mouse button will also do the job.
-	\item When done with a road or road segment, you can exit digitizing mode with a right mouse click. A window will pop up asking you for the ID and type. Insert a running number for the ID. For type, enter 1 for paved roads (the exception) and 2 if it is an unpaved road or you are not sure (which should be the overwhelming number of cases)
+	\item When done with a road or road segment, you can exit digitizing mode with a right mouse click. A window will pop up asking you for the ID and label. Insert a running number for the ID (which is not so important). For label, enter 1 for paved roads (the exception) and 2 if it is an unpaved road or you are not sure (which should be the overwhelming number of cases).
 	\item Save the project file in regular intervals (each 10 min or so) in order to prevent inadvertent loss of data
 	\item Repeat until all roads in the current subAOI are labeled
 	\item Extend the subAOI if you intend to continue labeling, otherwise save the project
@@ -318,7 +318,16 @@ Digitizing:
 tbc
 
 \subsubsection{Exporting the data}
-When you are done, right click on the layer you created. Click  \textit{export} - \textit{Save layer as} - and then choose either \textit{ESRI Shape File}, \textit{Keyhole Markup Language (KML)}, or \textit{geojson} (text-based, lossy).
+When you are done 
+\begin{itemize}
+	\item Right click on the layer you created
+	\item Click  \textit{export} - \textit{Save layer as} - and then choose \textit{Keyhole Markup Language (KML)}. \textbf{Do not choose any other format unless you know exactly how and why!}
+	\item Pick a file location and name the file <AOI>\_roadlabels (the extension will be given automatically)
+	\item Untick the 'Add saved file to map' box
+	\item Leave all other settings
+	\item Click OK
+	\item If this is the first time you label roads, verify the correctness of the labels by importing them into Google Earth. This is important, as any basic error will show up here, before you invest many hours of work.
+\end{itemize}
 
 
 \section{Installing and setting up QGIS}

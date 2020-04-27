@@ -5,25 +5,38 @@ from shapely.geometry import LineString
 from rtree import index
 import fiona
 
-
 def create_spatial_index(labels_path):
     logger = logging.getLogger(__name__)
     logger.info('Creating spatial index from geojsons in {}'.format(labels_path))
-
     idx = index.Index()
     for file in Path(labels_path).iterdir():
         if file.name.endswith('.geojson'):
             with fiona.open('{}/{}'.format(labels_path, file.name), "r") as geojson:
-                lines = [
-                    (LineString(feature["geometry"]["coordinates"]), feature['properties']['name'])
-                    for feature in geojson
-                    if len(feature["geometry"]["coordinates"]) >= 2
-                ]
-                count = -1
-                for line, prop_name in lines:
-                    count += 1
-                    payload = {'geometry': line, 'label': get_road_label(prop_name)}
-                    idx.insert(count, line.bounds, obj=payload)
+                lines = []
+                count = 0
+                isOK = True
+                try:
+                    for feature in geojson:
+                        # accept only entries with at least two coordinates
+                        coord = feature["geometry"]["coordinates"]
+                        if len(coord) >= 2:
+                            # Google Earth-derived labels have a 'name' key in 
+                            # which the type of road appears at the end of the 
+                            # string after a '_', and possibly also a 'label' 
+                            # key, whereas QGIS-derived labels have only a 
+                            # 'label' key
+                            if "name" in feature['properties'].keys():
+                                label = get_road_label(feature['properties']['name'])
+                            else:
+                                label = feature['properties']['label']
+                            line = LineString(feature["geometry"]["coordinates"])
+                            payload = {'geometry': line, 'label': label}
+                            idx.insert(count, line.bounds, obj=payload)
+                            count += 1
+                except: 
+                    isOK = False
+            if not isOK:
+                raise Exception("Mishap occurred with file {}".format(file.name))        
     return idx
 
 

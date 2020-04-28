@@ -182,7 +182,7 @@ Apply the properties by clicking on Apply or OK.
 \label{step3}
 There are multiple ways to load satellite images. The most convenient is to drag and drop images from the 'Project Home' folder as seen in the 'Browser' window into the main window. Alternatively, click \textit{Layer} - \textit{Add Layer} - \textit{Add Raster Layer} - click the \textit{...} button, then choose the satellite image from your Sat Image folder and click \textit{open}
 
-It is highly recommended to load \textbf{all} satellite images of an AOI, or at least groups of adjacent and/or overlapping images. The reason is that then the time-consuming act of pruning OSM road labels (next step) needs to be done only once (per goup of adjacent images).
+It is highly recommended to load \textbf{all} satellite images of an AOI, or at least groups of adjacent and/or overlapping images. The reason is that then the time-consuming act of pruning OSM road labels (next step) needs to be done only once (per group of adjacent images).
 
 
 \subsubsection{Display, navigation, overview}
@@ -320,7 +320,10 @@ tbc
 \subsubsection{Exporting the data}
 When you are done 
 \begin{itemize}
-	\item Right click on the layer you created
+	\item Remember: the labels you export must cover satellite images in their entirety. Either a single image or groups of adjacent or overlapping images. Incomplete labels will result in image tiles in which roads exist but are not labeled, downgrading the performance of the Deep Learning Models. 
+	\item Therefore, before saving the labels, double-check: do satellite images overlap? If so, have unlabeled parts of an image been overlaid? This can best be checked by temporarily suspending display of all but the labeled images.
+	\item Note the file name(s) of the labeled satellite image(s) and pass this information on.
+	\item When all's OK, right click on the layer you created
 	\item Click  \textit{export} - \textit{Save layer as} - and then choose \textit{Keyhole Markup Language (KML)}. \textbf{Do not choose any other format unless you know exactly how and why!}
 	\item Pick a file location and name the file <AOI>\_roadlabels (the extension will be given automatically)
 	\item Untick the 'Add saved file to map' box

@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <kml xmlns="http://www.opengis.net/kml/2.2">
 <Document id="root_doc">
-<Schema name="Brazil_Rondonia_PortoVelho_RoadLabels" id="Brazil_Rondonia_PortoVelho_RoadLabels">
+<Schema name="Brazil_Rondonia_PortoVelho_roadlabels" id="Brazil_Rondonia_PortoVelho_roadlabels">
 	<SimpleField name="id" type="float"></SimpleField>
 	<SimpleField name="label" type="float"></SimpleField>
 </Schema>
-<Folder><name>Brazil_Rondonia_PortoVelho_RoadLabels</name>
+<Folder><name>Brazil_Rondonia_PortoVelho_roadlabels</name>
   <Placemark>
 	<Style><LineStyle><color>ff0000ff</color></LineStyle><PolyStyle><fill>0</fill></PolyStyle></Style>
-	<ExtendedData><SchemaData schemaUrl="#Brazil_Rondonia_PortoVelho_RoadLabels">
+	<ExtendedData><SchemaData schemaUrl="#Brazil_Rondonia_PortoVelho_roadlabels">
 		<SimpleData name="id">1</SimpleData>
 		<SimpleData name="label">2</SimpleData>
 	</SchemaData></ExtendedData>
@@ -16,7 +16,7 @@
   </Placemark>
   <Placemark>
 	<Style><LineStyle><color>ff0000ff</color></LineStyle><PolyStyle><fill>0</fill></PolyStyle></Style>
-	<ExtendedData><SchemaData schemaUrl="#Brazil_Rondonia_PortoVelho_RoadLabels">
+	<ExtendedData><SchemaData schemaUrl="#Brazil_Rondonia_PortoVelho_roadlabels">
 		<SimpleData name="id">2</SimpleData>
 		<SimpleData name="label">2</SimpleData>
 	</SchemaData></ExtendedData>
@@ -24,7 +24,7 @@
   </Placemark>
   <Placemark>
 	<Style><LineStyle><color>ff0000ff</color></LineStyle><PolyStyle><fill>0</fill></PolyStyle></Style>
-	<ExtendedData><SchemaData schemaUrl="#Brazil_Rondonia_PortoVelho_RoadLabels">
+	<ExtendedData><SchemaData schemaUrl="#Brazil_Rondonia_PortoVelho_roadlabels">
 		<SimpleData name="id">3</SimpleData>
 		<SimpleData name="label">2</SimpleData>
 	</SchemaData></ExtendedData>
@@ -32,15 +32,15 @@
   </Placemark>
   <Placemark>
 	<Style><LineStyle><color>ff0000ff</color></LineStyle><PolyStyle><fill>0</fill></PolyStyle></Style>
-	<ExtendedData><SchemaData schemaUrl="#Brazil_Rondonia_PortoVelho_RoadLabels">
+	<ExtendedData><SchemaData schemaUrl="#Brazil_Rondonia_PortoVelho_roadlabels">
 		<SimpleData name="id">4</SimpleData>
 		<SimpleData name="label">2</SimpleData>
 	</SchemaData></ExtendedData>
-      <MultiGeometry><LineString><coordinates>-63.1771691181156,-8.55880149717831 -63.1771695011375,-8.55962991630214 -63.1772011170178,-8.56008318783319 -63.1772013700366,-8.56063025703275 -63.1771701660969,-8.56106792677259 -63.1771821910834,-8.56160326763781 -63.1771589922925,-8.5623730828845 -63.1771987240259,-8.56339686569055 -63.1771798935634,-8.56512307304842 -63.1770783404457,-8.56624461138531 -63.1770158665267,-8.56697927571506 -63.1771261376454,-8.56772949140659 -63.1770481408967,-8.56885492643709 -63.1769230114317,-8.56993349135269 -63.1768133628319,-8.57053140987369</coordinates></LineString></MultiGeometry>
+      <MultiGeometry><LineString><coordinates>-63.1771691181156,-8.55880149717831 -63.1771695011375,-8.55962991630214 -63.1772011170178,-8.56008318783319 -63.1772013700366,-8.56063025703275 -63.1771701660969,-8.56106792677259 -63.1771821910834,-8.56160326763781 -63.1771589922925,-8.5623730828845 -63.1771987240259,-8.56339686569055 -63.1771798935634,-8.56512307304842 -63.1770783404457,-8.56624461138531 -63.1770158665267,-8.56697927571506 -63.1771261376454,-8.56772949140659 -63.1770481408967,-8.56885492643709 -63.1769230114317,-8.56993349135269 -63.1768133628319,-8.57053140987369 -63.1770711163293,-8.57095823255544 -63.1771945538006,-8.57140281248096 -63.1771335554947,-8.57273675000811 -63.1770576354081,-8.57511329012104 -63.1770891323057,-8.57660050787016 -63.177151345682,-8.57788839164306 -63.1771523545697,-8.58006557609814</coordinates></LineString></MultiGeometry>
   </Placemark>
   <Placemark>
 	<Style><LineStyle><color>ff0000ff</color></LineStyle><PolyStyle><fill>0</fill></PolyStyle></Style>
-	<ExtendedData><SchemaData schemaUrl="#Brazil_Rondonia_PortoVelho_RoadLabels">
+	<ExtendedData><SchemaData schemaUrl="#Brazil_Rondonia_PortoVelho_roadlabels">
 		<SimpleData name="id">5</SimpleData>
 		<SimpleData name="label">2</SimpleData>
 	</SchemaData></ExtendedData>
@@ -48,7 +48,7 @@
   </Placemark>
   <Placemark>
 	<Style><LineStyle><color>ff0000ff</color></LineStyle><PolyStyle><fill>0</fill></PolyStyle></Style>
-	<ExtendedData><SchemaData schemaUrl="#Brazil_Rondonia_PortoVelho_RoadLabels">
+	<ExtendedData><SchemaData schemaUrl="#Brazil_Rondonia_PortoVelho_roadlabels">
 		<SimpleData name="id">6</SimpleData>
 		<SimpleData name="label">2</SimpleData>
 	</SchemaData></ExtendedData>
@@ -56,7 +56,7 @@
   </Placemark>
   <Placemark>
 	<Style><LineStyle><color>ff0000ff</color></LineStyle><PolyStyle><fill>0</fill></PolyStyle></Style>
-	<ExtendedData><SchemaData schemaUrl="#Brazil_Rondonia_PortoVelho_RoadLabels">
+	<ExtendedData><SchemaData schemaUrl="#Brazil_Rondonia_PortoVelho_roadlabels">
 		<SimpleData name="id">7</SimpleData>
 		<SimpleData name="label">2</SimpleData>
 	</SchemaData></ExtendedData>
@@ -64,15 +64,15 @@
   </Placemark>
   <Placemark>
 	<Style><LineStyle><color>ff0000ff</color></LineStyle><PolyStyle><fill>0</fill></PolyStyle></Style>
-	<ExtendedData><SchemaData schemaUrl="#Brazil_Rondonia_PortoVelho_RoadLabels">
+	<ExtendedData><SchemaData schemaUrl="#Brazil_Rondonia_PortoVelho_roadlabels">
 		<SimpleData name="id">8</SimpleData>
 		<SimpleData name="label">2</SimpleData>
 	</SchemaData></ExtendedData>
-      <MultiGeometry><LineString><coordinates>-63.1082434601825,-8.5839208605622 -63.10831403589,-8.58359259860948 -63.1082746979894,-8.58331907453462 -63.1082510332838,-8.58293613200206 -63.1082666311261,-8.58256099373141 -63.1082979175365,-8.58213114402143 -63.1081643420351,-8.58181075461782 -63.1082663344367,-8.58151374499195 -63.1082740824102,-8.5811464241872 -63.108234713828,-8.58076348601575 -63.1083287785844,-8.58020075871175 -63.1083129284113,-8.57968495398478</coordinates></LineString></MultiGeometry>
+      <MultiGeometry><LineString><coordinates>-63.1082217175976,-8.59343019069077 -63.1082524295445,-8.59308520483994 -63.1082677561407,-8.59280921875096 -63.1082368203033,-8.59236459011804 -63.1082829457037,-8.59205026456096 -63.1083290819092,-8.59177426979652 -63.108367506935,-8.59146761254731 -63.1083058376312,-8.59129130817657 -63.1082980830289,-8.59110732248458 -63.108298002562,-8.59082367453538 -63.1082825129672,-8.59052469858869 -63.1083209640179,-8.59031003525813 -63.1083440189647,-8.59012604089714 -63.1082592058056,-8.58981941825797 -63.1082282963398,-8.58946678348944 -63.1081973934519,-8.58913714719592 -63.1082204483946,-8.5889531528313 -63.1083359228797,-8.58873846785122 -63.1083589690324,-8.5885238088287 -63.1083279421654,-8.58775720129789 -63.1082815586193,-8.58715925363077 -63.1082966980787,-8.58622397748078 -63.1083119505225,-8.58568734175969 -63.1082434601825,-8.5839208605622 -63.10831403589,-8.58359259860948 -63.1082746979894,-8.58331907453462 -63.1082510332838,-8.58293613200206 -63.1082666311261,-8.58256099373141 -63.1082979175365,-8.58213114402143 -63.1081643420351,-8.58181075461782 -63.1082663344367,-8.58151374499195 -63.1082740824102,-8.5811464241872 -63.108234713828,-8.58076348601575 -63.1083287785844,-8.58020075871175 -63.1083129284113,-8.57968495398478</coordinates></LineString></MultiGeometry>
   </Placemark>
   <Placemark>
 	<Style><LineStyle><color>ff0000ff</color></LineStyle><PolyStyle><fill>0</fill></PolyStyle></Style>
-	<ExtendedData><SchemaData schemaUrl="#Brazil_Rondonia_PortoVelho_RoadLabels">
+	<ExtendedData><SchemaData schemaUrl="#Brazil_Rondonia_PortoVelho_roadlabels">
 		<SimpleData name="id">10</SimpleData>
 		<SimpleData name="label">2</SimpleData>
 	</SchemaData></ExtendedData>
@@ -80,7 +80,7 @@
   </Placemark>
   <Placemark>
 	<Style><LineStyle><color>ff0000ff</color></LineStyle><PolyStyle><fill>0</fill></PolyStyle></Style>
-	<ExtendedData><SchemaData schemaUrl="#Brazil_Rondonia_PortoVelho_RoadLabels">
+	<ExtendedData><SchemaData schemaUrl="#Brazil_Rondonia_PortoVelho_roadlabels">
 		<SimpleData name="id">11</SimpleData>
 		<SimpleData name="label">2</SimpleData>
 	</SchemaData></ExtendedData>
@@ -88,7 +88,7 @@
   </Placemark>
   <Placemark>
 	<Style><LineStyle><color>ff0000ff</color></LineStyle><PolyStyle><fill>0</fill></PolyStyle></Style>
-	<ExtendedData><SchemaData schemaUrl="#Brazil_Rondonia_PortoVelho_RoadLabels">
+	<ExtendedData><SchemaData schemaUrl="#Brazil_Rondonia_PortoVelho_roadlabels">
 		<SimpleData name="id">12</SimpleData>
 		<SimpleData name="label">2</SimpleData>
 	</SchemaData></ExtendedData>
@@ -96,7 +96,7 @@
   </Placemark>
   <Placemark>
 	<Style><LineStyle><color>ff0000ff</color></LineStyle><PolyStyle><fill>0</fill></PolyStyle></Style>
-	<ExtendedData><SchemaData schemaUrl="#Brazil_Rondonia_PortoVelho_RoadLabels">
+	<ExtendedData><SchemaData schemaUrl="#Brazil_Rondonia_PortoVelho_roadlabels">
 		<SimpleData name="id">13</SimpleData>
 		<SimpleData name="label">2</SimpleData>
 	</SchemaData></ExtendedData>
@@ -104,7 +104,7 @@
   </Placemark>
   <Placemark>
 	<Style><LineStyle><color>ff0000ff</color></LineStyle><PolyStyle><fill>0</fill></PolyStyle></Style>
-	<ExtendedData><SchemaData schemaUrl="#Brazil_Rondonia_PortoVelho_RoadLabels">
+	<ExtendedData><SchemaData schemaUrl="#Brazil_Rondonia_PortoVelho_roadlabels">
 		<SimpleData name="id">14</SimpleData>
 		<SimpleData name="label">2</SimpleData>
 	</SchemaData></ExtendedData>
@@ -112,7 +112,7 @@
   </Placemark>
   <Placemark>
 	<Style><LineStyle><color>ff0000ff</color></LineStyle><PolyStyle><fill>0</fill></PolyStyle></Style>
-	<ExtendedData><SchemaData schemaUrl="#Brazil_Rondonia_PortoVelho_RoadLabels">
+	<ExtendedData><SchemaData schemaUrl="#Brazil_Rondonia_PortoVelho_roadlabels">
 		<SimpleData name="id">15</SimpleData>
 		<SimpleData name="label">2</SimpleData>
 	</SchemaData></ExtendedData>
@@ -120,15 +120,15 @@
   </Placemark>
   <Placemark>
 	<Style><LineStyle><color>ff0000ff</color></LineStyle><PolyStyle><fill>0</fill></PolyStyle></Style>
-	<ExtendedData><SchemaData schemaUrl="#Brazil_Rondonia_PortoVelho_RoadLabels">
+	<ExtendedData><SchemaData schemaUrl="#Brazil_Rondonia_PortoVelho_roadlabels">
 		<SimpleData name="id">16</SimpleData>
 		<SimpleData name="label">2</SimpleData>
 	</SchemaData></ExtendedData>
-      <MultiGeometry><LineString><coordinates>-63.0646030028175,-8.59253528031575 -63.0640847582038,-8.59256662803696 -63.0633152537581,-8.59267616937499 -63.062734182932,-8.59266063383454 -63.0612736801209,-8.5927859135778 -63.0608810712928,-8.59281723699314 -63.059938773502,-8.59266107884229 -63.0591378270285,-8.59256741907051 -63.0578029383919,-8.59255199105251 -63.0570491529879,-8.59277093166109 -63.0566565554006,-8.59288040372321 -63.0560283868556,-8.59297427912488 -63.0555886636778,-8.59300560399957 -63.0551175538687,-8.59319323876789 -63.0545522362283,-8.59352156162426 -63.0541125654801,-8.59392801897327 -63.0537356308326,-8.59375613524306 -63.0530916815684,-8.59331856798967 -63.0522121397351,-8.59269346454332 -63.0516153604455,-8.59264665317689 -63.0512855523053,-8.59255291366717 -63.0507045007254,-8.5926780353044 -63.0505003270862,-8.59256864797606 -63.0502176370229,-8.59250616255559 -63.0502175671043,-8.59197472242793 -63.050123307132,-8.59172464521924 -63.0501388925716,-8.59081806879414 -63.0502169904478,-8.58759034081682 -63.0501854893388,-8.58688696808475 -63.050169653631,-8.58588661193738 -63.0500595905894,-8.58487063738203 -63.050122220908,-8.58344824475451 -63.0500593468844,-8.58301059613163 -63.049949334041,-8.5823697557918 -63.049964962554,-8.581791421548 -63.0499177502084,-8.58102552820673 -63.0497763647055,-8.58065041203617 -63.0501060802282,-8.58011892889363 -63.0501374103926,-8.57952496193559 -63.0499802497215,-8.57860277674883 -63.0499016400941,-8.57791504036168 -63.0499171828372,-8.57668022060322 -63.0499328255022,-8.5762113004271 -63.0501212228278,-8.57583614148158 -63.049979808435,-8.5752265661894 -63.0502309815067,-8.5745544175201 -63.050278018962,-8.57399170955373 -63.0503721469818,-8.57327268935093 -63.0504662633157,-8.57246770075715 -63.0504033454781,-8.57168617854837 -63.0502775804227,-8.57065457472877 -63.0508585239241,-8.5699667518399 -63.0509841424539,-8.56988858222997 -63.0514238541586,-8.56996667699492 -63.0521305190736,-8.56998221288474 -63.0527429644815,-8.57001339096721 -63.0532768744741,-8.5699195340415 -63.0536537020717,-8.56949745542512 -63.0536377432981,-8.56767649151056 -63.0536533175741,-8.56675428325989 -63.0534647360599,-8.56575395019805 -63.0534332353808,-8.56508183818819 -63.0533074579159,-8.56400334319658 -63.0472459423485,-8.56389471728221 -63.0464764753426,-8.56387917994751 -63.0463037335586,-8.56384012413802 -63.0463349228437,-8.56204259946964 -63.0463347319052,-8.56046390705898 -63.0463344616289,-8.55822872847543 -63.0463185922603,-8.5568532357148 -63.0463654236014,-8.55455552857951 -63.0463966139667,-8.55277363367553 -63.046364904869,-8.55026492200327 -63.0463959589161,-8.54735762144351 -63.0471182904345,-8.54742005675114 -63.0476835990944,-8.54751377133349 -63.0483745138786,-8.54748242438923 -63.0494422690665,-8.54726346074196 -63.0504472328537,-8.5472008086255 -63.0512009575544,-8.54716944845607 -63.0517034392109,-8.5471381204432 -63.0523943742903,-8.54726307261099 -63.0527083936784,-8.54701293995149 -63.0532109010036,-8.54716917751713 -63.0539960351454,-8.54716906884842 -63.0565084827419,-8.54729375542626 -63.057262202391,-8.54723112220961 -63.0578902956152,-8.54713724507255 -63.0594291534294,-8.54710575073997 -63.061376295547,-8.54716796956139 -63.0623498820547,-8.54729285904957 -63.0631663908168,-8.54710515923278 -63.0639515455263,-8.54723007537956 -63.0655846137833,-8.54716727977228 -63.0677516000391,-8.54726069048702</coordinates></LineString></MultiGeometry>
+      <MultiGeometry><LineString><coordinates>-63.0759020610442,-8.59261763382715 -63.0746774030687,-8.59277119648463 -63.0737531335658,-8.59289403320124 -63.072936680149,-8.59292485329587 -63.0725053373064,-8.59289427003822 -63.0720123633925,-8.59280236847709 -63.0715502368471,-8.59290978092601 -63.07091863337,-8.59289456536475 -63.0702408124356,-8.59286402485968 -63.0695475839154,-8.59281815360594 -63.0688851625618,-8.59275694325978 -63.0683151789588,-8.59274171240607 -63.0678376437933,-8.59283379080436 -63.067575736207,-8.592695845792 -63.0671443589405,-8.59246593614221 -63.0664202950409,-8.59226674124331 -63.0656192550266,-8.59234354018533 -63.0646030028175,-8.59253528031575 -63.0640847582038,-8.59256662803696 -63.0633152537581,-8.59267616937499 -63.062734182932,-8.59266063383454 -63.0612736801209,-8.5927859135778 -63.0608810712928,-8.59281723699314 -63.059938773502,-8.59266107884229 -63.0591378270285,-8.59256741907051 -63.0578029383919,-8.59255199105251 -63.0570491529879,-8.59277093166109 -63.0566565554006,-8.59288040372321 -63.0560283868556,-8.59297427912488 -63.0555886636778,-8.59300560399957 -63.0551175538687,-8.59319323876789 -63.0545522362283,-8.59352156162426 -63.0541125654801,-8.59392801897327 -63.0537356308326,-8.59375613524306 -63.0530916815684,-8.59331856798967 -63.0522121397351,-8.59269346454332 -63.0516153604455,-8.59264665317689 -63.0512855523053,-8.59255291366717 -63.0507045007254,-8.5926780353044 -63.0505003270862,-8.59256864797606 -63.0502176370229,-8.59250616255559 -63.0502175671043,-8.59197472242793 -63.050123307132,-8.59172464521924 -63.0501388925716,-8.59081806879414 -63.0502169904478,-8.58759034081682 -63.0501854893388,-8.58688696808475 -63.050169653631,-8.58588661193738 -63.0500595905894,-8.58487063738203 -63.050122220908,-8.58344824475451 -63.0500593468844,-8.58301059613163 -63.049949334041,-8.5823697557918 -63.049964962554,-8.581791421548 -63.0499177502084,-8.58102552820673 -63.0497763647055,-8.58065041203617 -63.0501060802282,-8.58011892889363 -63.0501374103926,-8.57952496193559 -63.0499802497215,-8.57860277674883 -63.0499016400941,-8.57791504036168 -63.0499171828372,-8.57668022060322 -63.0499328255022,-8.5762113004271 -63.0501212228278,-8.57583614148158 -63.049979808435,-8.5752265661894 -63.0502309815067,-8.5745544175201 -63.050278018962,-8.57399170955373 -63.0503721469818,-8.57327268935093 -63.0504662633157,-8.57246770075715 -63.0504033454781,-8.57168617854837 -63.0502775804227,-8.57065457472877 -63.0508585239241,-8.5699667518399 -63.0509841424539,-8.56988858222997 -63.0514238541586,-8.56996667699492 -63.0521305190736,-8.56998221288474 -63.0527429644815,-8.57001339096721 -63.0532768744741,-8.5699195340415 -63.0536537020717,-8.56949745542512 -63.0536377432981,-8.56767649151056 -63.0536533175741,-8.56675428325989 -63.0534647360599,-8.56575395019805 -63.0534332353808,-8.56508183818819 -63.0533074579159,-8.56400334319658 -63.0472459423485,-8.56389471728221 -63.0464764753426,-8.56387917994751 -63.0463037335586,-8.56384012413802 -63.0463349228437,-8.56204259946964 -63.0463347319052,-8.56046390705898 -63.0463344616289,-8.55822872847543 -63.0463185922603,-8.5568532357148 -63.0463654236014,-8.55455552857951 -63.0463966139667,-8.55277363367553 -63.046364904869,-8.55026492200327 -63.0463959589161,-8.54735762144351 -63.0471182904345,-8.54742005675114 -63.0476835990944,-8.54751377133349 -63.0483745138786,-8.54748242438923 -63.0494422690665,-8.54726346074196 -63.0504472328537,-8.5472008086255 -63.0512009575544,-8.54716944845607 -63.0517034392109,-8.5471381204432 -63.0523943742903,-8.54726307261099 -63.0527083936784,-8.54701293995149 -63.0532109010036,-8.54716917751713 -63.0539960351454,-8.54716906884842 -63.0565084827419,-8.54729375542626 -63.057262202391,-8.54723112220961 -63.0578902956152,-8.54713724507255 -63.0594291534294,-8.54710575073997 -63.061376295547,-8.54716796956139 -63.0623498820547,-8.54729285904957 -63.0631663908168,-8.54710515923278 -63.0639515455263,-8.54723007537956 -63.0655846137833,-8.54716727977228 -63.0677516000391,-8.54726069048702</coordinates></LineString></MultiGeometry>
   </Placemark>
   <Placemark>
 	<Style><LineStyle><color>ff0000ff</color></LineStyle><PolyStyle><fill>0</fill></PolyStyle></Style>
-	<ExtendedData><SchemaData schemaUrl="#Brazil_Rondonia_PortoVelho_RoadLabels">
+	<ExtendedData><SchemaData schemaUrl="#Brazil_Rondonia_PortoVelho_roadlabels">
 		<SimpleData name="id">17</SimpleData>
 		<SimpleData name="label">2</SimpleData>
 	</SchemaData></ExtendedData>
@@ -136,7 +136,7 @@
   </Placemark>
   <Placemark>
 	<Style><LineStyle><color>ff0000ff</color></LineStyle><PolyStyle><fill>0</fill></PolyStyle></Style>
-	<ExtendedData><SchemaData schemaUrl="#Brazil_Rondonia_PortoVelho_RoadLabels">
+	<ExtendedData><SchemaData schemaUrl="#Brazil_Rondonia_PortoVelho_roadlabels">
 		<SimpleData name="id">19</SimpleData>
 		<SimpleData name="label">2</SimpleData>
 	</SchemaData></ExtendedData>
@@ -144,7 +144,7 @@
   </Placemark>
   <Placemark>
 	<Style><LineStyle><color>ff0000ff</color></LineStyle><PolyStyle><fill>0</fill></PolyStyle></Style>
-	<ExtendedData><SchemaData schemaUrl="#Brazil_Rondonia_PortoVelho_RoadLabels">
+	<ExtendedData><SchemaData schemaUrl="#Brazil_Rondonia_PortoVelho_roadlabels">
 		<SimpleData name="id">19</SimpleData>
 		<SimpleData name="label">2</SimpleData>
 	</SchemaData></ExtendedData>
@@ -152,7 +152,7 @@
   </Placemark>
   <Placemark>
 	<Style><LineStyle><color>ff0000ff</color></LineStyle><PolyStyle><fill>0</fill></PolyStyle></Style>
-	<ExtendedData><SchemaData schemaUrl="#Brazil_Rondonia_PortoVelho_RoadLabels">
+	<ExtendedData><SchemaData schemaUrl="#Brazil_Rondonia_PortoVelho_roadlabels">
 		<SimpleData name="id">20</SimpleData>
 		<SimpleData name="label">2</SimpleData>
 	</SchemaData></ExtendedData>
@@ -160,7 +160,7 @@
   </Placemark>
   <Placemark>
 	<Style><LineStyle><color>ff0000ff</color></LineStyle><PolyStyle><fill>0</fill></PolyStyle></Style>
-	<ExtendedData><SchemaData schemaUrl="#Brazil_Rondonia_PortoVelho_RoadLabels">
+	<ExtendedData><SchemaData schemaUrl="#Brazil_Rondonia_PortoVelho_roadlabels">
 		<SimpleData name="id">21</SimpleData>
 		<SimpleData name="label">2</SimpleData>
 	</SchemaData></ExtendedData>
@@ -168,7 +168,7 @@
   </Placemark>
   <Placemark>
 	<Style><LineStyle><color>ff0000ff</color></LineStyle><PolyStyle><fill>0</fill></PolyStyle></Style>
-	<ExtendedData><SchemaData schemaUrl="#Brazil_Rondonia_PortoVelho_RoadLabels">
+	<ExtendedData><SchemaData schemaUrl="#Brazil_Rondonia_PortoVelho_roadlabels">
 		<SimpleData name="id">22</SimpleData>
 		<SimpleData name="label">2</SimpleData>
 	</SchemaData></ExtendedData>
@@ -176,7 +176,7 @@
   </Placemark>
   <Placemark>
 	<Style><LineStyle><color>ff0000ff</color></LineStyle><PolyStyle><fill>0</fill></PolyStyle></Style>
-	<ExtendedData><SchemaData schemaUrl="#Brazil_Rondonia_PortoVelho_RoadLabels">
+	<ExtendedData><SchemaData schemaUrl="#Brazil_Rondonia_PortoVelho_roadlabels">
 		<SimpleData name="id">23</SimpleData>
 		<SimpleData name="label">2</SimpleData>
 	</SchemaData></ExtendedData>
@@ -184,7 +184,7 @@
   </Placemark>
   <Placemark>
 	<Style><LineStyle><color>ff0000ff</color></LineStyle><PolyStyle><fill>0</fill></PolyStyle></Style>
-	<ExtendedData><SchemaData schemaUrl="#Brazil_Rondonia_PortoVelho_RoadLabels">
+	<ExtendedData><SchemaData schemaUrl="#Brazil_Rondonia_PortoVelho_roadlabels">
 		<SimpleData name="id">24</SimpleData>
 		<SimpleData name="label">2</SimpleData>
 	</SchemaData></ExtendedData>
@@ -192,7 +192,7 @@
   </Placemark>
   <Placemark>
 	<Style><LineStyle><color>ff0000ff</color></LineStyle><PolyStyle><fill>0</fill></PolyStyle></Style>
-	<ExtendedData><SchemaData schemaUrl="#Brazil_Rondonia_PortoVelho_RoadLabels">
+	<ExtendedData><SchemaData schemaUrl="#Brazil_Rondonia_PortoVelho_roadlabels">
 		<SimpleData name="id">27</SimpleData>
 		<SimpleData name="label">2</SimpleData>
 	</SchemaData></ExtendedData>
@@ -200,7 +200,7 @@
   </Placemark>
   <Placemark>
 	<Style><LineStyle><color>ff0000ff</color></LineStyle><PolyStyle><fill>0</fill></PolyStyle></Style>
-	<ExtendedData><SchemaData schemaUrl="#Brazil_Rondonia_PortoVelho_RoadLabels">
+	<ExtendedData><SchemaData schemaUrl="#Brazil_Rondonia_PortoVelho_roadlabels">
 		<SimpleData name="id">27</SimpleData>
 		<SimpleData name="label">2</SimpleData>
 	</SchemaData></ExtendedData>
@@ -208,11 +208,151 @@
   </Placemark>
   <Placemark>
 	<Style><LineStyle><color>ff0000ff</color></LineStyle><PolyStyle><fill>0</fill></PolyStyle></Style>
-	<ExtendedData><SchemaData schemaUrl="#Brazil_Rondonia_PortoVelho_RoadLabels">
+	<ExtendedData><SchemaData schemaUrl="#Brazil_Rondonia_PortoVelho_roadlabels">
 		<SimpleData name="id">28</SimpleData>
 		<SimpleData name="label">2</SimpleData>
 	</SchemaData></ExtendedData>
       <MultiGeometry><LineString><coordinates>-63.0410530978099,-8.5471726109269 -63.0401894435361,-8.54711017898997 -63.0393415002277,-8.54712589668472 -63.0384935521376,-8.5470947206305 -63.0378340502306,-8.54720420003641 -63.0372530568519,-8.5472667788829 -63.0368290842099,-8.54726681943317 -63.0357927124636,-8.54732943912711 -63.0355885774514,-8.54732945793966 -63.0351096209939,-8.54706378091981 -63.034826962779,-8.54695439201843 -63.0345914409247,-8.5471576113388 -63.0342145875995,-8.5472826898686 -63.0335236800916,-8.54740779534455 -63.0330761693993,-8.54759540140354 -63.0326208002675,-8.54770485444964 -63.0323695384617,-8.54748604668949 -63.0322438879654,-8.54714218326905 -63.0318355766305,-8.54664203681365 -63.0308619459888,-8.54582932270348</coordinates></LineString></MultiGeometry>
+  </Placemark>
+  <Placemark>
+	<Style><LineStyle><color>ff0000ff</color></LineStyle><PolyStyle><fill>0</fill></PolyStyle></Style>
+	<ExtendedData><SchemaData schemaUrl="#Brazil_Rondonia_PortoVelho_roadlabels">
+		<SimpleData name="id">20</SimpleData>
+		<SimpleData name="label">2</SimpleData>
+	</SchemaData></ExtendedData>
+      <MultiGeometry><LineString><coordinates>-63.0502375119799,-8.59252984080899 -63.0499756490259,-8.59268319828506 -63.0497753904504,-8.59272155506342 -63.0494518787803,-8.59265260118103 -63.0492362103312,-8.59265262880107 -63.049028244326,-8.59265265532034 -63.0488664851362,-8.59259134649998 -63.0485891688705,-8.59236906260307 -63.0483966088679,-8.5923767530089 -63.0482348683022,-8.59246110117544 -63.0479883959769,-8.5925071289797 -63.0476340941758,-8.59259150082923 -63.0472412799899,-8.59267587707736 -63.0469331812337,-8.59266824855871 -63.0468484590414,-8.59270658972654 -63.0466867039246,-8.59267594467478 -63.0465326466051,-8.59260696776793 -63.0462861665371,-8.5925916651134 -63.0461090103312,-8.59259168635443 -63.0460396874127,-8.59258402847253 -63.0459780577056,-8.59249970794446 -63.0459087071443,-8.59226206489283 -63.0458393575908,-8.59203208799703 -63.0457314904716,-8.59175611862736 -63.0456005189924,-8.5915031504736 -63.0454002450833,-8.59141118005641</coordinates></LineString></MultiGeometry>
+  </Placemark>
+  <Placemark>
+	<Style><LineStyle><color>ff0000ff</color></LineStyle><PolyStyle><fill>0</fill></PolyStyle></Style>
+	<ExtendedData><SchemaData schemaUrl="#Brazil_Rondonia_PortoVelho_roadlabels">
+		<SimpleData name="id">21</SimpleData>
+		<SimpleData name="label">2</SimpleData>
+	</SchemaData></ExtendedData>
+      <MultiGeometry><LineString><coordinates>-63.0459934727511,-8.59258403399195 -63.0455236310045,-8.59264541916328 -63.0448535155929,-8.59262249924076 -63.0442527160309,-8.59254590699534 -63.0437520563541,-8.59253829799989 -63.0431050546091,-8.59256903561258 -63.0425042751038,-8.59266876258998 -63.0419419923551,-8.59263049334851 -63.0414644291064,-8.59252321862998 -63.0411024076875,-8.59246192804223 -63.0406941513074,-8.59220898769498 -63.0404861708831,-8.59207101850332</coordinates></LineString></MultiGeometry>
+  </Placemark>
+  <Placemark>
+	<Style><LineStyle><color>ff0000ff</color></LineStyle><PolyStyle><fill>0</fill></PolyStyle></Style>
+	<ExtendedData><SchemaData schemaUrl="#Brazil_Rondonia_PortoVelho_roadlabels">
+		<SimpleData name="id">23</SimpleData>
+		<SimpleData name="label">2</SimpleData>
+	</SchemaData></ExtendedData>
+      <MultiGeometry><LineString><coordinates>-63.0437759667608,-8.5995375088638 -63.0438914605279,-8.59914652109122 -63.0440454828378,-8.59889351991863 -63.0439299168972,-8.59865588187315 -63.0437912337345,-8.59833391855493 -63.0436679708341,-8.59814227831514 -63.0436448219386,-8.59778197096594 -63.0438373521795,-8.59749063464521 -63.0440992040734,-8.59719162412333 -63.0442532112337,-8.59681596412794 -63.0443533093535,-8.59651697197898 -63.0445535382495,-8.5962026358895 -63.0446074262884,-8.5959496460318 -63.0446382094277,-8.59571965735337 -63.044699809725,-8.59555099445895 -63.0446766654108,-8.59523668415076 -63.0445764953311,-8.59491471658645 -63.0444686265108,-8.59462341456231</coordinates></LineString></MultiGeometry>
+  </Placemark>
+  <Placemark>
+	<Style><LineStyle><color>ff0000ff</color></LineStyle><PolyStyle><fill>0</fill></PolyStyle></Style>
+	<ExtendedData><SchemaData schemaUrl="#Brazil_Rondonia_PortoVelho_roadlabels">
+		<SimpleData name="id">24</SimpleData>
+		<SimpleData name="label">2</SimpleData>
+	</SchemaData></ExtendedData>
+      <MultiGeometry><LineString><coordinates>-63.0634857375431,-8.59268887524454 -63.0634858395585,-8.59330216876684 -63.0634859313787,-8.59385413292027</coordinates></LineString></MultiGeometry>
+  </Placemark>
+  <Placemark>
+	<Style><LineStyle><color>ff0000ff</color></LineStyle><PolyStyle><fill>0</fill></PolyStyle></Style>
+	<ExtendedData><SchemaData schemaUrl="#Brazil_Rondonia_PortoVelho_roadlabels">
+		<SimpleData name="id">25</SimpleData>
+		<SimpleData name="label">2</SimpleData>
+	</SchemaData></ExtendedData>
+      <MultiGeometry><LineString><coordinates>-63.0674756003825,-8.59267286483505 -63.0671521733294,-8.59310222678946 -63.0668133621043,-8.59365424983282 -63.0663821175522,-8.59419095617207 -63.0659200459601,-8.59463567328066 -63.0655504216256,-8.59518770046478 -63.0652424215068,-8.59577038152431 -63.0649652644623,-8.5965523774844 -63.0646726362347,-8.59695106744905 -63.0643800358611,-8.59751841286454 -63.0640565909397,-8.59788644283308</coordinates></LineString></MultiGeometry>
+  </Placemark>
+  <Placemark>
+	<Style><LineStyle><color>ff0000ff</color></LineStyle><PolyStyle><fill>0</fill></PolyStyle></Style>
+	<ExtendedData><SchemaData schemaUrl="#Brazil_Rondonia_PortoVelho_roadlabels">
+		<SimpleData name="id">26</SimpleData>
+		<SimpleData name="label">2</SimpleData>
+	</SchemaData></ExtendedData>
+      <MultiGeometry><LineString><coordinates>-63.0574004425829,-8.59026731993908 -63.057523775629,-8.59089592757316 -63.0575238472504,-8.59137123015134 -63.0574931091667,-8.59184653731597 -63.0575393884454,-8.59227583595157 -63.0575856423856,-8.59253647883101</coordinates></LineString></MultiGeometry>
+  </Placemark>
+  <Placemark>
+	<Style><LineStyle><color>ff0000ff</color></LineStyle><PolyStyle><fill>0</fill></PolyStyle></Style>
+	<ExtendedData><SchemaData schemaUrl="#Brazil_Rondonia_PortoVelho_roadlabels">
+		<SimpleData name="id">30</SimpleData>
+		<SimpleData name="label">2</SimpleData>
+	</SchemaData></ExtendedData>
+      <MultiGeometry><LineString><coordinates>-63.072586210804,-8.59288275555862 -63.0726978502736,-8.5926412502206 -63.0727941008135,-8.59248407560439 -63.0729866529631,-8.59243804217027 -63.073148382834,-8.59232685206474 -63.073344791233,-8.59230764930819 -63.0735951144303,-8.59227693690575 -63.0738338616932,-8.59213123403984 -63.0740302602898,-8.59206220084486</coordinates></LineString></MultiGeometry>
+  </Placemark>
+  <Placemark>
+	<Style><LineStyle><color>ff0000ff</color></LineStyle><PolyStyle><fill>0</fill></PolyStyle></Style>
+	<ExtendedData><SchemaData schemaUrl="#Brazil_Rondonia_PortoVelho_roadlabels">
+		<SimpleData name="id">31</SimpleData>
+		<SimpleData name="label">2</SimpleData>
+	</SchemaData></ExtendedData>
+      <MultiGeometry><LineString><coordinates>-63.1064720662868,-8.58914529380226 -63.1064259546718,-8.58951328233683 -63.1062874016288,-8.58983529938976 -63.1062721718532,-8.59046392889072 -63.1061799265424,-8.59112324424644 -63.1061338783743,-8.59172121754708 -63.1060877704136,-8.59210453832164 -63.1057796777355,-8.59211995534642 -63.1057335736226,-8.59251860839721</coordinates></LineString></MultiGeometry>
+  </Placemark>
+  <Placemark>
+	<Style><LineStyle><color>ff0000ff</color></LineStyle><PolyStyle><fill>0</fill></PolyStyle></Style>
+	<ExtendedData><SchemaData schemaUrl="#Brazil_Rondonia_PortoVelho_roadlabels">
+		<SimpleData name="id">32</SimpleData>
+		<SimpleData name="label">2</SimpleData>
+	</SchemaData></ExtendedData>
+      <MultiGeometry><LineString><coordinates>-63.1076279091677,-8.59087752539221 -63.1062183873661,-8.59093924576238</coordinates></LineString></MultiGeometry>
+  </Placemark>
+  <Placemark>
+	<Style><LineStyle><color>ff0000ff</color></LineStyle><PolyStyle><fill>0</fill></PolyStyle></Style>
+	<ExtendedData><SchemaData schemaUrl="#Brazil_Rondonia_PortoVelho_roadlabels">
+		<SimpleData name="id">33</SimpleData>
+		<SimpleData name="label">2</SimpleData>
+	</SchemaData></ExtendedData>
+      <MultiGeometry><LineString><coordinates>-63.1119122140239,-8.57062229829464 -63.1119355644261,-8.57145790388388 -63.1118355279814,-8.57176457959156 -63.1116892457038,-8.57195627612662 -63.1116585114709,-8.57220926855955 -63.1117201903162,-8.57242390342396 -63.1118357946422,-8.572676853501 -63.1117665771546,-8.57302185108801 -63.1119206941503,-8.57328245614749 -63.1119901426989,-8.57372707372171 -63.1120213101238,-8.57495365141177 -63.1120759615776,-8.57746813810144</coordinates></LineString></MultiGeometry>
+  </Placemark>
+  <Placemark>
+	<Style><LineStyle><color>ff0000ff</color></LineStyle><PolyStyle><fill>0</fill></PolyStyle></Style>
+	<ExtendedData><SchemaData schemaUrl="#Brazil_Rondonia_PortoVelho_roadlabels">
+		<SimpleData name="id">34</SimpleData>
+		<SimpleData name="label">2</SimpleData>
+	</SchemaData></ExtendedData>
+      <MultiGeometry><LineString><coordinates>-63.1119994208999,-8.57910871973923 -63.1120457866503,-8.57963000550412 -63.1120152430608,-8.58053462181793 -63.1120925257489,-8.58142387444582 -63.1121390629167,-8.58252778853941 -63.1121396298993,-8.58445966155443 -63.1121399809549,-8.58565558284792 -63.1121247563953,-8.58626888027014 -63.1121249476849,-8.58692050400034 -63.1120866700883,-8.58771779596882 -63.1119251345435,-8.5884461282574 -63.1119176523915,-8.58919741424257 -63.1119947974456,-8.58961136453491 -63.1121335256851,-8.58990263831488 -63.1119025352586,-8.5901786872416 -63.1119026386207,-8.59053133060612 -63.1119027285044,-8.5908379770048 -63.1119029307548,-8.59152793138404 -63.1119185558526,-8.5922792105392 -63.1119032274193,-8.592539864429</coordinates></LineString></MultiGeometry>
+  </Placemark>
+  <Placemark>
+	<Style><LineStyle><color>ff0000ff</color></LineStyle><PolyStyle><fill>0</fill></PolyStyle></Style>
+	<ExtendedData><SchemaData schemaUrl="#Brazil_Rondonia_PortoVelho_roadlabels">
+		<SimpleData name="id">35</SimpleData>
+		<SimpleData name="label">2</SimpleData>
+	</SchemaData></ExtendedData>
+      <MultiGeometry><LineString><coordinates>-63.1556188105757,-8.58424524794326 -63.1555877643187,-8.58366263305692 -63.1556337529205,-8.58311065167533 -63.1555874147034,-8.58280402434743 -63.1553870759242,-8.58260478518555 -63.1552176458477,-8.58265085030544 -63.1549866352945,-8.58278893390972 -63.1547401580382,-8.5827737005647 -63.1543243186538,-8.5829731870874 -63.1540009179275,-8.58320330087477 -63.1537699004209,-8.58332605146047 -63.1533848196186,-8.58340286630154 -63.1529227531248,-8.58357170510692 -63.152383688271,-8.58380190300464 -63.1516751307289,-8.58392484073051</coordinates></LineString></MultiGeometry>
+  </Placemark>
+  <Placemark>
+	<Style><LineStyle><color>ff0000ff</color></LineStyle><PolyStyle><fill>0</fill></PolyStyle></Style>
+	<ExtendedData><SchemaData schemaUrl="#Brazil_Rondonia_PortoVelho_roadlabels">
+		<SimpleData name="id">36</SimpleData>
+		<SimpleData name="label">2</SimpleData>
+	</SchemaData></ExtendedData>
+      <MultiGeometry><LineString><coordinates>-63.1641565518267,-8.55684287971049 -63.1642952743372,-8.55705747323777 -63.1642183427474,-8.55725682600225 -63.1642646121046,-8.55739479719424 -63.1641414833092,-8.55762483418628 -63.1641416409068,-8.55799280967653 -63.1642187500619,-8.55820742935215 -63.1642341995002,-8.55831474899385</coordinates></LineString></MultiGeometry>
+  </Placemark>
+  <Placemark>
+	<Style><LineStyle><color>ff0000ff</color></LineStyle><PolyStyle><fill>0</fill></PolyStyle></Style>
+	<ExtendedData><SchemaData schemaUrl="#Brazil_Rondonia_PortoVelho_roadlabels">
+		<SimpleData name="id">37</SimpleData>
+		<SimpleData name="label">2</SimpleData>
+	</SchemaData></ExtendedData>
+      <MultiGeometry><LineString><coordinates>-63.0940336571919,-8.59284362029252 -63.0941415613294,-8.59312724200357</coordinates></LineString></MultiGeometry>
+  </Placemark>
+  <Placemark>
+	<Style><LineStyle><color>ff0000ff</color></LineStyle><PolyStyle><fill>0</fill></PolyStyle></Style>
+	<ExtendedData><SchemaData schemaUrl="#Brazil_Rondonia_PortoVelho_roadlabels">
+		<SimpleData name="id">37</SimpleData>
+		<SimpleData name="label">2</SimpleData>
+	</SchemaData></ExtendedData>
+      <MultiGeometry><LineString><coordinates>-63.0938102901736,-8.59285900707049 -63.0936485915759,-8.59307369899696 -63.093471435326,-8.59307374201697 -63.0933019890173,-8.59310444774431 -63.0931710661444,-8.59318114106695</coordinates></LineString></MultiGeometry>
+  </Placemark>
+  <Placemark>
+	<Style><LineStyle><color>ff0000ff</color></LineStyle><PolyStyle><fill>0</fill></PolyStyle></Style>
+	<ExtendedData><SchemaData schemaUrl="#Brazil_Rondonia_PortoVelho_roadlabels">
+		<SimpleData name="id">38</SimpleData>
+		<SimpleData name="label">2</SimpleData>
+	</SchemaData></ExtendedData>
+      <MultiGeometry><LineString><coordinates>-63.0868704265503,-8.59302162376103 -63.0866779106668,-8.59322098741716 -63.0865393013313,-8.59337434188091 -63.0864699705677,-8.59333602662175 -63.0864468267449,-8.59317504234482 -63.0864853059844,-8.5930293765679 -63.0864698524603,-8.59281472740537 -63.0864235909402,-8.59260775131669 -63.086408170445,-8.5925387592853</coordinates></LineString></MultiGeometry>
+  </Placemark>
+  <Placemark>
+	<Style><LineStyle><color>ff0000ff</color></LineStyle><PolyStyle><fill>0</fill></PolyStyle></Style>
+	<ExtendedData><SchemaData schemaUrl="#Brazil_Rondonia_PortoVelho_roadlabels">
+		<SimpleData name="id">39</SimpleData>
+		<SimpleData name="label">2</SimpleData>
+	</SchemaData></ExtendedData>
+      <MultiGeometry><LineString><coordinates>-63.0665901191132,-8.59439024064853 -63.0665594242032,-8.59504953641033 -63.0665595151394,-8.59557083580985 -63.0666366258421,-8.59606145720717 -63.066621309174,-8.59656742690945 -63.0666676555948,-8.59731870327565 -63.0666215314215,-8.59784001061121 -63.0664984029374,-8.59848398990081 -63.0666063244589,-8.59897460590371 -63.0664985847224,-8.59952658850152 -63.0664833078632,-8.6002625430818 -63.0664988307032,-8.60093716298927 -63.0664681111394,-8.60145846755203</coordinates></LineString></MultiGeometry>
+  </Placemark>
+  <Placemark>
+	<Style><LineStyle><color>ff0000ff</color></LineStyle><PolyStyle><fill>0</fill></PolyStyle></Style>
+      <MultiGeometry><LineString><coordinates>-63.1121800766479,-8.59254572383609 -63.1118570128367,-8.59253987784842 -63.1113871735251,-8.59257067860071 -63.1103550565941,-8.59260164023497 -63.1099776109127,-8.59250975423123 -63.1096618134704,-8.59251751040054 -63.1084063020206,-8.59246420256231 -63.1082214676146,-8.59254858229022 -63.107674588481,-8.59252573702347 -63.0961517433975,-8.59250578633701 -63.094603559907,-8.5925291680636 -63.0941183632468,-8.59275927180714 -63.0939643408858,-8.59286663569541 -63.0937948815231,-8.59284367849411 -63.093625367645,-8.59259840247429 -63.0933249538935,-8.59252181371407 -63.089666299084,-8.59253034867631 -63.0867162609317,-8.59250802540773 -63.0783745331843,-8.59256347566064 -63.0759097604348,-8.59260229997532</coordinates></LineString></MultiGeometry>
   </Placemark>
 </Folder>
 </Document></kml>

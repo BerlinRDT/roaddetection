@@ -182,7 +182,7 @@ Apply the properties by clicking on Apply or OK.
 \label{step3}
 There are multiple ways to load satellite images. The most convenient is to drag and drop images from the 'Project Home' folder as seen in the 'Browser' window into the main window. Alternatively, click \textit{Layer} - \textit{Add Layer} - \textit{Add Raster Layer} - click the \textit{...} button, then choose the satellite image from your Sat Image folder and click \textit{open}
 
-It is highly recommended to load \textbf{all} satellite images of an AOI, or at least groups of adjacent and/or overlapping images. The reason is that then the time-consuming act of pruning OSM road labels (next step) needs to be done only once (per group of adjacent images).
+It is highly recommended to load \textbf{all} satellite images of an AOI, or at least groups of adjacent and/or overlapping images. The reason is that then the time-consuming act of pruning OSM road labels (one of the next steps) needs to be done only once (per group of adjacent images). However, be aware that images may overlap, in other words occlude each other partly, a situation which can potentially lead to inadvertently incomplete labels.
 
 
 \subsubsection{Display, navigation, overview}
@@ -212,8 +212,7 @@ OSM label files usually comprise large geographic areas, so if they turn out to 
 \begin{enumerate}
 	\item Load the OSM labels. Labels can be loaded in manners similar to those for images -- drag \& drop or via the Layer menu (labels should be defined as vector layers).
 	\item Inspect the label quality. If the labels don't trace the roads very well, delete the layer, and skip the remaining steps in this section. If a \textit{sizeable} amount of labels does trace the roads well, similar to how you would yourself label them, and if you are sure that correcting whichever imperfections these labels have is a substantial time saver over labeling the roads from scratch, continue.
-	\item Using one of QGIS' selection tools, select the road labels you'd like to keep (see Figure~\ref{fig:mark_osm_label} for details). Be precise -- road labels protruding beyond the area covered by the satellite images must be cut off, which may also be a lot of work.
-	\item The selected labels must be copied to a new layer. Click Edit-Copy Features (or hit Ctrl-C) and then Edit-Paste Features As (nope, Ctrl-V won't do the trick) and select New Vector layer. In the window that pops up, \textbf{select geojson as format. This is the only currently confirmed format which supports the steps further below}. To the right of the edit field for the file name, click on the three dots to select a directory in which to save the data (otherwise QGIS may select your home directory and you may have trouble finding the file). Name the file according to the scheme <YYYY\_MM\_DD>\_<AOI>\_OSM, where the date is that of the data retrieval, e.g. 2020\_04\_23\_Brazil\_Rondonia\_PortoVelho\_OSM. The layer name will be identical, leave it at that. Make sure CRS is set correctly (see Section \ref{subsec:project_properties}) and leave all other settings as they are.
+	\item Using one of QGIS' selection tools, select the road labels you'd like to keep (see Figure~\ref{fig:mark_osm_label} for details). No need to be super-precise, road labels protruding beyond the area covered by the satellite images  will be cut off programmatically further down the computational road.	Click Edit-Copy Features (or hit Ctrl-C) and then Edit-Paste Features As (nope, Ctrl-V won't do the trick) and select New Vector layer. In the window that pops up, \textbf{select geojson as format. This is the only currently confirmed format which supports the steps further below}. To the right of the edit field for the file name, click on the three dots to select a directory in which to save the data (otherwise QGIS may select your home directory and you may have trouble finding the file). Name the file according to the scheme <YYYY\_MM\_DD>\_<AOI>\_OSM, where the date is that of the data retrieval, e.g. 2020\_04\_23\_Brazil\_Rondonia\_PortoVelho\_OSM. The layer name will be identical, leave it at that. Make sure CRS is set correctly (see Section \ref{subsec:project_properties}) and leave all other settings as they are.
 	\item In the 'Layers' window, mark the whole set of OSM road labels and delete them - we won't need them anymore.
 	\item Mark the set of retained labels and go to the Layer Styling tab/window. There, set the width and color to eye-friendly values. This is now our reservoir of labeled roads which we need not label ourselves, but may have to correct.
 \end{enumerate}
@@ -314,9 +313,6 @@ Digitizing:
 	\label{fig:label_examples}
 \end{figure}
 
-\subsubsection{Merging OSM and own labels}
-tbc
-
 \subsubsection{Exporting the data}
 When you are done 
 \begin{itemize}
@@ -329,7 +325,8 @@ When you are done
 	\item Untick the 'Add saved file to map' box
 	\item Leave all other settings
 	\item Click OK
-	\item If this is the first time you label roads, verify the correctness of the labels by importing them into Google Earth. This is important, as any basic error will show up here, before you invest many hours of work.
+	\item Repeat the same procedure (starting with right mouse click - Export...) with the OSM labels of the subAOI (if any). This step needs to be done each time the OSM labels are manipulated in any way. Name the file <AOI>\_OSM
+	\item If this is the first time you label roads, verify the correctness of all labels by importing them into Google Earth. This is important, as any basic error will show up here, before you invest many hours of work.
 \end{itemize}
 
 

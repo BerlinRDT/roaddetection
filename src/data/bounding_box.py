@@ -47,6 +47,9 @@ def window_trueBoundingBox(windowBox, imageBox):
         gdf_TrueBounds = gdf_WindowBounds
     else:
         gdf_TrueBounds = gp.GeoDataFrame(gp.overlay(gdf_WindowBounds, gdf_ImageBounds, how='intersection').geometry)
+    # TODO: FIX: the code line below creates the warning in the two lines below:    
+    # /home/hh/miniconda3/envs/roaddetection/lib/python3.7/site-packages/pyproj/crs/crs.py:53: FutureWarning: '+init=<authority>:<code>' syntax is deprecated. '<authority>:<code>' is the preferred initialization method. When making the change, be mindful of axis order changes: https://pyproj4.github.io/pyproj/stable/gotchas.html#axis-order-changes-in-proj-6
+    # return _prepare_from_string(" ".join(pjargs))        
     gdf_TrueBounds.crs = ({'init': 'epsg:4326'})
     return gdf_TrueBounds
 

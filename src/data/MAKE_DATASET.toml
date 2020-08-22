@@ -3,11 +3,6 @@ title = "Analysis parameters"
 # https://pypi.org/project/toml/
 # https://github.com/uiri/toml
 
-[paths]
-# Input and output paths for data
-input_filepath = "data/raw/"
-output_filepath = "data/train/"
-
 [satimg]
 # json file containing list of satellite images from which to generate image tiles
 satimg_list = "data/list_satellite_images.json"

@@ -73,7 +73,7 @@ endif
 
 ## Make Dataset
  create_tiles: create_tile_folders
-	$(PYTHON_INTERPRETER) src/data/make_dataset.py src/data/MAKE_DATASET.toml
+	$(PYTHON_INTERPRETER) src/data/make_dataset.py  src/data/MAKE_DATASET.toml  data/raw  data/train
 
 ## Make Partial train set
  copy_partial_train_tiles: create_tile_folders

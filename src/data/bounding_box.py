@@ -4,6 +4,15 @@ from shapely import wkt
 import geopandas as gp
 import fiona
 
+# Note: the code line marked OLD below creates this warning:    
+# /home/hh/miniconda3/envs/roaddetection/lib/python3.7/site-packages/pyproj/crs/crs.py:53: FutureWarning: '+init=<authority>:<code>' syntax is deprecated. '<authority>:<code>' is the preferred initialization method. When making the change, be mindful of axis order changes: https://pyproj4.github.io/pyproj/stable/gotchas.html#axis-order-changes-in-proj-6
+# return _prepare_from_string(" ".join(pjargs))        
+# The following solution has been found and implemented and seems to work:
+# https://stackoverflow.com/a/59703971/10300133    
+# OLD:
+# gdf_TrueBounds.crs = ({'init': 'epsg:4326'})
+# NEW:
+# gdf_TrueBounds.crs = "epsg:4326"
 
 def inner_bbox(metadata):
     fiona.drvsupport.supported_drivers['GML'] = 'rw'
@@ -21,13 +30,13 @@ def inner_bbox(metadata):
 def bounds2box(bounds):
     xmin, ymin, xmax, ymax = bounds
     bound = gp.GeoDataFrame(geometry=[box(xmin, ymin, xmax, ymax)])
-    bound.crs = ({'init': 'epsg:4326'})
+    bound.crs = "epsg:4326"
     return bound
 
 
 def bounds2polygon(metafile_data):
     bounds = gp.GeoDataFrame(geometry=[Polygon(metafile_data)])
-    bounds.crs = {'init': 'epsg:4326'}
+    bounds.crs = "epsg:4326"
     return bounds
 
 
@@ -47,10 +56,8 @@ def window_trueBoundingBox(windowBox, imageBox):
         gdf_TrueBounds = gdf_WindowBounds
     else:
         gdf_TrueBounds = gp.GeoDataFrame(gp.overlay(gdf_WindowBounds, gdf_ImageBounds, how='intersection').geometry)
-    # TODO: FIX: the code line below creates the warning in the two lines below:    
-    # /home/hh/miniconda3/envs/roaddetection/lib/python3.7/site-packages/pyproj/crs/crs.py:53: FutureWarning: '+init=<authority>:<code>' syntax is deprecated. '<authority>:<code>' is the preferred initialization method. When making the change, be mindful of axis order changes: https://pyproj4.github.io/pyproj/stable/gotchas.html#axis-order-changes-in-proj-6
-    # return _prepare_from_string(" ".join(pjargs))        
-    gdf_TrueBounds.crs = ({'init': 'epsg:4326'})
+    gdf_TrueBounds.crs = "epsg:4326"
+    
     return gdf_TrueBounds
 
 
@@ -69,7 +76,7 @@ def cut_linestrings_at_bounds(bounds, intersecting_road_items):
                 geom.append(buffered_line(cut_line, label))
                 iden.append(label)
 
-    gpd = gp.GeoDataFrame({'label': iden}, geometry=geom, crs={'init': 'epsg:4326'})
+    gpd = gp.GeoDataFrame({'label': iden}, geometry=geom, crs='epsg:4326')
     # For testing if different colors appear in the rasterized labels
     # if len(gpd) > 3:
     #     gpd.loc['label'] = 1

@@ -14,13 +14,12 @@ from bounding_box import inner_bbox, window_trueBoundingBox, cut_linestrings_at_
 # import pyproj
 # from functools import partial
 # from operator import is_not
-
+import pdb
 
 class Raster(object):
 
     def __init__(self, analyticFile, rgbFile, meta):
         self.logger = logging.getLogger(__name__)
-
         self.analyticFile = analyticFile
         self.rgbFile = rgbFile
         self.meta = meta
@@ -110,11 +109,11 @@ class Raster(object):
 
     def to_tiles(self, output_path, window_size, idx, overlap, dtype, scaling_type):
         logging.info("Generating tiles for image {} with edge length {} and relative edge overlap {}"\
-                     .format(self.analyticFile.name, window_size, overlap))        
+                     .format(self.analyticFile.name, window_size, overlap))
         i = 0
         with rio.open(self.analyticFile) as raster:
             innerBBox = inner_bbox(self.meta)
-            meta = raster.meta.copy()            
+            meta = raster.meta.copy()
             # open and read full image file
             fullImg = raster.read()
             # open and read mask (one mask for whole image, not for bands separately):
@@ -139,25 +138,24 @@ class Raster(object):
                     self.write_rgb_tile(window, meta, output_path, i)
                     self.write_map(raster, window, output_path, idx, i, meta, innerBBox, window_size)
                     i += 1
+            # return number of tiles written
+        return i
 
     def write_map(self, raster, window, output_path, spatial_idx, i, meta, box, window_size):
         windowBounds = self.transform_bnds(raster.crs, self.DST_CRS, raster.window_bounds(window))
-
         sec_WindowImageBBox = window_trueBoundingBox(windowBounds, box)
-
         dst_bounds = mapping(sec_WindowImageBBox.geometry)['bbox']
-
         intersecting_road_items = spatial_idx.intersection(dst_bounds, objects=True)
-
         linesDf = cut_linestrings_at_bounds(sec_WindowImageBBox, intersecting_road_items)
-
         m2 = meta.copy()
         m2['count'] = 1
         m2['dtype'] = 'uint8'
         nodata = 0
-
         with rio.open(output_map_path(self.analyticFile, i, output_path), 'w', **m2) as outds:
             if len(linesDf) > 0:
+                # TODO: the line below causes the warning (see also bounding_box.py )
+                # /home/hh/miniconda3/envs/roaddetection/lib/python3.7/site-packages/pyproj/crs/crs.py:53: FutureWarning: '+init=<authority>:<code>' syntax is deprecated. '<authority>:<code>' is the preferred initialization method. When making the change, be mindful of axis order changes: https://pyproj4.github.io/pyproj/stable/gotchas.html#axis-order-changes-in-proj-6
+                #   return _prepare_from_string(" ".join(pjargs))                
                 g2 = linesDf.to_crs(m2['crs'].data)
                 burned = features.rasterize(shapes=[(x.geometry, self.get_pixel_value(x.label)) for i, x in g2.iterrows()],
                                             fill=nodata,

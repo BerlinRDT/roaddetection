@@ -5,10 +5,10 @@ title = "Analysis parameters"
 
 [satimg]
 # json file containing list of satellite images from which to generate image tiles
-satimg_list = "data/list_satellite_images.json"
+satimg_list_filepath = "data/list_satellite_images.json"
 
-# Region from which to create tiles. Currently, any of ["all", "borneo", "harz"]
-region = "all"
+# Regions from which to create tiles. More precisely, strings in subdirectories (listed in the json file of satellite images) that you wish to include. Set to "None" for no filter, or a list of strings (e.g. ["borneo", "brazil"])
+region = ["brazil", "borneo"]
 
 # File name prefix for satellite images to be used for creating image tiles: specify string (set to "None" or "" for no filter)
 raw_prefix = "None"
